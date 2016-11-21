@@ -3,26 +3,27 @@ var pageMediaGallery, formGallery;
 formGallery = {
 		
 	removeImg: function (closeButton){
-		$(closeButton).parent('li').remove();
+		var container = $(closeButton).parents('.msuploadContainer');
 		filename = $(closeButton).parent('li').attr('data-filename');
+		$(closeButton).parent('li').remove();
 		if (filename) {
 			var inputs = $(container ).find('input.createboxInput');
-			
 			if (inputs.length == 0) {
 				return;
 			}
-			
 			inputs = inputs.filter(function() { 
 				return this.value == filename; 
 			});
-			
-			
-			
-			if (emptiesInputs.length > 0) {
+			if (inputs.length > 0) {
 				// remove filename from input
-				emptiesInputs.first().val('');
+				inputs.first().val('');
 			} 
 		}
+		formGallery.updateInputsFields( container );
+	},
+	
+	updateInputsFields: function (container) {
+		
 	},
 
 	addThumb: function(container, img, filename) {
