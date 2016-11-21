@@ -76,7 +76,7 @@ class Hooks {
 				// thumb Ok, change the URL to point to a thumbnail.
 				$fileUrl = wfExpandUrl( $mto->getUrl(), PROTO_RELATIVE );
 			}
-			$out .= '<img class="mediaGalleryFile" src="' . $fileUrl . '"/> ';
+			$out .= '<img class="mediaGalleryFile" src="' . $fileUrl . '" alt="' . $file->getName() . '"/> ';
 		}
 
 		$out .= '

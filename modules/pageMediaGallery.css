@@ -3,11 +3,11 @@
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    z-index: 1000; /* Stay on top */
     top: 0;
     left: 0;
     background-color: #111; /* Black*/
-    overflow-x: hidden; /* Disable horizontal scroll */
+    /*overflow-x: hidden; /* Disable horizontal scroll  do not work with dragable*/
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
@@ -18,4 +18,15 @@
 }
 .pg_sidebar .msupload-list .file .file-thumb {
     height: 100%;
+}
+
+.ui-droppable-active {
+	border: solid 1px #008; 
+}
+.ui-droppable-active.ui-state-hover {
+	border: solid 1px #00F; 
+}
+
+.formmediagallery img {
+	width:25%;
 }
