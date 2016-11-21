@@ -114,14 +114,21 @@ pageMediaGallery = {
 		
 	    var $gallery = $( ".msupload-list" ),
 	     $trash = $( ".msuploadContainer" );
+	    
+	    // create temp li in body :
+	    $('<ul>').attr('id', 'draggableTempUl').appendTo($('body'));
 		
 	    // Let the gallery items be draggable
 	    $( "li", $gallery ).draggable({
 	      cancel: "a.ui-icon", // clicking an icon won't initiate dragging
 	      revert: true, // when not dropped, the item will revert back to its initial position
-	      containment: "document",
+	      //containment: "document",
+	      //containment: [10, $('body').offset().top],
+	      containment: 'window',
+	      appendTo: '#draggableTempUl',
 	      helper: "clone",
 	      cursor: "move",
+	      scroll: false,
 	      start: function() {
 	          $(".msuploadContainer").addClass('ui-droppable-active');
 	      },
