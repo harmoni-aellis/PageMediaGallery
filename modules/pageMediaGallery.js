@@ -1,9 +1,40 @@
 var pageMediaGallery, formGallery;
 
 formGallery = {
+		
+	removeImg: function (closeButton){
+		$(closeButton).parent('li').remove();
+		filename = $(closeButton).parent('li').attr('data-filename');
+		if (filename) {
+			var inputs = $(container ).find('input.createboxInput');
+			
+			if (inputs.length == 0) {
+				return;
+			}
+			
+			inputs = inputs.filter(function() { 
+				return this.value == filename; 
+			});
+			
+			
+			
+			if (emptiesInputs.length > 0) {
+				// remove filename from input
+				emptiesInputs.first().val('');
+			} 
+		}
+	},
 
 	addThumb: function(container, img, filename) {
 		li = $('<li>').attr('data-filename', filename).append(img);
+		
+		var cancelbutton = $( '<span>' ).attr({ 'class': 'file-cancel', 'title': mw.msg( 'msu-cancel-upload' ) });
+		cancelbutton.click( function () {
+			formGallery.removeImg( this );
+		});
+		li.prepend( cancelbutton );
+		
+		//li.append('<span class="file-cancel" title="<msu-remove-image>"></span>');
 		
 		$(container).find('.formmediagallery').append(li);
 	},

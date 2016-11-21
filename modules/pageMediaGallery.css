@@ -27,6 +27,29 @@
 	border: solid 1px #00F; 
 }
 
-.formmediagallery img {
-	width:25%;
+.formmediagallery li:first-child {
+	width:100%;
+}
+.formmediagallery li {
+	width:33%;
+}
+.formmediagallery li img {
+	width:100%;
+}
+
+.formmediagallery li {
+	display: inline-block;
+    position: relative;
+}
+.formmediagallery li .file-cancel {
+    background: url(images/msu-close.png) no-repeat 0 0;
+    cursor: pointer;
+    float: right;
+    height: 26px;
+    margin-left: 5px;
+    padding: 5px 10px;
+    position: absolute;
+    right: 12px;
+    top: 6px;
+    width: 26px;
 }
