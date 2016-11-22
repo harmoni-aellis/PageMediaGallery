@@ -10,7 +10,28 @@
     overflow-x: visible; /* Disable horizontal scroll  do not work with dragable*/
     overflow-y: scroll;
     padding-top: 60px; /* Place content 60px from the top */
-    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+#PageGallery {
+	display:none;
+}
+
+.pageGalleryControls {
+    background: #111 url(images/gallery.png) no-repeat 5px 5px ;
+    position: fixed; /* Stay in place */
+	top:60px;
+    z-index: 1000; /* Stay on top */
+    padding:10px;
+    width:40px;
+    height:35px;
+    -webkit-border-top-right-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-moz-border-radius-topright: 5px;
+	-moz-border-radius-bottomright: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+    transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
 .pg_sidebar .msupload-list .green,
@@ -36,20 +57,25 @@
 	border: solid 1px #00F; 
 }
 
+.formmediagallery{
+	padding:2px;
+}
+.formmediagallery ul{
+	margin:0px;
+	padding:0px;
+}
 .formmediagallery li:first-child {
 	width:100%;
 }
 .formmediagallery li {
+	display: inline-block;
+    position: relative;
 	width:33%;
 }
 .formmediagallery li img {
 	width:100%;
 }
 
-.formmediagallery li {
-	display: inline-block;
-    position: relative;
-}
 .formmediagallery li .file-cancel {
     background: url(images/msu-close.png) no-repeat 0 0;
     cursor: pointer;
@@ -61,4 +87,13 @@
     right: 12px;
     top: 6px;
     width: 26px;
+}
+
+.formmediagallery{
+	min-height:100px;
+}
+
+.dropHelp {
+	display:block;
+	text-align:center;
 }

@@ -37,7 +37,7 @@ formGallery = {
 		
 		//li.append('<span class="file-cancel" title="<msu-remove-image>"></span>');
 		
-		$(container).find('.formmediagallery').append(li);
+		$(container).find('.formmediagallery ul').append(li);
 	},
 	addImageToFormsInputs: function (container, filename) {
 		
@@ -71,10 +71,12 @@ formGallery = {
 	addImage: function(container, img, filename) {
 		
 		result = formGallery.addImageToFormsInputs(container,filename);
+
+		console.log("added image : " + result);
 		
 		if ( result) { 
 			formGallery.addThumb(container, img, filename);
-		}
+		} 
 		// TODO : add image name to form input
 		// TODO : manage error if too many files
 	},
@@ -82,9 +84,11 @@ formGallery = {
 		$(".msuploadContainer").each(function (i) {
 			container = this;
 			$(this).children().hide();
-			ol = $('<ul>').addClass('formmediagallery');
+			ol = $('<div>').addClass('formmediagallery');
+			ol.append($('<ul>'));
 			$(this).prepend(ol);
-			$(this).find('input').each(function (i) {
+			files = new Array();
+			$(this).find('input.createboxInput').each(function (i) {
 				if ($(this).val()) {
 					var image = $(this).parentsUntil('div').nextAll('.sfImagePreviewWrapper').find('img').first();
 					formGallery.addThumb(container, image.clone(), $(this).val());
@@ -102,13 +106,33 @@ formGallery = {
  */
 pageMediaGallery = {
 
+	isOpen: false,
+	
+	toggle: function() {
+		if(pageMediaGallery.isOpen) {
+			pageMediaGallery.close();
+		} else {
+			pageMediaGallery.open();
+		}
+	},
 	open: function() {
+		pageMediaGallery.isOpen=true;
+		
 		$('#PageGallery').width(250);
+		$("#PageGallery .pageGalleryControls").animate({ left: '250' }, 200);
+		//$('#PageGallery .pageGalleryControls').css('left','250px');
 		$('body').css('marginLeft','250px');
 	},
 	close: function() {
+		pageMediaGallery.isOpen=false;
+		
 		$('#PageGallery').width(0);
+		$('#PageGallery .pageGalleryControls').animate({ left: '250' }, 200);
 		$('body').css('marginLeft','0px');
+	},
+	
+	onRefresh: function () {
+		$('#PageGallery').scrollTop($('#PageGallery')[0].scrollHeight);
 	},
 	
 	initDraggaBleBehaviour() {
@@ -154,116 +178,85 @@ pageMediaGallery = {
 	    	  $('.ui-draggable-dragging').hide();
 	      }
 	    });
-		/*var i, $this, $log = $('#log');
-		 
 		
-	    $('#PageGallery li').on({
-	        // on commence le drag
-	        dragstart: function(e) {
-	            $this = $(this);
-	 
-	            i = $this.index();
-	            $this.css('opacity', '0.5');
-	 
-	            // on garde le texte en mémoire (A, B, C ou D)
-	            e.dataTransfer.setData('text', $this.text());
-	        },
-	        // on passe sur un élément draggable
-	        dragenter: function(e) {
-	            // on augmente la taille pour montrer le draggable
-	            $(this).animate({
-	                width: '90px'
-	            }, 'fast');
-	 
-	            e.preventDefault();
-	        },
-	        // on quitte un élément draggable
-	        dragleave: function() {
-	            // on remet la taille par défaut
-	            $(this).animate({
-	                width: '75px'
-	            }, 'fast');
-	        },
-	        // déclenché tant qu on a pas lâché l élément
-	        dragover: function(e) {
-	            e.preventDefault();
-	        },
-	        // on lâche l élément
-	        drop: function(e) {
-	            // si l élément sur lequel on drop n'est pas l'élément de départ
-	            if (i !== $(this).index()) {
-	                // on récupère le texte initial
-	                var data = e.dataTransfer.getData('text');
-	 
-	                // on log
-	                $log.html(data + ' > ' + $(this).text()).fadeIn('slow').delay(1000).fadeOut();
-	 
-	                // on met le nouveau texte à la place de l ancien et inversement
-	                $this.text($(this).text());
-	                $(this).text(data);
-	            }
-	 
-	            // on remet la taille par défaut
-	            $(this).animate({
-	                width: '75px'
-	            }, 'fast');
-	        },
-	        // fin du drag (même sans drop)
-	        dragend: function() {
-	            $(this).css('opacity', '1');
-	        },
-	        // au clic sur un élément
-	        click: function() {
-	            alert($(this).text());
-	        }
-	    });*/
-		
-		/*
-		MsUpload.dropableAreaCount ++;
-		var areaId = 'msupload-drop-' + MsUpload.dropableAreaCount ;
-		var picturesList = $( '<ol>' ).attr( 'class', 'msupload-dropableImgList ' ).attr('data-target','#myCarousel1');
-
-		picturesList.attr('id', areaId);
-		$(msUploadContainer).prepend(picturesList);
-
-		var p = $( '<img>' ).attr( 'src', 'http://wikifab-build.localtest.me/skins/wikifabStyleModule/wiki.png' );
-		var pI = $( '<li>' ).attr( 'class', 'msupload-dropableImgItem' ).append(p);
-		picturesList.append(pI);
-		var p2 = $( '<img>' ).attr( 'src', 'http://wikifab-build.localtest.me/skins/wikifabStyleModule/wiki.png' );
-		var pI2 = $( '<li>' ).attr( 'class', 'msupload-dropableImgItem' ).append(p2);
-		picturesList.append(pI2);
-
-	    $("#" + areaId).sortable({
-			revert : true
-		});
-		$("#" + areaId + " ul").draggable({
-			connectToSortable : "#" + areaId,
-			helper : "clone",
-			revert : "invalid"
-		});
-		$("#" + areaId + " ul").draggable({
-			connectToSortable : ".msupload-list",
-			helper : "clone",
-			revert : "invalid"
-		});
-		$("ul, li").disableSelection();
-		*/
 		
 	},
 	
 	
 	callMsUpload() {
-		uploader = MsUpload.createUploaderOnElement($('#PageGallery'), true);
+		uploader = MsUpload.createUploaderOnElement($('#PageGalleryUploader'), true);
 		MsUpload.initWithImgElement(uploader);
+		MsUpload.onRefresh = pageMediaGallery.onRefresh;
+		pageMediaGallery.addDropOnformmediagalleryEvent(uploader);
 	},
 	init: function () {
 		//var openlink = $( '<a>Open</a>' ).click(pageMediaGallery.callMsUpload);
 		
 		//alert(openlink);
 		//$('#PageGallery').prepend(openlink)
-		pageMediaGallery.open();
+		$('#PageGallery .pageGalleryControls').appendTo('body');
+		$('.pageGalleryControls').click(pageMediaGallery.toggle);
+		pageMediaGallery.close();
+		$('#PageGallery').show();
 		setTimeout(pageMediaGallery.callMsUpload, 300);
 		setTimeout(pageMediaGallery.initDraggaBleBehaviour, 600);
+	},
+	
+	addDropOnformmediagalleryEvent: function (uploader) {
+		
+		// this add drop zone around file fields in form, when a file is dropped, 
+		// it upload it in the page gallery, and if success, it add it to the field
+		
+		var obj = $(".formmediagallery");
+		obj.css('border', '2px dotted #0B85A1');
+		obj.append('<span class="dropHelp">'+mw.msg( 'msu-dropzone' )+'</span>');
+		obj.on('dragenter', function (e) 
+				{
+				    e.stopPropagation();
+				    e.preventDefault();
+				    $(this).css('border', '2px solid #0B85A1');
+				});
+		obj.on('dragleave', function (e) 
+				{
+				    e.stopPropagation();
+				    e.preventDefault();
+				    $(this).css('border', '2px dotted #0B85A1');
+				});
+		obj.on('dragover', function (e) 
+		{
+		     e.stopPropagation();
+		     e.preventDefault();
+		});
+		obj.on('drop', function (e) 
+		{
+			 var container = $(this).parent();
+		     $(this).css('border', '2px dotted #0B85A1');
+		     e.preventDefault();
+		     pageMediaGallery.open();
+		     var files = e.originalEvent.dataTransfer.files;
+		     for (index = 0; index < files.length; ++index) {
+		    	var isUploaded = false;
+		    	// add file to be uploaded in mediGallery
+			    uploader.addFile(files[index]);
+			    // add bin function to add it to form once it is uploaded
+			    uploader.bind( 'FileUploaded',function(uploader, file, success) {
+			    		if(! isUploaded && success) {
+			    			isUploaded = true;
+				    		var img = file.li.find('img.file-thumb');
+			    			formGallery.addImage(container, img.clone(), file.name);
+			    		}
+			    	} );
+		     }
+		     //uploader.start();
+		     pageMediaGallery.onRefresh();
+		     
+		});
+		// avoid opening file when drop outside of areas :
+		$(document).on('drop', function (e) 
+				{
+				    e.stopPropagation();
+				    e.preventDefault();
+				});
 	}
 };
 

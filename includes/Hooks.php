@@ -66,7 +66,7 @@ class Hooks {
 
 
 		$out = '';
-		$out .= '<div id="PageGallery" class="pg_sidebar">';
+		$out .= '<div id="PageGallery" class="pg_sidebar"><div id="PageGalleryUploader">';
 
 		foreach ($files as $file) {
 			$fileUrl = $file->getUrl();
@@ -79,11 +79,10 @@ class Hooks {
 			$out .= '<img class="mediaGalleryFile" src="' . $fileUrl . '" alt="' . $file->getName() . '"/> ';
 		}
 
-		$out .= '
-		    <a href="#volet" class="ouvrir">Ouvrir !</a>
-	        <a href="#volet_clos" class="fermer">fermer !</a>
+		$out .= '</div>
+			<div class="pageGalleryControls">
+			</div>
 		</div>
-				<span onclick="pageMediaGallery.open()">open</span>
 				';
 		return $out;
 	}
