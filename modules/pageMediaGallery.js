@@ -80,9 +80,14 @@ formGallery = {
 		// TODO : add image name to form input
 		// TODO : manage error if too many files
 	},
-	init: function () {
+	
+	initFormGalleriesArea: function () {
 		$(".msuploadContainer").each(function (i) {
 			container = this;
+			console.log("length : " + $(this).find('.formmediagallery').length);
+			if ($(this).find('.formmediagallery').length > 0) {
+				return ;
+			}
 			$(this).children().hide();
 			ol = $('<div>').addClass('formmediagallery');
 			ol.append($('<ul>'));
@@ -95,6 +100,17 @@ formGallery = {
 				}
 			});
 		});
+	},
+	
+	init: function () {
+		formGallery.initFormGalleriesArea();
+		
+		/*$('.multipleTemplateAdder').click(function () {
+			// whe launch createMultipleUploader after a timeout, 
+			//to be sure news divs are created before executing
+			setTimeout(formGallery.initFormGalleriesArea, 150);
+			return true;
+		});*/
 	}
 }
 
@@ -185,11 +201,24 @@ pageMediaGallery = {
 	
 	
 	callMsUpload() {
-		uploader = MsUpload.createUploaderOnElement($('#PageGalleryUploader'), true);
-		MsUpload.initWithImgElement(uploader);
+		pageMediaGallery.uploader = MsUpload.createUploaderOnElement($('#PageGalleryUploader'), true);
+		MsUpload.initWithImgElement(pageMediaGallery.uploader);
 		MsUpload.onRefresh = pageMediaGallery.onRefresh;
-		pageMediaGallery.addDropOnformmediagalleryEvent(uploader);
+		pageMediaGallery.addDropOnformmediagalleryEvent();
 	},
+	
+	stepAdded: function() {
+		alert('stepadded');
+		setTimeout(pageMediaGallery.addDropOnformmediagalleryEvent, 100);
+		setTimeout(pageMediaGallery.updateBindEvents, 100);
+	},
+	
+	updateBindEvents: function() {
+		$( ".addAboveButton" )
+		    .off( "click", null, pageMediaGallery.stepAdded )
+		    .on( "click", null, pageMediaGallery.stepAdded );
+	},
+	
 	init: function () {
 		//var openlink = $( '<a>Open</a>' ).click(pageMediaGallery.callMsUpload);
 		
@@ -201,38 +230,66 @@ pageMediaGallery = {
 		$('#PageGallery').show();
 		setTimeout(pageMediaGallery.callMsUpload, 300);
 		setTimeout(pageMediaGallery.initDraggaBleBehaviour, 600);
+		
+		$('.multipleTemplateAdder').click(function () {
+			// whe launch createMultipleUploader after a timeout, 
+			//to be sure news divs are created before executing
+			setTimeout(pageMediaGallery.addDropOnformmediagalleryEvent, 100);
+		});
+		
+		$( ".addAboveButton" )
+			    .on( "click", null, pageMediaGallery.stepAdded );
 	},
 	
-	addDropOnformmediagalleryEvent: function (uploader) {
+	
+	
+	addDropOnformmediagalleryEvent: function () {
+		/**
+		 * Warning : this function can be called many times
+		 *  to add events on div Dynamically added
+		 *  so we remove previous event whith 'off' and check existence of div to add
+		 */
+		var uploader = pageMediaGallery.uploader;
 		
 		// this add drop zone around file fields in form, when a file is dropped, 
 		// it upload it in the page gallery, and if success, it add it to the field
 		
 		var obj = $(".formmediagallery");
+		
+		// check if already bounded :
+		console.log( obj.data('events'))
+		//var bounded = -1 !== $.inArray(onButtonClicked, obj.data('events').drop);
+		//console.log('isBouded' + bounded);
+		
+		
+		
 		obj.css('border', '2px dotted #0B85A1');
-		obj.append('<span class="dropHelp">'+mw.msg( 'msu-dropzone' )+'</span>');
-		obj.on('dragenter', function (e) 
+		if(obj.find('.dropHelp').length == 0) {
+			obj.append('<span class="dropHelp">'+mw.msg( 'msu-dropzone' )+'</span>');
+		}
+		obj.off( "dragenter").on('dragenter', function (e) 
 				{
 				    e.stopPropagation();
 				    e.preventDefault();
 				    $(this).css('border', '2px solid #0B85A1');
 				});
-		obj.on('dragleave', function (e) 
+		obj.off( "dragleave").on('dragleave', function (e) 
 				{
 				    e.stopPropagation();
 				    e.preventDefault();
 				    $(this).css('border', '2px dotted #0B85A1');
 				});
-		obj.on('dragover', function (e) 
+		obj.off( "dragover").on('dragover', function (e) 
 		{
 		     e.stopPropagation();
 		     e.preventDefault();
 		});
-		obj.on('drop', function (e) 
+		obj.off( "drop").on('drop', function (e) 
 		{
+		     e.stopPropagation();
+		     e.preventDefault();
 			 var container = $(this).parent();
 		     $(this).css('border', '2px dotted #0B85A1');
-		     e.preventDefault();
 		     pageMediaGallery.open();
 		     var files = e.originalEvent.dataTransfer.files;
 		     for (index = 0; index < files.length; ++index) {
