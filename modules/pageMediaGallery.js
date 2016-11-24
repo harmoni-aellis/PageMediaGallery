@@ -191,6 +191,9 @@ pageMediaGallery = {
 	      drop: function( event, ui ) {
 	    	  var image = ui.draggable.find('img').clone();
 	    	  var filename = ui.draggable.attr('data-filename');
+	    	  if ( ! filename) {
+	    		  filename = ui.draggable.find('.file-name').first().text();
+	    	  }
 	    	  formGallery.addImage(this, image, filename );
 	    	  
 	    	  // trick to hide the 'revert' movement of the image back to the gallery
