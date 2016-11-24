@@ -78,6 +78,9 @@
 .formmediagallery li img {
 	width:100%;
 }
+.formmediagallery li .thumbimage {
+	display:none;
+}
 
 .formmediagallery li .file-cancel {
     background: url(images/msu-close.png) no-repeat 0 0;

@@ -149,6 +149,8 @@ pageMediaGallery = {
 	},
 	
 	onRefresh: function () {
+		// to activate draggable on news images : 
+		pageMediaGallery.initDraggaBleBehaviour();
 		$('#PageGallery').scrollTop($('#PageGallery')[0].scrollHeight);
 	},
 	
