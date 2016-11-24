@@ -208,7 +208,6 @@ pageMediaGallery = {
 	},
 	
 	stepAdded: function() {
-		alert('stepadded');
 		setTimeout(pageMediaGallery.addDropOnformmediagalleryEvent, 100);
 		setTimeout(pageMediaGallery.updateBindEvents, 100);
 	},
@@ -244,6 +243,7 @@ pageMediaGallery = {
 	
 	
 	addDropOnformmediagalleryEvent: function () {
+		setTimeout(pageMediaGallery.initDraggaBleBehaviour, 600);
 		/**
 		 * Warning : this function can be called many times
 		 *  to add events on div Dynamically added
