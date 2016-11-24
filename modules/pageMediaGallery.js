@@ -122,6 +122,7 @@ pageMediaGallery = {
 		$("#PageGallery .pageGalleryControls").animate({ left: '250' }, 200);
 		//$('#PageGallery .pageGalleryControls').css('left','250px');
 		$('body').css('marginLeft','250px');
+		
 	},
 	close: function() {
 		pageMediaGallery.isOpen=false;
