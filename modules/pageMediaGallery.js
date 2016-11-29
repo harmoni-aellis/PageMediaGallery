@@ -84,7 +84,6 @@ formGallery = {
 	initFormGalleriesArea: function () {
 		$(".msuploadContainer").each(function (i) {
 			container = this;
-			console.log("length : " + $(this).find('.formmediagallery').length);
 			if ($(this).find('.formmediagallery').length > 0) {
 				return ;
 			}
@@ -323,8 +322,11 @@ pageMediaGallery = {
 	}
 };
 
-$( pageMediaGallery.init );
-$( formGallery.init );
+$( document ).ready(function() {
+	$( pageMediaGallery.init );
+	$( formGallery.init );
+});
+
 
 
 

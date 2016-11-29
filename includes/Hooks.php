@@ -93,6 +93,7 @@ class Hooks {
 
 		$text = $image->getLocalFile()->getDescription();
 
+
 		$pattern = '/\[\[(.*)\]\]/';
 		if (preg_match($pattern, $text, $matches)) {
 			$pageUri = $matches[1];
