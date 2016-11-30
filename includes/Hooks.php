@@ -90,6 +90,7 @@ class Hooks {
 	public static function onUploadComplete( &$image ) {
 
 		// if file comment contain a link to a page, we expressaly link it to the page
+		// Warning : page is not recorded yet, so it has no id !!!
 
 		$text = $image->getLocalFile()->getDescription();
 

@@ -153,6 +153,35 @@ pageMediaGallery = {
 		$('#PageGallery').scrollTop($('#PageGallery')[0].scrollHeight);
 	},
 	
+	
+	addFileToPagesGroup: function(filePage, grouppage) {
+		// fonction to do second request to execute follow action
+		function ajaxGroupsPageQuery(jsondata) {
+			var token = jsondata.query.tokens.csrftoken;
+			$.ajax({
+				type: "POST",
+				url: mw.util.wikiScript('api'),
+				data: { 
+					action:'goupspage', 
+					format:'json', 
+					groupaction: 'add', token: token, 
+					memberpage: filePage, 
+					groupspage: grouppage
+				},
+			    dataType: 'json'
+			});
+		};
+		
+		// first request to get token
+		$.ajax({
+			type: "GET",
+			url: mw.util.wikiScript('api'),
+			data: { action:'query', format:'json',  meta: 'tokens', type:'csrf'},
+		    dataType: 'json',
+		    success: ajaxGroupsPageQuery
+		});
+	},
+	
 	initDraggaBleBehaviour() {
 		
 	    var $gallery = $( ".msupload-list" ),
@@ -233,6 +262,7 @@ pageMediaGallery = {
 		$('#PageGallery').show();
 		setTimeout(pageMediaGallery.callMsUpload, 300);
 		setTimeout(pageMediaGallery.initDraggaBleBehaviour, 600);
+		setTimeout(pageMediaGallery.initBind, 610);
 		
 		$('.multipleTemplateAdder').click(function () {
 			// whe launch createMultipleUploader after a timeout, 
@@ -243,6 +273,20 @@ pageMediaGallery = {
 		$( ".addAboveButton" )
 			    .on( "click", null, pageMediaGallery.stepAdded );
 	},
+	
+	initBind: function() {
+		var uploader = pageMediaGallery.uploader;
+		
+		uploader.bind( 'FileUploaded',function(uploader, file, success) {
+			if( success) {
+				isUploaded = true;
+				console.log(file);
+				
+				pageMediaGallery.addFileToPagesGroup('File:' + file.name,  mw.config.get('wgPageName'));
+			}
+		} );
+	},
+	
 	
 	
 	
