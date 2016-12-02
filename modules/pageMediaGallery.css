@@ -9,8 +9,23 @@
     background-color: #111; /* Black*/
     overflow-x: visible; /* Disable horizontal scroll  do not work with dragable*/
     overflow-y: scroll;
-    padding-top: 60px; /* Place content 60px from the top */
+    padding-top: 10px; /* Place content 60px from the top */
     transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.pg_sidebar .PageGalleryTitle {
+	color:#FFF;
+	margin-left:5px;
+	font-size:90%;
+	text-align:center;
+	text-transform:uppercase;
+}
+.pg_sidebar .PageGallerysubTitle {
+	color:#FFF;
+	text-align:center;
+	margin-left:5px;
+	font-size:90%;
+	
 }
 
 #PageGalleryUploader {
@@ -40,7 +55,19 @@
 .pg_sidebar .msupload-list .green,
 .pg_sidebar .msupload-list .file {
 	width:100%;
+	margin:2px 0;
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
 }
+.pg_sidebar .msupload-list .green:active,
+.pg_sidebar .msupload-list .file:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
 .pg_sidebar .msupload-list .file .file-thumb {
     height: 100%;
 }
@@ -97,6 +124,10 @@
 
 .formmediagallery{
 	min-height:100px;
+}
+
+.msupload-bottom {
+	margin:0 5px 10px 5px;
 }
 
 .dropHelp {

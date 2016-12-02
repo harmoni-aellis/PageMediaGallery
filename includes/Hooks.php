@@ -66,7 +66,14 @@ class Hooks {
 
 
 		$out = '';
-		$out .= '<div id="PageGallery" class="pg_sidebar"><div id="PageGalleryUploader">';
+		$out .= '<div id="PageGallery" class="pg_sidebar">
+
+				<h6 class="PageGalleryTitle" title="'.wfMessage( 'pmg-gallery-subtitle' )->parse().'"
+								type="button" data-toggle="tooltip" data-placement="right">'
+					. wfMessage( 'pmg-gallery-title' )->parse().'
+					<span class="smwtticon info"></span></h6>
+
+				<div id="PageGalleryUploader">';
 
 		foreach ($files as $file) {
 			$fileUrl = $file->getUrl();
