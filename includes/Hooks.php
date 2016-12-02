@@ -20,25 +20,23 @@ class Hooks {
 
 	}
 	static function start( ) {
-		global $wgOut, $wgScriptPath, $wgJsMimeType, $wgFileExtensions;
+		global $wgOut, $wgScriptPath, $wgJsMimeType, $wgFileExtensions, $wgUser;
+		$wgOut->addModules ( 'ext.pageMediaGallery' );
+		$wgOut->addJsConfigVars ( array (
+				'wgFileExtensions' => array_values ( array_unique ( $wgFileExtensions ) )
+		) );
 
-		$wgOut->addModules( 'ext.pageMediaGallery' );
-		$wgOut->addJsConfigVars( array(
-			'wgFileExtensions' => array_values( array_unique( $wgFileExtensions ) ),
-		));
-
-		$pmgVars = array(
-			'scriptPath' => $wgScriptPath,
+		$pmgVars = array (
+				'scriptPath' => $wgScriptPath
 		);
 
-		$pmgVars = json_encode( $pmgVars );
+		$pmgVars = json_encode ( $pmgVars );
 
-
-
-		$galleryBody = self::getGalleryBody($wgOut->getTitle());
-
-		$wgOut->addHTML($galleryBody);
-		$wgOut->addScript( "<script type=\"$wgJsMimeType\">window.pmgVars = $pmgVars;</script>\n" );
+		if ($wgUser->getId ()) {
+			$galleryBody = self::getGalleryBody ( $wgOut->getTitle () );
+			$wgOut->addHTML ( $galleryBody );
+		}
+		$wgOut->addScript ( "<script type=\"$wgJsMimeType\">window.pmgVars = $pmgVars;</script>\n" );
 
 		return true;
 	}
