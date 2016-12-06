@@ -366,10 +366,10 @@ pageMediaGallery = {
 	}
 };
 
-$( document ).ready(function() {
+mw.loader.using( 'ext.MsUpload' ).then( function () {
 	$( pageMediaGallery.init );
 	$( formGallery.init );
-});
+} );
 
 
 
