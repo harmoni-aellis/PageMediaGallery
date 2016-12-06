@@ -67,6 +67,9 @@
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
 }
+.pg_sidebar .msupload-list .file .file-name {
+    width: 51%;
+}
 
 .pg_sidebar .msupload-list .file .file-thumb {
     height: 100%;
@@ -125,7 +128,6 @@
 .formmediagallery{
 	min-height:100px;
 }
-
 .msupload-bottom {
 	margin:0 5px 10px 5px;
 }
