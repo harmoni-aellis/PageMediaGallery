@@ -182,7 +182,7 @@ pageMediaGallery = {
 		});
 	},
 	
-	initDraggaBleBehaviour() {
+	initDraggaBleBehaviour: function() {
 		
 	    var $gallery = $( ".msupload-list" ),
 	     $trash = $( ".msuploadContainer" );
@@ -233,7 +233,7 @@ pageMediaGallery = {
 	},
 	
 	
-	callMsUpload() {
+	callMsUpload: function() {
 		pageMediaGallery.uploader = MsUpload.createUploaderOnElement($('#PageGalleryUploader'), true);
 		MsUpload.initWithImgElement(pageMediaGallery.uploader);
 		MsUpload.onRefresh = pageMediaGallery.onRefresh;
