@@ -94,7 +94,7 @@ formGallery = {
 			files = new Array();
 			$(this).find('input.createboxInput').each(function (i) {
 				if ($(this).val()) {
-					var image = $(this).parentsUntil('div').nextAll('.sfImagePreviewWrapper').find('img').first();
+					var image = $(this).parentsUntil('div').nextAll('.pfImagePreviewWrapper').find('img').first();
 					formGallery.addThumb(container, image.clone(), $(this).val());
 				}
 			});
