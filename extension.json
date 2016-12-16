@@ -19,6 +19,9 @@
 		"EditPage::showEditForm:initial": [
 			"PageMediaGallery\\Hooks::start"
 		],
+		"FormEdit::showEditForm:initial": [
+			"PageMediaGallery\\Hooks::start"
+		],
 		"sfRenderingEnd": [
 			"PageMediaGallery\\Hooks::addToForm"
 		],
