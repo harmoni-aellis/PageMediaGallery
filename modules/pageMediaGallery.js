@@ -218,6 +218,9 @@ pageMediaGallery = {
 	      },
 	      drop: function( event, ui ) {
 	    	  var image = ui.draggable.find('img').clone();
+	    	  if (image.length == 0 && ui.draggable.find('video').length > 0) {
+	    		  image = ui.draggable.find('video').clone();
+	    	  }
 	    	  var filename = ui.draggable.attr('data-filename');
 	    	  if ( ! filename) {
 	    		  filename = ui.draggable.find('.file-name').first().text();
