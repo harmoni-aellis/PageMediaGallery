@@ -91,7 +91,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			return true;
 		}
 		
-		emptiesInputs = inputs.filter(function() { 
+		var emptiesInputs = inputs.filter(function() { 
 			return this.value == "" || this.value == 'No-image-yet.jpg'; 
 		});
 		
@@ -113,7 +113,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addImage = function ( img, filename) {
 		
-		var result = formGallery.addImageToFormsInputs(filename);
+		var result = this.addImageToFormsInputs(filename);
 
 		console.log("added image : " + result);
 		
@@ -121,6 +121,22 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			this.addThumb(img, filename);
 		} 
 		// TODO : manage error if too many files
+	};
+	
+
+	pagemediagallery.ui.SecondaryGallery.prototype.affFileFromGallery = function( draggedObject) {
+		var image = draggedObject.find('img').clone();
+		if (image.length == 0 && draggedObject.find('video').length > 0) {
+			image = draggedObject.find('video').clone();
+		}
+		var filename = draggedObject.attr('data-filename');
+		if (!filename) {
+			filename = draggedObject.find('.file-name').first().text();
+		}
+		this.addImage(image, filename);
+
+		// trick to hide the 'revert' movement of the image back to the gallery
+		$('.ui-draggable-dragging').hide();
 	};
 	
 	
@@ -150,32 +166,53 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		     e.stopPropagation();
 		     e.preventDefault();
 		});
+		
+
+		// accept items match file uploads from filesystem
 		target.off( "drop").on('drop', function (e) 
 		{
-			// TODO : check if it is file drop from gallery, or file from filesystem
-		     e.stopPropagation();
-		     e.preventDefault();
-		     
-		     $(this).css('border', '2px dotted #0B85A1');
-		     secondaryGallery.primaryGallery.open();
-		     var files = e.originalEvent.dataTransfer.files;
-		     for (var index = 0; index < files.length; ++index) {
-		    	var isUploaded = false;
-		    	// add file to be uploaded in mediaGallery
-			    uploader.addFile(files[index]);
-			    // add bind function to add it to form once it is uploaded
-			    uploader.bind( 'FileUploaded',function(uploader, file, success) {
-			    		if(! isUploaded && success) {
-			    			isUploaded = true;
-				    		var img = file.li.find('img.file-thumb');
-				    		secondaryGallery.addImage( img.clone(), file.name);
-			    		}
-			    	} );
-		     }
-		     //uploader.start();
-		     secondaryGallery.primaryGallery.onRefresh();
-		     
+			if (!e.originalEvent.dataTransfer) {
+				return;
+			}
+			e.stopPropagation();
+			e.preventDefault();
+
+			$(this).css('border', '2px dotted #0B85A1');
+			secondaryGallery.primaryGallery.open();
+			var files = e.originalEvent.dataTransfer.files;
+			for (var index = 0; index < files.length; ++index) {
+				var isUploaded = false;
+				// add file to be uploaded in mediaGallery
+				uploader.addFile(files[index]);
+				// add bind function to add it to form once it is
+				// uploaded
+				uploader.bind('FileUploaded', function(uploader, file,
+						success) {
+					if (!isUploaded && success) {
+						isUploaded = true;
+						var img = file.li.find('img.file-thumb');
+						secondaryGallery.addImage(img.clone(),
+								file.name);
+					}
+				});
+			}
+			// uploader.start();
+			secondaryGallery.primaryGallery.onRefresh();
+
 		});
+		
+		// accept drop item from Primary gallery
+		target.droppable({
+		      accept: ".msupload-list > li",
+		      classes: {
+		        "ui-droppable-active": "ui-state-default",
+		        "ui-droppable-hover": "ui-state-hover"
+		      },
+		      drop: function( event, ui ) {
+		    	  secondaryGallery.affFileFromGallery(ui.draggable);
+		      }
+		    });
+		
 		// avoid opening file when drop outside of areas :
 		$(document).on('drop', function (e) 
 				{
@@ -184,6 +221,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				});
 		
 	}
+	
+	
 	
 }( jQuery, mediaWiki, pagemediagallery ) );
 		

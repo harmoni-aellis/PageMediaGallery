@@ -99,28 +99,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	      }
 	    });
 		
-	    // Let the trash be droppable, accepting the gallery items
-	    $trash.droppable({
-	      accept: ".msupload-list > li",
-	      classes: {
-	        "ui-droppable-active": "ui-state-default",
-	        "ui-droppable-hover": "ui-state-hover"
-	      },
-	      drop: function( event, ui ) {
-	    	  var image = ui.draggable.find('img').clone();
-	    	  if (image.length == 0 && ui.draggable.find('video').length > 0) {
-	    		  image = ui.draggable.find('video').clone();
-	    	  }
-	    	  var filename = ui.draggable.attr('data-filename');
-	    	  if ( ! filename) {
-	    		  filename = ui.draggable.find('.file-name').first().text();
-	    	  }
-	    	  formGallery.addImage(this, image, filename );
-	    	  
-	    	  // trick to hide the 'revert' movement of the image back to the gallery
-	    	  $('.ui-draggable-dragging').hide();
-	      }
-	    });
 	};
 	
 
