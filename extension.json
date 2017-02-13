@@ -37,7 +37,13 @@
 	"ResourceModules": {
 		"ext.pageMediaGallery": {
 			"scripts": [
-				"pageMediaGallery.js"
+				"pagemediagallery.initialisation.js",
+				"pagemediagallery.ui.SecondaryGallery.js",
+				"pagemediagallery.ui.PrimaryGallery.js"
+			],
+			"dependencies": [
+				"oojs",
+				"ext.MsUpload"
 			],
 			"styles": [
 				"pageMediaGallery.css"
