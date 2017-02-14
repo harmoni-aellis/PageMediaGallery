@@ -147,6 +147,15 @@
 	text-align:right;
     margin:0 0 5px;
 }
+
+.msuploadContainer .buttonBar .select-file {
+	display:inline-block;
+    background: url(images/msu-upload-button.png) no-repeat 1px 2px;
+    width: 32px;
+    height: 29px;
+    top: -4px;
+    cursor: pointer;
+}
 .msuploadContainer .uploadButton.loading {
 	background: #337ab7 url(images/msu-loading.png) no-repeat 7px 8px ;
 }

@@ -57,10 +57,44 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		});
 		this.uploadButton.hide();
 		
-		this.buttonbar = $('<div>').addClass('buttonBar');
+		
+		this.selectFileButton = $('<div>').addClass('select-file');
+		
+		this.selectFileButton.click(function () {
+			
+		});
 
+		
+		this.buttonbar = $('<div>').addClass('buttonBar');
 		this.buttonbar.append(this.uploadButton);
+		this.buttonbar.append(this.selectFileButton);
 		$(this.$container).append(this.buttonbar);
+		
+		this.addBrowseButton();
+	}
+	pagemediagallery.ui.SecondaryGallery.prototype.addFileToUpload = function (file) {
+		this.filesUploading.push( new pagemediagallery.ui.FileUploading(file,this));
+	}
+	
+	pagemediagallery.ui.SecondaryGallery.prototype.addBrowseButton = function() {
+		var secondaryGallery = this;
+		var fileInput = new mOxie.FileInput({
+			browse_button: this.selectFileButton[ 0 ], // or document.getElementById('file-picker')
+			container: this.$container[ 0 ],
+			multiple: true // allow multiple file selection
+		});
+
+		fileInput.onchange = function(e) {
+			// do something to files array
+			console.info(e.target.files); // or this.files or fileInput.files
+			for (var index = 0; index < e.target.files.length; ++index) {
+				// add file to be uploaded in mediaGallery
+				secondaryGallery.addFileToUpload(e.target.files[index]);
+			}
+			
+		};
+
+		fileInput.init();
 	}
 
 	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename, isTemp = false, tempToReplace = false ) {
@@ -189,9 +223,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	pagemediagallery.ui.SecondaryGallery.prototype.affFilesToLoad = function( files) {
 		for (var index = 0; index < files.length; ++index) {
 			// add file to be uploaded in mediaGallery
-			this.filesUploading.push( new pagemediagallery.ui.FileUploading(files[index],this));
+			this.addFileToUpload(files[index]);
 		}
-		
 	}
 	
 	
