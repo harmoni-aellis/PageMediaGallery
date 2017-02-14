@@ -168,6 +168,12 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	};
 	
 	
+	pagemediagallery.ui.PrimaryGallery.prototype.startUpload = function() {
+		
+		this.uploader.start();
+	};
+	
+	
 	/**
 	 * this add drop zone around file fields in form, when a file is dropped,
 	 * it upload it in the page gallery, and if success, it add it to the field

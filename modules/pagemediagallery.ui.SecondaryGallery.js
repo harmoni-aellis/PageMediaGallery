@@ -33,6 +33,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.ol.append($('<ul>'));
 		$(this.$container).prepend(this.ol);
 		
+		this.addUploadButton();
+		
 		// add image present in inputs
 		$(this.$container).find('input.createboxInput').each(function (i) {
 			if ($(this).val()) {
@@ -42,6 +44,24 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		});
 		this.manageDropOnFormField();
 	};
+	
+	pagemediagallery.ui.SecondaryGallery.prototype.addUploadButton = function() {
+		var secondaryGallery = this;
+		// add upload button
+		this.uploadButton = $('<a>'+ mw.msg( 'msu-upload-all' )+'</a>').addClass('uploadButton');
+		
+		this.uploadButton.click(function() {
+			$(this).addClass('loading');
+			secondaryGallery.primaryGallery.startUpload();
+			return false;
+		});
+		this.uploadButton.hide();
+		
+		this.buttonbar = $('<div>').addClass('buttonBar');
+
+		this.buttonbar.append(this.uploadButton);
+		$(this.$container).append(this.buttonbar);
+	}
 
 	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename, isTemp = false, tempToReplace = false ) {
 		var li;
@@ -131,6 +151,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			this.addThumb(img, filename, false, tempToReplace);
 		} 
 		// TODO : manage error if too many files
+		this.uploadButton.hide();
+
 	};
 
 	/**
@@ -141,6 +163,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addTempImage = function ( img, filename) {
 		this.addThumb(img, filename, true);
+
+		this.uploadButton.show();
+		this.uploadButton.removeClass('loading');
 	};
 	
 

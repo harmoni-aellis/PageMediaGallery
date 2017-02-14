@@ -143,9 +143,33 @@
 	padding-top: 66%; 	/* initial ratio of 3:2*/
 }
 
+.msuploadContainer .buttonBar {
+	text-align:right;
+    margin:0 0 5px;
+}
+.msuploadContainer .uploadButton.loading {
+	background: #337ab7 url(images/msu-loading.png) no-repeat 7px 8px ;
+}
+.msuploadContainer .uploadButton {
+    padding: 6px 11px 6px 32px;
+    background: url(images/msu-upload-icon.png) no-repeat 5px 4px;
+    background-color: #337ab7;
+    border:none;
+    border-radius: 3px;
+    color: white;
+    font-size: 14px;
+    font-weight: normal;
+    display:inline-block;
+}
+.msuploadContainer .uploadButton:hover {
+    text-decoration: none;
+    background-color: #2b6e87;
+}
+
 .msupload-bottom {
 	margin:0 5px 10px 5px;
 }
+
 
 .dropHelp {
 	display:block;
