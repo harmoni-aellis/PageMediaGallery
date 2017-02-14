@@ -19,6 +19,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.primaryGallery = primaryGallery;
 		this.$container = container;
 		
+		//file to be uploaded
+		this.filesUploading = [];
+		
 		if ($(this.$container).find('.formmediagallery').length > 0) {
 			return ;
 		}
@@ -40,9 +43,14 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.manageDropOnFormField();
 	};
 
-	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename ) {
+	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename, isTemp = false, tempToReplace = false ) {
+		var li;
 		
-		var li = $('<li>').attr('data-filename', filename).append(img);
+		if (tempToReplace && tempToReplace.parent('li').length == 1) {
+			li = tempToReplace.parent('li').empty().attr('class','').append(img);
+		} else {
+			li = $('<li>').attr('data-filename', filename).append(img);
+		}
 		var secondaryGallery = this;
 		
 		var cancelbutton = $( '<span>' ).attr({ 'class': 'file-cancel', 'title': mw.msg( 'msu-cancel-upload' ) });
@@ -50,6 +58,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			secondaryGallery.removeImg( this );
 		});
 		li.prepend( cancelbutton );
+		
+		if (isTemp) {
+			li.addClass('fileToBeUpload');
+		}
 		
 		$(this.$container).find('.formmediagallery ul').append(li);
 	};
@@ -104,23 +116,31 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		}
 		return true;
 	};
-	
+
 
 	/**
 	 * add an image to the secondary gallery
 	 * 
 	 *  @param String filename filename to add
 	 */
-	pagemediagallery.ui.SecondaryGallery.prototype.addImage = function ( img, filename) {
+	pagemediagallery.ui.SecondaryGallery.prototype.addImage = function ( img, filename, tempToReplace) {
 		
 		var result = this.addImageToFormsInputs(filename);
-
-		console.log("added image : " + result);
 		
 		if ( result) { 
-			this.addThumb(img, filename);
+			this.addThumb(img, filename, false, tempToReplace);
 		} 
 		// TODO : manage error if too many files
+	};
+
+	/**
+	 * add temporary image to the secondary gallery 
+	 * (image of file to be uploaded)
+	 * 
+	 *  @param String filename filename to add
+	 */
+	pagemediagallery.ui.SecondaryGallery.prototype.addTempImage = function ( img, filename) {
+		this.addThumb(img, filename, true);
 	};
 	
 
@@ -138,6 +158,16 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		// trick to hide the 'revert' movement of the image back to the gallery
 		$('.ui-draggable-dragging').hide();
 	};
+	
+
+	
+	pagemediagallery.ui.SecondaryGallery.prototype.affFilesToLoad = function( files) {
+		for (var index = 0; index < files.length; ++index) {
+			// add file to be uploaded in mediaGallery
+			this.filesUploading.push( new pagemediagallery.ui.FileUploading(files[index],this));
+		}
+		
+	}
 	
 	
 	pagemediagallery.ui.SecondaryGallery.prototype.manageDropOnFormField = function () {
@@ -179,23 +209,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 			$(this).css('border', '2px dotted #0B85A1');
 			secondaryGallery.primaryGallery.open();
+			
 			var files = e.originalEvent.dataTransfer.files;
-			for (var index = 0; index < files.length; ++index) {
-				var isUploaded = false;
-				// add file to be uploaded in mediaGallery
-				uploader.addFile(files[index]);
-				// add bind function to add it to form once it is
-				// uploaded
-				uploader.bind('FileUploaded', function(uploader, file,
-						success) {
-					if (!isUploaded && success) {
-						isUploaded = true;
-						var img = file.li.find('img.file-thumb');
-						secondaryGallery.addImage(img.clone(),
-								file.name);
-					}
-				});
-			}
+			secondaryGallery.affFilesToLoad(files);
+			
 			// uploader.start();
 			secondaryGallery.primaryGallery.onRefresh();
 

@@ -39,7 +39,8 @@
 			"scripts": [
 				"pagemediagallery.initialisation.js",
 				"pagemediagallery.ui.SecondaryGallery.js",
-				"pagemediagallery.ui.PrimaryGallery.js"
+				"pagemediagallery.ui.PrimaryGallery.js",
+				"pagemediagallery.ui.FileUploading.js"
 			],
 			"dependencies": [
 				"oojs",

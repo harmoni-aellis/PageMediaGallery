@@ -131,6 +131,18 @@
 .formmediagallery{
 	min-height:100px;
 }
+
+.formmediagallery .tempFileLoader {
+	background: url(images/upload.png) no-repeat center center;
+    width: 100%;
+    height: 100%%;
+}
+.formmediagallery .tempFileLoader:before{
+	content: "";
+	display: block;
+	padding-top: 66%; 	/* initial ratio of 3:2*/
+}
+
 .msupload-bottom {
 	margin:0 5px 10px 5px;
 }

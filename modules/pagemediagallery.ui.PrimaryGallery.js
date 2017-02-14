@@ -105,6 +105,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	pagemediagallery.ui.PrimaryGallery.prototype.initcallMsUpload =  function() {
 		var primaryGallery = this;
 		this.uploader = MsUpload.createUploaderOnElement($('#PageGalleryUploader'), true);
+		this.uploader.primaryGallery = this;
 		MsUpload.initWithImgElement(this.uploader);
 		MsUpload.onRefresh = function () {
 			primaryGallery.onRefresh();
@@ -126,8 +127,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	pagemediagallery.ui.PrimaryGallery.prototype.init = function () {
 		//var openlink = $( '<a>Open</a>' ).click(pageMediaGallery.initcallMsUpload);
 		var pageMediaGallery = this;
-		
-		console.log(pageMediaGallery.constructor.name);
 		
 		//alert(openlink);
 		//$('#PageGallery').prepend(openlink)
@@ -160,14 +159,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	};
 	
 	pagemediagallery.ui.PrimaryGallery.prototype.initBind = function() {
-		var primaryGallery = this;
 		
 		this.uploader.bind( 'FileUploaded',function(uploader, file, success) {
 			if( success) {
-				isUploaded = true;
-				console.log(file);
-				
-				primaryGallery.addFileToPagesGroup('File:' + file.name,  mw.config.get('wgPageName'));
+				uploader.primaryGallery.addFileToPagesGroup('File:' + file.name,  mw.config.get('wgPageName'));
 			}
 		} );
 	};
