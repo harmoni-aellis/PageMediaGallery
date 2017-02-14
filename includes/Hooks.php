@@ -64,7 +64,7 @@ class Hooks {
 
 
 		$out = '';
-		$out .= '<div id="PageGallery" class="pg_sidebar">
+		$out .= '<div id="PageGallery" class="pg_sidebar" style="display:none">
 
 				<h6 class="PageGalleryTitle" title="'.wfMessage( 'pmg-gallery-subtitle' )->parse().'"
 								type="button" data-toggle="tooltip" data-placement="right">'

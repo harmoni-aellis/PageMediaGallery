@@ -20,18 +20,20 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		
 		this.file = file;
 		this.isUploaded = false;
-
-		this.fileAdded();
-		
-		// add file to the page gallery uploader
-		uploader.addFile(file);
 		
 		// init class
 		if(! pagemediagallery.ui.FileUploading.initialised ){
 			// to avoid bind many time the same event, check if it is done before
 			pagemediagallery.ui.FileUploading.initialised = true;
 			uploader.bind('FileUploaded', pagemediagallery.ui.FileUploading.onFileUpload);
+			uploader.bind('FilesAdded', pagemediagallery.ui.FileUploading.onFilesAdded);
 		}
+
+		this.fileAdded();
+		
+		// add file to the page gallery uploader
+		uploader.addFile(file);
+		
 		// register instance
 		pagemediagallery.ui.FileUploading.instances.push(this);
 	};
@@ -67,9 +69,49 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.secondaryGallery.addImage(img.clone(), file.name, this.tempImage);
 	};
 	
+	pagemediagallery.ui.FileUploading.prototype.updateFileTempImage = function ( file ) {
+		
+		var tempImage = this.tempImage;
+		
+		// add image on loader
+		// this does not work, :/
+		try {
+			var image = new o.Image();
+			image.onload = function () {
+				this.embed( tempImage, {
+					width: 30,
+					height: 30,
+					crop: true
+				});
+			};
+			image.load( file.getSource() );
+			this.tempImage.addClass( 'file-load' );
+		} catch ( event ) {
+			this.tempImage.addClass( 'image' );
+		}
+	};
+	
 	pagemediagallery.ui.FileUploading.prototype.cancelUpload = function (  ) {
 		
 	};
+	
+	/**
+	 * static method to listen FileAdded event and call updateFileTempImage on corresponding items
+	 */
+	pagemediagallery.ui.FileUploading.onFilesAdded = function (uploader, files) {
+		for (var a = 0; a < files.length; a++) {
+			var file = files[a];
+			for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
+				// here, in case of multiple file upload, 
+				// I cannot find an exact condition to find if the uploaded file match the one for this object
+				var initName = pagemediagallery.ui.FileUploading.instances[i].file.name;
+				if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
+				//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
+					pagemediagallery.ui.FileUploading.instances[i].updateFileTempImage(file);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * static method to listen FileUpload event and call confirmUpload on corresponding items
