@@ -71,8 +71,6 @@ formGallery = {
 	addImage: function(container, img, filename) {
 		
 		result = formGallery.addImageToFormsInputs(container,filename);
-
-		console.log("added image : " + result);
 		
 		if ( result) { 
 			formGallery.addThumb(container, img, filename);
@@ -283,8 +281,6 @@ pageMediaGallery = {
 		uploader.bind( 'FileUploaded',function(uploader, file, success) {
 			if( success) {
 				isUploaded = true;
-				console.log(file);
-				
 				pageMediaGallery.addFileToPagesGroup('File:' + file.name,  mw.config.get('wgPageName'));
 			}
 		} );
@@ -306,13 +302,6 @@ pageMediaGallery = {
 		// it upload it in the page gallery, and if success, it add it to the field
 		
 		var obj = $(".formmediagallery");
-		
-		// check if already bounded :
-		console.log( obj.data('events'))
-		//var bounded = -1 !== $.inArray(onButtonClicked, obj.data('events').drop);
-		//console.log('isBouded' + bounded);
-		
-		
 		
 		obj.css('border', '2px dotted #0B85A1');
 		if(obj.find('.dropHelp').length == 0) {

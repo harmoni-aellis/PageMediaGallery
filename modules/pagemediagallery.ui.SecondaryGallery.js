@@ -43,7 +43,35 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			}
 		});
 		this.manageDropOnFormField();
+		$(this.$container).find('ul').sortable({
+			    start: function (e, ui) {
+			        ui.placeholder.append(ui.item.find('img,video').clone());
+			    },
+			    stop: function (e, info) {
+			    	secondaryGallery.updateImageInputsValues();
+			    }
+		});
 	};
+	
+	/**
+	 * update image inputs value according to ul list in the dom
+	 * must be call after reorder items, or after insert/delete (if not managed by insert/delete function)
+	 * 
+	 */
+	pagemediagallery.ui.SecondaryGallery.prototype.updateImageInputsValues = function() {
+		var items = $(this.$container).find('ul li').not('.fileToBeUpload');
+		var inputs = $(this.$container).find('input.createboxInput');
+		
+		for (var i=0; i< inputs.length; i++) {
+			var item = items.get(i);
+			var input = inputs.get(i);
+			if (item) {
+				$(input).val($(item).attr('data-filename'));
+			} else {
+				$(input).val('');
+			}
+		}
+	}
 	
 	pagemediagallery.ui.SecondaryGallery.prototype.addUploadButton = function() {
 		var secondaryGallery = this;
@@ -60,11 +88,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		
 		this.selectFileButton = $('<div>').addClass('select-file');
 		
-		this.selectFileButton.click(function () {
-			
-		});
-
-		
 		this.buttonbar = $('<div>').addClass('buttonBar');
 		this.buttonbar.append(this.uploadButton);
 		this.buttonbar.append(this.selectFileButton);
@@ -72,6 +95,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		
 		this.addBrowseButton();
 	}
+	
 	pagemediagallery.ui.SecondaryGallery.prototype.addFileToUpload = function (file) {
 		this.filesUploading.push( new pagemediagallery.ui.FileUploading(file,this));
 	}
@@ -101,7 +125,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		var li;
 		
 		if (tempToReplace && tempToReplace.parent('li').length == 1) {
-			li = tempToReplace.parent('li').empty().attr('class','').append(img);
+			li = tempToReplace.parent('li').empty().attr('class','').attr('data-filename', filename).append(img);
 		} else {
 			li = $('<li>').attr('data-filename', filename).append(img);
 		}
@@ -137,7 +161,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			if (inputs.length > 0) {
 				// remove filename from input
 				inputs.first().val('');
-			} 
+			}
+			this.updateImageInputsValues();
 		}
 	};
 	
@@ -183,6 +208,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		
 		if ( result) { 
 			this.addThumb(img, filename, false, tempToReplace);
+			this.updateImageInputsValues();
 		} 
 		// TODO : manage error if too many files
 		this.uploadButton.hide();

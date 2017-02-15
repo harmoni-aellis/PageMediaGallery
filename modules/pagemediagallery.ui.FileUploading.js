@@ -64,7 +64,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.isUploaded = true;
 		
 		this.tempImage.hide();
-		
 		var img = file.li.find('img.file-thumb');
 		this.secondaryGallery.addImage(img.clone(), file.name, this.tempImage);
 	};
