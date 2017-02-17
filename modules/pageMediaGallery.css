@@ -9,7 +9,7 @@
     background-color: #111; /* Black*/
     overflow-x: visible; /* Disable horizontal scroll  do not work with dragable*/
     overflow-y: scroll;
-    padding: 10px 10px 0 10px; /* Place content 10px from the top */
+    padding: 10px; /* Place content 10px from the top */
     transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
@@ -93,7 +93,7 @@
 
 .col-xs-12.ui-droppable {
 	padding: 0px;
-    background: #f7f7f7;
+    background: #f8f8f8;
 }
 
 .formmediagallery{
@@ -106,11 +106,6 @@
 .formmediagallery li:first-child {
 	width: 99%;
 	height: 99%;
-}
-
-.msuploadContainer .formmediagallery .buttonBar {
-	float: right;
-	margin: 5px 5px 0px 0px;
 }
 
 .msuploadContainer .uploadButton:hover {
@@ -155,13 +150,12 @@
 
 .formmediagallery{
 	min-height:100px;
-    background-color: #f5fdff;
 }
 
 .formmediagallery .tempFileLoader {
 	background: url(images/upload.png) no-repeat center center;
     width: 100%;
-    height: 100%%;
+    height: 100%;
 }
 .formmediagallery .tempFileLoader:before{
 	content: "";
@@ -171,7 +165,8 @@
 
 .msuploadContainer .buttonBar {
 	text-align:right;
-    margin:0 0 5px;
+	float: right;
+	margin: 5px 5px 0px 0px;
 }
 
 .msuploadContainer .buttonBar .select-file {
