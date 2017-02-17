@@ -27,9 +27,9 @@
 	font-size:90%;	
 }
 
-#PageGalleryUploader {
+#PageGallery #PageGalleryUploader {
 	min-height:100%;
-	padding:10px;
+	padding:0px 5px;
 }
 #PageGallery {
 	display:none;
@@ -56,6 +56,7 @@
 .pg_sidebar .msupload-list .file {
 	width:100%;
 	margin:2px 0;
+	padding:0px;
     cursor: move; /* fallback if grab cursor is unsupported */
     cursor: grab;
     cursor: -moz-grab;
@@ -110,6 +111,10 @@
 .msuploadContainer .formmediagallery .buttonBar {
 	float: right;
 	margin: 5px 5px 0px 0px;
+}
+
+.msuploadContainer .uploadButton:hover {
+	cursor:pointer;
 }
 
 .formmediagallery li:hover {
