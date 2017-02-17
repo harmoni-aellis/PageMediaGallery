@@ -56,7 +56,6 @@
 .pg_sidebar .msupload-list .file {
 	width:100%;
 	margin:2px 0;
-	padding:0px;
     cursor: move; /* fallback if grab cursor is unsupported */
     cursor: grab;
     cursor: -moz-grab;
@@ -181,7 +180,9 @@
 	background: #337ab7 url(images/msu-loading.png) no-repeat 7px 8px ;
 }
 .msuploadContainer .uploadButton {
-    padding: 6px 11px 6px 32px;
+    padding: 4px 8px 4px 30px;
+    margin: -2px 5px 0 5px;
+	float:left;
     background: url(images/msu-upload-icon.png) no-repeat 5px 4px;
     background-color: #337ab7;
     border:none;
@@ -200,6 +201,11 @@
 	margin:0 5px 10px 5px;
 }
 
+.msupload-bottom .msupload-files {
+    font-size: 1em;
+    padding: 6px 7px 6px 30px;
+    margin-right: 0px;
+}
 
 .dropHelp {
 	display:block;
