@@ -39,6 +39,11 @@ formGallery = {
 		
 		$(container).find('.formmediagallery ul').append(li);
 	},
+	dispErrorMessage: function (container, message){
+		// remove previous message
+		$(containe).find('span.errorMessage').remove();
+		$('<span class="errorMessage">').html( message).appendTo(container);
+	},
 	addImageToFormsInputs: function (container, filename) {
 		
 		// this function automaticaly add image to forminputs included in container div
@@ -63,7 +68,7 @@ formGallery = {
 			// if we get an input with no value, we add filename to it
 			emptiesInputs.first().val(filename);
 		} else {
-			$('<span>').html( mw.msg( 'msu-upload-nbfile-exceed' )).appendTo(container);
+			formGallery.dispErrorMessage(container, mw.msg( 'msu-upload-nbfile-exceed' ));
 			return false;
 		}
 		return true;
