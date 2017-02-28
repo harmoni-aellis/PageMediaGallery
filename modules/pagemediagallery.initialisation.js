@@ -1,4 +1,3 @@
-var pagemediagallery = {};
 
 
 $(document).ready(function (){

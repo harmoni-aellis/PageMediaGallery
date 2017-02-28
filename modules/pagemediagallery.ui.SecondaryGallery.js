@@ -1,3 +1,4 @@
+var pagemediagallery = {};
 
 pagemediagallery.ui = pagemediagallery.ui || {};
 
@@ -161,10 +162,22 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			if (inputs.length > 0) {
 				// remove filename from input
 				inputs.first().val('');
+				this.clearErrorMessages();
 			}
 			this.updateImageInputsValues();
 		}
 	};
+
+
+	pagemediagallery.ui.SecondaryGallery.prototype.clearErrorMessages = function ( ){
+		$(this.$container).find('span.errorMessage').remove();
+	},
+
+	pagemediagallery.ui.SecondaryGallery.prototype.dispErrorMessage = function ( message){
+		// remove previous message
+		this.clearErrorMessages();
+		$('<span class="errorMessage">').html( message).appendTo($(this.$container));
+	},
 	
 
 	/**
@@ -189,12 +202,28 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		if (emptiesInputs.length > 0) {
 			// if we get an input with no value, we add filename to it
 			emptiesInputs.first().val(filename);
+			this.clearErrorMessages();
 		} else {
-			$('<span>').html( mw.msg( 'msu-upload-nbfile-exceed' )).appendTo($(this.$container));
+			this.dispErrorMessage(mw.msg( 'msu-upload-nbfile-exceed' ));
 			return false;
 		}
 		return true;
 	};
+
+	/**
+	 * this function return true is it is still possible to add images
+	 * 
+	 *  @return Boolean
+	 */
+	pagemediagallery.ui.SecondaryGallery.prototype.hasEmptiesSlots = function (  ) {
+		
+		var emptiesInputs = $(this.$container).find('input.createboxInput').filter(function() { 
+			return this.value == "" || this.value == 'No-image-yet.jpg'; 
+		});
+		
+		return emptiesInputs.length > 0;
+	};
+	
 
 
 	/**
@@ -288,8 +317,15 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			if (!e.originalEvent.dataTransfer) {
 				return;
 			}
+			secondaryGallery.clearErrorMessages();
 			e.stopPropagation();
 			e.preventDefault();
+			
+			//check space :
+			if ( ! secondaryGallery.hasEmptiesSlots()) {
+				secondaryGallery.dispErrorMessage(mw.msg( 'msu-upload-nbfile-exceed' ));
+				return;
+			}
 
 			$(this).css('border', '2px dotted #0B85A1');
 			secondaryGallery.primaryGallery.open();

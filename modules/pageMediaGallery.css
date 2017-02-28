@@ -162,6 +162,14 @@
 	padding-top: 66%; 	/* initial ratio of 3:2*/
 }
 
+.msuploadContainer .errorMessage{
+	text-align: center;
+	width: 100%;
+	display: inline-block;
+	margin-bottom: 3px;
+	font-size:1em;
+}
+
 .msuploadContainer .buttonBar {
 	text-align:right;
 	float: right;
