@@ -39,8 +39,13 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		// add image present in inputs
 		$(this.$container).find('input.createboxInput').each(function (i) {
 			if ($(this).val()) {
-				var image = $(this).parentsUntil('div').nextAll('.pfImagePreviewWrapper').find('img,video').first();
-				secondaryGallery.addThumb( image.clone(), $(this).val());
+				var inputId = $(this).attr('id');
+				if (!inputId ) {
+					return;
+				}
+				var image = $('#'+ inputId + '_imagepreview');
+				//var image = $(this).parent().find('.pfImagePreviewWrapper').clone();
+				secondaryGallery.addThumb( image.show(), $(this).val());
 			}
 		});
 		this.manageDropOnFormField();
@@ -132,11 +137,15 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		}
 		var secondaryGallery = this;
 		
+		var buttonBar = $( '<span>' ).attr({ 'class': 'file-buttonbar'});
 		var cancelbutton = $( '<span>' ).attr({ 'class': 'file-cancel', 'title': mw.msg( 'msu-cancel-upload' ) });
 		cancelbutton.click( function () {
 			secondaryGallery.removeImg( this );
 		});
-		li.prepend( cancelbutton );
+		buttonBar.append( cancelbutton );
+		li.append( buttonBar );
+		
+		$(li).find('.image-button').appendTo(buttonBar);
 		
 		if (isTemp) {
 			li.addClass('fileToBeUpload');
