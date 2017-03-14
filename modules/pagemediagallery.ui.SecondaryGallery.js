@@ -158,8 +158,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	
 	pagemediagallery.ui.SecondaryGallery.prototype.removeImg = function ( closeButton ) {
 		
-		var filename = $(closeButton).parent('li').attr('data-filename');
-		$(closeButton).parent('li').remove();
+		var filename = $(closeButton).parents('li').attr('data-filename');
+		$(closeButton).parents('li').remove();
 		if (filename) {
 			var inputs = $(this.$container).find('input.createboxInput');
 			if (inputs.length == 0) {
