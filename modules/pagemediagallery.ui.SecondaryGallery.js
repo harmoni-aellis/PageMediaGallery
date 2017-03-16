@@ -9,6 +9,11 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 * SecondaryGallery class
 	 * create html linked to form input to create a secondary gallery on inputs, linked to the PrimaryGallery for Upload and drag/drop
 	 * container node should be the one with class .msuploadContainer
+	 * 
+	 * possibles hooks fired : 
+	 * mw.hook 'pmg.secondaryGallery.newThumbAdded' (li)
+	 * mw.hook 'pmg.secondaryGallery.itemRemoved' (input)
+	 * mw.hook 'pmg.secondaryGallery.itemChanged' (input, li)
  	 *
 	 * @param container node
 	 * @constructor
@@ -72,8 +77,14 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			var item = items.get(i);
 			var input = inputs.get(i);
 			if (item) {
+				if ( $(input).val() != $(item).attr('data-filename') ) {
+					mw.hook('pmg.secondaryGallery.itemChanged').fire(input, item);
+				}
 				$(input).val($(item).attr('data-filename'));
 			} else {
+				if ($(input).val()) {
+					mw.hook('pmg.secondaryGallery.itemRemoved').fire(input);
+				}
 				$(input).val('');
 			}
 		}
@@ -130,10 +141,13 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename, isTemp = false, tempToReplace = false ) {
 		var li;
 		
+		var imageWrapper = $('<div>').attr('class','pfImagePreviewWrapper');
+		imageWrapper.append(img);
+		
 		if (tempToReplace && tempToReplace.parent('li').length == 1) {
-			li = tempToReplace.parent('li').empty().attr('class','').attr('data-filename', filename).append(img);
+			li = tempToReplace.parent('li').empty().attr('class','').attr('data-filename', filename).append(imageWrapper);
 		} else {
-			li = $('<li>').attr('data-filename', filename).append(img);
+			li = $('<li>').attr('data-filename', filename).append(imageWrapper);
 		}
 		var secondaryGallery = this;
 		
@@ -152,6 +166,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		}
 		
 		$(this.$container).find('.formmediagallery ul').append(li);
+		
+		console.log(img);
+		mw.hook('pmg.secondaryGallery.newThumbAdded').fire(li);
 	};
 	
 	
