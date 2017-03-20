@@ -138,6 +138,19 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		fileInput.init();
 	}
 
+	/**
+	 * add thumb to gallery (do not manage adding image to inputs)
+	 * called when : 
+	 *  - init : call it for each existing image
+	 *  - adding image to download (params isTemp = true) ( add thumb to indicate an image to be uploaded)
+	 *  - adding image, after upload, or after drop an existing image
+	 * 
+	 * @param domelement img the image element to add
+	 * @param string filename the filename for the image
+	 * @param isTemp if true, indicate the the image is about to be uploaded, an other will be added to replace it after upload
+	 * @param tempToReplace fir an image just being uploaded, indicate the corresponding tempImage to remove before adding this one 
+	 * @return {jQuery} li element added
+	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename, isTemp = false, tempToReplace = false ) {
 		var li;
 		
@@ -169,6 +182,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		
 		console.log(img);
 		mw.hook('pmg.secondaryGallery.newThumbAdded').fire(li);
+		
+		return li;
 	};
 	
 	
@@ -250,7 +265,25 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		return emptiesInputs.length > 0;
 	};
 	
-
+	
+	pagemediagallery.ui.SecondaryGallery.prototype.getInputForFile = function ( filename ) {
+		
+		
+		// TODO fire event to alloaw adding edit image tools
+		var items = $(this.$container).find('ul li').not('.fileToBeUpload');
+		
+		var inputs = $(this.$container).find('input.createboxInput');
+		var result = null;
+		
+		for (var i=0; i< inputs.length; i++) {
+			var item = items.get(i);
+			var input = inputs.get(i);
+			if ($(input).val() == filename) {
+				result = input;
+			}
+		}
+		return result;
+	};
 
 	/**
 	 * add an image to the secondary gallery
@@ -262,11 +295,16 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		var result = this.addImageToFormsInputs(filename);
 		
 		if ( result) { 
-			this.addThumb(img, filename, false, tempToReplace);
+			var newItem = this.addThumb(img, filename, false, tempToReplace);
 			this.updateImageInputsValues();
-		} 
-		// TODO : manage error if too many files
+			var fileinput = this.getInputForFile(filename);
+			mw.hook('pmg.secondaryGallery.newImageAdded').fire(fileinput, newItem);
+		}
 		this.uploadButton.hide();
+		
+		// TODO fire event to allow adding edit image tools
+
+		
 
 	};
 
