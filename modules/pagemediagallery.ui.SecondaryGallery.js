@@ -180,7 +180,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		
 		$(this.$container).find('.formmediagallery ul').append(li);
 		
-		console.log(img);
 		mw.hook('pmg.secondaryGallery.newThumbAdded').fire(li);
 		
 		return li;
