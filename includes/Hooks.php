@@ -59,7 +59,7 @@ class Hooks {
 						'page_title',
 						'page_namespace'
 				), array(
-						"SUBSTR(page_title,1,$len) = '$filename'",
+						"SUBSTR(page_title,1,$len)" =>  $filename,
 						'page_namespace' => NS_FILE
 				),
 				__METHOD__
