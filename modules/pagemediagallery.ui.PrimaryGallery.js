@@ -44,6 +44,34 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	};
 
 
+	pagemediagallery.ui.PrimaryGallery.prototype.removeFileFromPagesGroup = function(filePage, grouppage) {
+		// function to do second request to execute follow action
+		function ajaxGroupsPageQuery(jsondata) {
+			var token = jsondata.query.tokens.csrftoken;
+			$.ajax({
+				type: "POST",
+				url: mw.util.wikiScript('api'),
+				data: {
+					action:'goupspage',
+					format:'json',
+					groupaction: 'remove', token: token,
+					memberpage: filePage,
+					groupspage: grouppage
+				},
+			    dataType: 'json'
+			});
+		};
+
+		// first request to get token
+		$.ajax({
+			type: "GET",
+			url: mw.util.wikiScript('api'),
+			data: { action:'query', format:'json',  meta: 'tokens', type:'csrf'},
+		    dataType: 'json',
+		    success: ajaxGroupsPageQuery
+		});
+	};
+
 	pagemediagallery.ui.PrimaryGallery.prototype.addFileToPagesGroup = function(filePage, grouppage) {
 		// function to do second request to execute follow action
 		function ajaxGroupsPageQuery(jsondata) {
@@ -145,6 +173,13 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		setTimeout(function () {
 			pageMediaGallery.initBind();
 		}, 610);
+
+		mw.hook('msupload.fileRemoved').add( function(li) {
+			var filename = li.attr('data-filename');
+			if (filename) {
+				pageMediaGallery.removeFileFromPagesGroup('File:' + filename, mw.config.get('wgPageName'));
+			}
+		});
 
 		/*$('.multipleTemplateAdder').click(function () {
 			// whe launch createMultipleUploader after a timeout,
