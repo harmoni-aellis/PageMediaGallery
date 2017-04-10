@@ -13,6 +13,11 @@
     transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
+.col-pic-detail.ui-droppable {
+    background: #f8f8f8;
+    padding-bottom: 6px;
+}
+
 .pg_sidebar .PageGalleryTitle {
 	color:#FFF;
 	margin-left:5px;
