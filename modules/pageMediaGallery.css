@@ -160,7 +160,6 @@
 
 .formmediagallery{
 	min-height:100px;
-    background-color: #f5fdff;
 }
 
 .formmediagallery .tempFileLoader {
@@ -186,6 +185,8 @@
 	text-align:right;
 	float: right;
 	margin: 5px 5px 0px 0px;
+	z-index: 0;
+    position: relative;
 }
 
 .msuploadContainer .buttonBar .select-file {
