@@ -47,9 +47,35 @@ class Hooks {
 		$out->addModules( 'ext.userswatchbutton.js' );
 	}
 
-	static function getGalleryBody($page) {
+	static function getFileMatching($filename) {
 
-		// get all existing image linked to the page
+		$len = strlen($filename);
+
+		$dbr = wfGetDB( DB_SLAVE );
+		$res = $dbr->select(
+				'page',
+				array(
+						'page_id',
+						'page_title',
+						'page_namespace'
+				), array(
+						"SUBSTR(page_title,1,$len)" =>  $filename,
+						'page_namespace' => NS_FILE
+				),
+				__METHOD__
+				);
+
+		$files = array();
+		if ( $res->numRows() > 0 ) {
+			foreach ( $res as $row ) {
+				$files[] = wfLocalFile(\Title::newFromRow($row));
+			}
+			$res->free();
+		}
+		return $files;
+	}
+
+	static function getGalleryFiles(\Title $page) {
 		$files = [];
 		if ($page) {
 			$fileTitles = GroupsPageCore::getInstance()->getMemberPages($page);
@@ -60,8 +86,25 @@ class Hooks {
 					$files[] = $file;
 				}
 			}
+			if( ! $page->exists()) {
+				// if page doesn't exist yet,
+				// we look for any files that could be linked to the page by name
+				$titleKey = $page->getDBkey();
+				if(strrpos($titleKey, '/')) {
+					$titleKey = substr($titleKey, strrpos($titleKey, '/') +1);
+				}
+				$t = \Title::newFromText($titleKey);
+				// the creation of Title object enable to get formatted DBKey
+				$files = self::getFileMatching($t->getDBkey());
+			}
 		}
+		return $files;
+	}
 
+	static function getGalleryBody($page) {
+
+		// get all existing image linked to the page
+		$files = self::getGalleryFiles($page);
 
 		$out = '';
 		$out .= '<div id="PageGallery" class="pg_sidebar" style="display:none">
@@ -108,6 +151,32 @@ class Hooks {
 			if ($page->exists()) {
 				GroupsPageCore::getInstance()->addPagesToGroup($page, [$fileTitle]);
 			}
+		}
+	}
+
+	/**
+	 * on page creation : we check if files exist with name starting like page name
+	 * and we add found files to the page galery
+	 *
+	 * This is a hack to manage files added to the gallery before page is saved at least once.
+	 *
+	 *
+	 * @param unknown $wikiPage
+	 * @param User $user
+	 * @param unknown $content
+	 * @param unknown $summary
+	 * @param unknown $isMinor
+	 * @param unknown $isWatch
+	 * @param unknown $section
+	 * @param unknown $flags
+	 * @param Revision $revision
+	 */
+	public static function onPageContentInsertComplete( \Wikipage $wikiPage, \User $user, $content, $summary, $isMinor,$isWatch, $section, $flags, \Revision $revision ) {
+
+		$filename = $wikiPage->getTitle()->getDBkey();
+		$files = self::getFileMatching($filename);
+		foreach ($files as $file) {
+			GroupsPageCore::getInstance()->addPagesToGroup($wikiPage->getTitle(),[$file->getTitle()]);
 		}
 	}
 

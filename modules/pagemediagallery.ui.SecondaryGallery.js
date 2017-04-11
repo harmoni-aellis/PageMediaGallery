@@ -4,13 +4,13 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 ( function ( $, mw, pagemediagallery ) {
 	'use strict';
-	
+
 	/**
 	 * SecondaryGallery class
 	 * create html linked to form input to create a secondary gallery on inputs, linked to the PrimaryGallery for Upload and drag/drop
 	 * container node should be the one with class .msuploadContainer
-	 * 
-	 * possibles hooks fired : 
+	 *
+	 * possibles hooks fired :
 	 * mw.hook 'pmg.secondaryGallery.newThumbAdded' (li)
 	 * mw.hook 'pmg.secondaryGallery.itemRemoved' (input)
 	 * mw.hook 'pmg.secondaryGallery.itemChanged' (input, li)
@@ -19,28 +19,28 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 * @constructor
 	 */
 	pagemediagallery.ui.SecondaryGallery = function ( container, primaryGallery ) {
-		
+
 		var secondaryGallery = this;
-		
+
 		this.primaryGallery = primaryGallery;
 		this.$container = container;
-		
+
 		//file to be uploaded
 		this.filesUploading = [];
-		
+
 		if ($(this.$container).find('.formmediagallery').length > 0) {
 			return ;
 		}
 		// hide all inputs in container
 		$(this.$container).children().hide();
 
-		// replace by formmediagallery list 
+		// replace by formmediagallery list
 		this.ol = $('<div>').addClass('formmediagallery');
 		this.ol.append($('<ul>'));
 		$(this.$container).prepend(this.ol);
-		
+
 		this.addUploadButton();
-		
+
 		// add image present in inputs
 		$(this.$container).find('input.createboxInput').each(function (i) {
 			if ($(this).val()) {
@@ -63,16 +63,16 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			    }
 		});
 	};
-	
+
 	/**
 	 * update image inputs value according to ul list in the dom
 	 * must be call after reorder items, or after insert/delete (if not managed by insert/delete function)
-	 * 
+	 *
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.updateImageInputsValues = function() {
 		var items = $(this.$container).find('ul li').not('.fileToBeUpload');
 		var inputs = $(this.$container).find('input.createboxInput');
-		
+
 		for (var i=0; i< inputs.length; i++) {
 			var item = items.get(i);
 			var input = inputs.get(i);
@@ -89,34 +89,34 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			}
 		}
 	}
-	
+
 	pagemediagallery.ui.SecondaryGallery.prototype.addUploadButton = function() {
 		var secondaryGallery = this;
 		// add upload button
 		this.uploadButton = $('<a>'+ mw.msg( 'msu-upload-all' )+'</a>').addClass('uploadButton');
-		
+
 		this.uploadButton.click(function() {
 			$(this).addClass('loading');
 			secondaryGallery.primaryGallery.startUpload();
 			return false;
 		});
 		this.uploadButton.hide();
-		
-		
+
+
 		this.selectFileButton = $('<div>').addClass('select-file');
-		
+
 		this.buttonbar = $('<div>').addClass('buttonBar');
 		this.buttonbar.append(this.uploadButton);
 		this.buttonbar.append(this.selectFileButton);
 		$(this.$container).append(this.buttonbar);
-		
+
 		this.addBrowseButton();
 	}
-	
+
 	pagemediagallery.ui.SecondaryGallery.prototype.addFileToUpload = function (file) {
 		this.filesUploading.push( new pagemediagallery.ui.FileUploading(file,this));
 	}
-	
+
 	pagemediagallery.ui.SecondaryGallery.prototype.addBrowseButton = function() {
 		var secondaryGallery = this;
 		var fileInput = new mOxie.FileInput({
@@ -132,7 +132,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				// add file to be uploaded in mediaGallery
 				secondaryGallery.addFileToUpload(e.target.files[index]);
 			}
-			
+
 		};
 
 		fileInput.init();
@@ -140,30 +140,30 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 	/**
 	 * add thumb to gallery (do not manage adding image to inputs)
-	 * called when : 
+	 * called when :
 	 *  - init : call it for each existing image
 	 *  - adding image to download (params isTemp = true) ( add thumb to indicate an image to be uploaded)
 	 *  - adding image, after upload, or after drop an existing image
-	 * 
+	 *
 	 * @param domelement img the image element to add
 	 * @param string filename the filename for the image
 	 * @param isTemp if true, indicate the the image is about to be uploaded, an other will be added to replace it after upload
-	 * @param tempToReplace fir an image just being uploaded, indicate the corresponding tempImage to remove before adding this one 
+	 * @param tempToReplace fir an image just being uploaded, indicate the corresponding tempImage to remove before adding this one
 	 * @return {jQuery} li element added
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename, isTemp = false, tempToReplace = false ) {
 		var li;
-		
+
 		var imageWrapper = $('<div>').attr('class','pfImagePreviewWrapper');
 		imageWrapper.append(img);
-		
+
 		if (tempToReplace && tempToReplace.parent('li').length == 1) {
 			li = tempToReplace.parent('li').empty().attr('class','').attr('data-filename', filename).append(imageWrapper);
 		} else {
 			li = $('<li>').attr('data-filename', filename).append(imageWrapper);
 		}
 		var secondaryGallery = this;
-		
+
 		var buttonBar = $( '<span>' ).attr({ 'class': 'file-buttonbar'});
 		var cancelbutton = $( '<span>' ).attr({ 'class': 'file-cancel', 'title': mw.msg( 'msu-cancel-upload' ) });
 		cancelbutton.click( function () {
@@ -171,25 +171,24 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		});
 		buttonBar.append( cancelbutton );
 		li.append( buttonBar );
-		
+
 		$(li).find('.image-button').appendTo(buttonBar);
-		
+
 		if (isTemp) {
 			li.addClass('fileToBeUpload');
 		}
-		
+
 		$(this.$container).find('.formmediagallery ul').append(li);
-		
-		console.log(img);
+
 		mw.hook('pmg.secondaryGallery.newThumbAdded').fire(li);
-		
+
 		return li;
 	};
-	
-	
-	
+
+
+
 	pagemediagallery.ui.SecondaryGallery.prototype.removeImg = function ( closeButton ) {
-		
+
 		var filename = $(closeButton).parents('li').attr('data-filename');
 		$(closeButton).parents('li').remove();
 		if (filename) {
@@ -197,8 +196,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			if (inputs.length == 0) {
 				return;
 			}
-			inputs = inputs.filter(function() { 
-				return this.value == filename; 
+			inputs = inputs.filter(function() {
+				return this.value == filename;
 			});
 			if (inputs.length > 0) {
 				// remove filename from input
@@ -219,27 +218,27 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.clearErrorMessages();
 		$('<span class="errorMessage">').html( message).appendTo($(this.$container));
 	},
-	
+
 
 	/**
 	 * this function automaticaly add image to forminputs included in container div
 	 * if all inputs are allready filled, it mark file as error, because not possible to add more
 	 * if there is no input in container div, , no check , just return OK (case of page gallery)
-	 * 
+	 *
 	 *  @param String filename filename to add
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addImageToFormsInputs = function ( filename ) {
-		
+
 		var inputs = $(this.$container).find('input.createboxInput');
-		
+
 		if (inputs.length == 0) {
 			return true;
 		}
-		
-		var emptiesInputs = inputs.filter(function() { 
-			return this.value == "" || this.value == 'No-image-yet.jpg'; 
+
+		var emptiesInputs = inputs.filter(function() {
+			return this.value == "" || this.value == 'No-image-yet.jpg';
 		});
-		
+
 		if (emptiesInputs.length > 0) {
 			// if we get an input with no value, we add filename to it
 			emptiesInputs.first().val(filename);
@@ -253,28 +252,28 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 	/**
 	 * this function return true is it is still possible to add images
-	 * 
+	 *
 	 *  @return Boolean
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.hasEmptiesSlots = function (  ) {
-		
-		var emptiesInputs = $(this.$container).find('input.createboxInput').filter(function() { 
-			return this.value == "" || this.value == 'No-image-yet.jpg'; 
+
+		var emptiesInputs = $(this.$container).find('input.createboxInput').filter(function() {
+			return this.value == "" || this.value == 'No-image-yet.jpg';
 		});
-		
+
 		return emptiesInputs.length > 0;
 	};
-	
-	
+
+
 	pagemediagallery.ui.SecondaryGallery.prototype.getInputForFile = function ( filename ) {
-		
-		
+
+
 		// TODO fire event to alloaw adding edit image tools
 		var items = $(this.$container).find('ul li').not('.fileToBeUpload');
-		
+
 		var inputs = $(this.$container).find('input.createboxInput');
 		var result = null;
-		
+
 		for (var i=0; i< inputs.length; i++) {
 			var item = items.get(i);
 			var input = inputs.get(i);
@@ -287,31 +286,31 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 	/**
 	 * add an image to the secondary gallery
-	 * 
+	 *
 	 *  @param String filename filename to add
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addImage = function ( img, filename, tempToReplace) {
-		
+
 		var result = this.addImageToFormsInputs(filename);
-		
-		if ( result) { 
+
+		if ( result) {
 			var newItem = this.addThumb(img, filename, false, tempToReplace);
 			this.updateImageInputsValues();
 			var fileinput = this.getInputForFile(filename);
 			mw.hook('pmg.secondaryGallery.newImageAdded').fire(fileinput, newItem);
 		}
 		this.uploadButton.hide();
-		
+
 		// TODO fire event to allow adding edit image tools
 
-		
+
 
 	};
 
 	/**
-	 * add temporary image to the secondary gallery 
+	 * add temporary image to the secondary gallery
 	 * (image of file to be uploaded)
-	 * 
+	 *
 	 *  @param String filename filename to add
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addTempImage = function ( img, filename) {
@@ -320,7 +319,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.uploadButton.show();
 		this.uploadButton.removeClass('loading');
 	};
-	
+
 
 	pagemediagallery.ui.SecondaryGallery.prototype.affFileFromGallery = function( draggedObject) {
 		var image = draggedObject.find('img').clone();
@@ -336,72 +335,82 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		// trick to hide the 'revert' movement of the image back to the gallery
 		$('.ui-draggable-dragging').hide();
 	};
-	
 
-	
+
+
 	pagemediagallery.ui.SecondaryGallery.prototype.affFilesToLoad = function( files) {
 		for (var index = 0; index < files.length; ++index) {
 			// add file to be uploaded in mediaGallery
 			this.addFileToUpload(files[index]);
 		}
 	}
-	
-	
+
+	var addDropOverClass = function (target) {
+		// as style is set on element by msupload, adding class is not enought, we must change style on element
+		target.css('border', '2px solid #0B85A1');
+		target.addClass('dropOverActive');
+	}
+	var removeDropOverClass = function (target) {
+		target.removeClass('dropOverActive');
+		target.css('border', '2px dotted #0B85A1');
+	}
+
 	pagemediagallery.ui.SecondaryGallery.prototype.manageDropOnFormField = function () {
 
 		var secondaryGallery = this;
 		var target = $(this.$container);
-		
+
 		target.css('border', '2px dotted #0B85A1');
 		if(target.find('.dropHelp').length == 0) {
 			target.append('<span class="dropHelp">'+mw.msg( 'msu-dropzone' )+'</span>');
 		}
-		target.off( "dragenter").on('dragenter', function (e) 
+		target.off( "dragenter").on('dragenter', function (e)
 				{
 				    e.stopPropagation();
 				    e.preventDefault();
-				    $(this).css('border', '2px solid #0B85A1');
+					addDropOverClass($(this));
 				});
-		target.off( "dragleave").on('dragleave', function (e) 
+		target.off( "dragleave").on('dragleave', function (e)
 				{
 				    e.stopPropagation();
 				    e.preventDefault();
-				    $(this).css('border', '2px dotted #0B85A1');
+				    removeDropOverClass($(this));
 				});
-		target.off( "dragover").on('dragover', function (e) 
+		target.off( "dragover").on('dragover', function (e)
 		{
 		     e.stopPropagation();
 		     e.preventDefault();
+		     addDropOverClass($(this));
 		});
-		
+
 
 		// accept items match file uploads from filesystem
-		target.off( "drop").on('drop', function (e) 
+		target.off( "drop").on('drop', function (e)
 		{
+			removeDropOverClass($(this));
 			if (!e.originalEvent.dataTransfer) {
 				return;
 			}
 			secondaryGallery.clearErrorMessages();
 			e.stopPropagation();
 			e.preventDefault();
-			
+
 			//check space :
 			if ( ! secondaryGallery.hasEmptiesSlots()) {
 				secondaryGallery.dispErrorMessage(mw.msg( 'msu-upload-nbfile-exceed' ));
 				return;
 			}
 
-			$(this).css('border', '2px dotted #0B85A1');
 			secondaryGallery.primaryGallery.open();
-			
+
 			var files = e.originalEvent.dataTransfer.files;
 			secondaryGallery.affFilesToLoad(files);
-			
+
 			// uploader.start();
 			secondaryGallery.primaryGallery.onRefresh();
 
 		});
-		
+
 		// accept drop item from Primary gallery
 		target.droppable({
 		      accept: ".msupload-list > li",
@@ -411,19 +420,24 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		      },
 		      drop: function( event, ui ) {
 		    	  secondaryGallery.affFileFromGallery(ui.draggable);
+		      },
+		      over: function (event, ui) {
+		    	  addDropOverClass(target);
+		      },
+		      out: function (event, ui) {
+		    	  removeDropOverClass(target);
 		      }
 		    });
-		
+
 		// avoid opening file when drop outside of areas :
-		$(document).on('drop', function (e) 
+		$(document).on('drop', function (e)
 				{
 				    e.stopPropagation();
 				    e.preventDefault();
 				});
-		
+
 	}
-	
-	
-	
+
+
+
 }( jQuery, mediaWiki, pagemediagallery ) );
-		

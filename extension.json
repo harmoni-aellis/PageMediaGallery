@@ -27,6 +27,9 @@
 		],
 		"UploadComplete": [
 			"PageMediaGallery\\Hooks::onUploadComplete"
+		],
+		"PageContentInsertComplete": [
+			"PageMediaGallery\\Hooks::onPageContentInsertComplete"
 		]
 	},
 	"MessagesDirs": {
