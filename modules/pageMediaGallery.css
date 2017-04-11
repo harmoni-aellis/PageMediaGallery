@@ -198,6 +198,11 @@
 	font-size:1em;
 }
 
+.msuploadContainer {
+	background: #f9f9f9;
+    padding-bottom: 10px;
+}
+
 .msuploadContainer .buttonBar {
 	text-align:right;
 	float: right;
