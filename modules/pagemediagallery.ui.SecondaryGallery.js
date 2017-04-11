@@ -387,6 +387,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		// accept items match file uploads from filesystem
 		target.off( "drop").on('drop', function (e)
 		{
+			removeDropOverClass($(this));
 			if (!e.originalEvent.dataTransfer) {
 				return;
 			}
@@ -400,7 +401,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				return;
 			}
 
-			$(this).css('border', '2px dotted #0B85A1');
 			secondaryGallery.primaryGallery.open();
 
 			var files = e.originalEvent.dataTransfer.files;
