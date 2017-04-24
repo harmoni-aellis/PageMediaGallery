@@ -73,13 +73,6 @@
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
 }
-.pg_sidebar .msupload-list .file .file-name {
-    width: 51%;
-}
-
-.pg_sidebar .msupload-list .file .file-thumb {
-    height: 100%;
-}
 
 #draggableTempUl .ui-draggable {
 	width:150px;
