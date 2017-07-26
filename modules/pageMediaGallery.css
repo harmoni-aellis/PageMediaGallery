@@ -19,11 +19,10 @@
 }
 
 .pg_sidebar .PageGalleryTitle {
-	color:#FFF;
-	margin-left:5px;
-	font-size: 105%;
+    color: #FFF;
+    margin-bottom: 15px;
+    font-size: 115%;
 	text-align:center;
-	text-transform:uppercase;
 }
 .pg_sidebar .PageGallerysubTitle {
 	color:#FFF;
