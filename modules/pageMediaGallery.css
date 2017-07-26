@@ -46,6 +46,7 @@
 	top:60px;
     z-index: 1000; /* Stay on top */
     padding:10px;
+    cursor: pointer;
     width:40px;
     height:35px;
     -webkit-border-top-right-radius: 5px;
@@ -55,6 +56,10 @@
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
     transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.pageGalleryControls:hover {
+    box-shadow: 0 0 7px rgba(0,0,0,.4);
 }
 
 .pg_sidebar .msupload-list .green,
