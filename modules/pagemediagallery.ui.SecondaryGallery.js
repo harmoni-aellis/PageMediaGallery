@@ -162,6 +162,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		} else {
 			li = $('<li>').attr('data-filename', filename).append(imageWrapper);
 		}
+		if (imageWrapper.find('video').length > 0){
+			$('<span>').addClass('video-player').prependTo(imageWrapper);
+		}
 		var secondaryGallery = this;
 
 		var buttonBar = $( '<span>' ).attr({ 'class': 'file-buttonbar'});
@@ -325,12 +328,14 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		var image = draggedObject.find('img').clone();
 		if (image.length == 0 && draggedObject.find('video').length > 0) {
 			image = draggedObject.find('video').clone();
+
 		}
 		var filename = draggedObject.attr('data-filename');
 		if (!filename) {
 			filename = draggedObject.find('.file-name').first().text();
 		}
 		this.addImage(image, filename);
+				
 
 		// trick to hide the 'revert' movement of the image back to the gallery
 		$('.ui-draggable-dragging').hide();
