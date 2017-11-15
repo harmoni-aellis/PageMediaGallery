@@ -207,6 +207,14 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				inputs.first().val('');
 				this.clearErrorMessages();
 			}
+			
+			if ($('.fileToBeUpload').length) {
+				this.uploadButton.show();
+
+			}
+			else {
+				this.uploadButton.hide();
+			}
 			this.updateImageInputsValues();
 		}
 	};
