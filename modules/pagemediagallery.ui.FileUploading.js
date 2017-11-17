@@ -136,5 +136,22 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		}
 	}
 
+	/**
+	 * static method to remove file from queue when thumb of uploading image is removed from secondary gallery
+	 */
+	pagemediagallery.ui.FileUploading.onFileRemove = function (filename) {
+		for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
+			// here, in case of multiple file upload,
+			// I cannot find an exact condition to find if the uploaded file match the one for this object
+			var initName = pagemediagallery.ui.FileUploading.instances[i].file.name;
+			// this fix issue with filename with space : change them to '_' :
+			initName = initName.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
+
+			if (filename.indexOf(initName, filename.length - initName.length) !== -1) {
+				pagemediagallery.ui.FileUploading.instances.splice(i, 1);
+			}
+		}
+	}
+
 
 }( jQuery, mediaWiki, pagemediagallery, plupload ) );

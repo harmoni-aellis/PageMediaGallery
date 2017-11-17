@@ -207,7 +207,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				inputs.first().val('');
 				this.clearErrorMessages();
 			}
-			
+
+			pagemediagallery.ui.FileUploading.onFileRemove(filename);
+
 			if ($('.fileToBeUpload').length) {
 				this.uploadButton.show();
 
