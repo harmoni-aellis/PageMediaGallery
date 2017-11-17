@@ -65,6 +65,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		$(this.tempImage).parents('li.fileToBeUpload').remove();
 		var img = file.li.find('img.file-thumb');
+		if ( img.length == 0) {
+			img = file.li.find('video.file-thumb');
+		}
 		this.secondaryGallery.addImage(img.clone(), file.name, this.tempImage);
 	};
 
