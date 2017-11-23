@@ -71,6 +71,17 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.secondaryGallery.addImage(img.clone(), file.name, this.tempImage);
 	};
 
+	pagemediagallery.ui.FileUploading.prototype.cancelUpload = function ( file ) {
+
+		if(this.isUploaded) {
+			// security to avoid many calls
+			return;
+		}
+		this.isUploaded = true;
+
+		this.secondaryGallery.removeTempImage(file.name, this.tempImage);
+	};
+
 	pagemediagallery.ui.FileUploading.prototype.updateFileTempImage = function ( file ) {
 
 		var tempImage = this.tempImage;
@@ -91,10 +102,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		} catch ( event ) {
 			this.tempImage.addClass( 'image' );
 		}
-	};
-
-	pagemediagallery.ui.FileUploading.prototype.cancelUpload = function (  ) {
-
 	};
 
 	/**
@@ -130,7 +137,13 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				
 				if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
 				//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
-					pagemediagallery.ui.FileUploading.instances[i].confirmUpload(file);
+
+					var result = $.parseJSON( success.response );
+					if ( result.error ) {
+						pagemediagallery.ui.FileUploading.instances[i].cancelUpload(file);
+					} else {
+						pagemediagallery.ui.FileUploading.instances[i].confirmUpload(file);
+					}
 				}
 			}
 		}

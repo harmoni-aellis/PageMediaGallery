@@ -315,9 +315,25 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.uploadButton.hide();
 
 		// TODO fire event to allow adding edit image tools
+	};
 
+	/**
+	 * remove a temp img from the secondary gallery
+	 * in case of fail to upload the image, the temp image must be remove
+	 *
+	 *  @param Object tempToRemove
+	 */
+	pagemediagallery.ui.SecondaryGallery.prototype.removeTempImage = function (filename, tempToReplace) {
 
-
+		tempToReplace.parents('li').first().remove();
+		
+		//$(this.$container).find('.formmediagallery ul').append(li);
+		if ($('.fileToBeUpload').length) {
+			this.uploadButton.show();
+		}
+		else {
+			this.uploadButton.hide();
+		}
 	};
 
 	/**
