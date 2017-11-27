@@ -27,6 +27,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			pagemediagallery.ui.FileUploading.initialised = true;
 			uploader.bind('FileUploaded', pagemediagallery.ui.FileUploading.onFileUpload);
 			uploader.bind('FilesAdded', pagemediagallery.ui.FileUploading.onFilesAdded);
+			uploader.bind('FilesRemoved', pagemediagallery.ui.FileUploading.onFilesRemoved);
 		}
 
 		this.fileAdded();
@@ -46,6 +47,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 * call when instance is created, before trigger upload, to show loading images
 	 */
 	pagemediagallery.ui.FileUploading.prototype.fileAdded = function ( ) {
+
 		// todo : find a way to get the real image
 		this.tempImage = $('<div>').attr('class', 'tempFileLoader');
 		//this.tempImage = img.clone();
@@ -105,9 +107,30 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	};
 
 	/**
+	 * static method to listen FilesRemoved event 
+	 */
+	pagemediagallery.ui.FileUploading.onFilesRemoved = function (uploader, files) {
+		//console.log('pagemediagallery.file.onFilesRemoved');
+		for (var a = 0; a < files.length; a++) {
+			var file = files[a];
+			for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
+				// here, in case of multiple file upload,
+				// I cannot find an exact condition to find if the uploaded file match the one for this object
+				var initName = pagemediagallery.ui.FileUploading.instances[i].file.name;
+				if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
+				//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
+					//pagemediagallery.ui.FileUploading.instances[i].updateFileTempImage(file);
+					pagemediagallery.ui.FileUploading.instances[i].cancelUpload(file);
+				}
+			}
+		}
+	}
+
+	/**
 	 * static method to listen FileAdded event and call updateFileTempImage on corresponding items
 	 */
 	pagemediagallery.ui.FileUploading.onFilesAdded = function (uploader, files) {
+		//console.log('pagemediagallery.file.onFilesAdded');
 		for (var a = 0; a < files.length; a++) {
 			var file = files[a];
 			for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
@@ -126,24 +149,34 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 * static method to listen FileUpload event and call confirmUpload on corresponding items
 	 */
 	pagemediagallery.ui.FileUploading.onFileUpload = function (uploader, file, success) {
-		if(success) {
-			for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
-				// here, in case of multiple file upload,
-				// I cannot find an exact condition to find if the uploaded file match the one for this object
-				var initName = pagemediagallery.ui.FileUploading.instances[i].file.name;
-				// this fix issue with filename with space : change them to '_' :
-				initName = initName.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
-				//initName =  mw.util.wikiUrlencode(initName);
-				
-				if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
-				//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
 
-					var result = $.parseJSON( success.response );
-					if ( result.error ) {
-						pagemediagallery.ui.FileUploading.instances[i].cancelUpload(file);
+		//console.log('pagemediagallery.file.onFileUpload');
+		for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
+			// here, in case of multiple file upload,
+			// I cannot find an exact condition to find if the uploaded file match the one for this object
+			var initName = pagemediagallery.ui.FileUploading.instances[i].file.name;
+			// this fix issue with filename with space : change them to '_' :
+			initName = initName.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
+			//initName =  mw.util.wikiUrlencode(initName);
+			
+			if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
+			//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
+
+				var result = false;
+				try{
+					if(success) {
+						$.parseJSON( success.response );
+						if ( result.error ) {
+							pagemediagallery.ui.FileUploading.instances[i].cancelUpload(file);
+						} else {
+							pagemediagallery.ui.FileUploading.instances[i].confirmUpload(file);
+						}
 					} else {
 						pagemediagallery.ui.FileUploading.instances[i].confirmUpload(file);
 					}
+					
+				} catch ( e) {
+					pagemediagallery.ui.FileUploading.instances[i].cancelUpload(file);
 				}
 			}
 		}
