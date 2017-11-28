@@ -156,6 +156,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		//var openlink = $( '<a>Open</a>' ).click(pageMediaGallery.initcallMsUpload);
 		var pageMediaGallery = this;
 
+		if ($('#PageGalleryUploader').length == 0) {
+			console.log('Pagegallery not loaded, are you logged in ?');
+			return;
+		}
 		//alert(openlink);
 		//$('#PageGallery').prepend(openlink)
 		$('#PageGallery .pageGalleryControls').appendTo('body');
