@@ -75,11 +75,11 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 	pagemediagallery.ui.FileUploading.prototype.cancelUpload = function ( file ) {
 
-		if(this.isUploaded) {
+		if(this.isCanceled) {
 			// security to avoid many calls
 			return;
 		}
-		this.isUploaded = true;
+		this.isCanceled = true;
 
 		this.secondaryGallery.removeTempImage(file.name, this.tempImage);
 	};
@@ -118,8 +118,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				// I cannot find an exact condition to find if the uploaded file match the one for this object
 				var initName = pagemediagallery.ui.FileUploading.instances[i].file.name;
 				if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
-				//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
-					//pagemediagallery.ui.FileUploading.instances[i].updateFileTempImage(file);
 					pagemediagallery.ui.FileUploading.instances[i].cancelUpload(file);
 				}
 			}
