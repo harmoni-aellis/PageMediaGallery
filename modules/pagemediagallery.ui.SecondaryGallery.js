@@ -113,6 +113,14 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.addBrowseButton();
 	}
 
+	pagemediagallery.ui.SecondaryGallery.prototype.updateUploadButtonVisibility = function () {
+		if ($(this.$container).find('.fileToBeUpload').length) {
+			this.uploadButton.show();
+		} else {
+			this.uploadButton.hide();
+		}
+	};
+
 	pagemediagallery.ui.SecondaryGallery.prototype.addFileToUpload = function (file) {
 		this.filesUploading.push( new pagemediagallery.ui.FileUploading(file,this));
 	}
@@ -197,6 +205,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		if (filename) {
 			var inputs = $(this.$container).find('input.createboxInput');
 			if (inputs.length == 0) {
+				this.updateUploadButtonVisibility();
 				return;
 			}
 			inputs = inputs.filter(function() {
@@ -209,14 +218,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			}
 
 			pagemediagallery.ui.FileUploading.onFileRemove(filename);
-
-			if ($('.fileToBeUpload').length) {
-				this.uploadButton.show();
-
-			}
-			else {
-				this.uploadButton.hide();
-			}
+			
+			this.updateUploadButtonVisibility();
 			this.updateImageInputsValues();
 		}
 	};
@@ -328,12 +331,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		tempToReplace.parents('li').first().remove();
 		
 		//$(this.$container).find('.formmediagallery ul').append(li);
-		if ($('.fileToBeUpload').length) {
-			this.uploadButton.show();
-		}
-		else {
-			this.uploadButton.hide();
-		}
+		this.updateUploadButtonVisibility();
 	};
 
 	/**
