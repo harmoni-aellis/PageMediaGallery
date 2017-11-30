@@ -117,6 +117,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				// here, in case of multiple file upload,
 				// I cannot find an exact condition to find if the uploaded file match the one for this object
 				var initName = pagemediagallery.ui.FileUploading.instances[i].file.name;
+
+				// this fix issue with filename with space : change them to '_' :
+				initName = initName.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
+
 				if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
 					pagemediagallery.ui.FileUploading.instances[i].cancelUpload(file);
 				}
@@ -135,6 +139,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				// here, in case of multiple file upload,
 				// I cannot find an exact condition to find if the uploaded file match the one for this object
 				var initName = pagemediagallery.ui.FileUploading.instances[i].file.name;
+
+				// this fix issue with filename with space : change them to '_' :
+				initName = initName.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
+
 				if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
 				//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
 					pagemediagallery.ui.FileUploading.instances[i].updateFileTempImage(file);
