@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": []
+	},
+	"pmg-desc": "Permite cargar imágenes fácilmente en una página y administrar una galería de imágenes por página",
+	"pmg-gallery-title": "Galería de imágenes",
+	"pmg-gallery-subtitle": "Cargue sus imágenes en la galería de tutoriales, luego arrástrelas en cada paso.\nTamaño máximo de imágenes: 2 Mb. Prefiere el formato de paisaje."
+}
