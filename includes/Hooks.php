@@ -19,8 +19,19 @@ class Hooks {
 		}
 
 	}
-	static function start( ) {
-		global $wgOut, $wgScriptPath, $wgJsMimeType, $wgFileExtensions, $wgUser;
+	static function start( $pFFormEdit) {
+		global $wgOut, $wgScriptPath, $wgJsMimeType, $wgFileExtensions, $wgUser, $wgpmgEnabledForms;
+
+		if($wgpmgEnabledForms && isset($pFFormEdit) && $pFFormEdit->mForm) {
+			if ( ! in_array($pFFormEdit->mForm, $wgpmgEnabledForms)) {
+				// pagemediagallery is not enable for this form :
+				return ;
+			}
+		}
+
+
+
+
 		$wgOut->addModules ( 'ext.pageMediaGallery' );
 		$wgOut->addJsConfigVars ( array (
 				'wgFileExtensions' => array_values ( array_unique ( $wgFileExtensions ) )

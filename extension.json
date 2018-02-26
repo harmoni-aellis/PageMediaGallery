@@ -12,7 +12,8 @@
 		"PageMediaGallery\\Hooks": "includes/Hooks.php"
 	},
 	"config": {
-		"PageMediaGalleryFoo": true
+		"PageMediaGalleryFoo": true,
+		"pmgEnabledForms" : false
 	},
 	"callback": "PageMediaGallery\\Hooks::onExtensionLoad",
 	"Hooks": {
