@@ -140,6 +140,7 @@ class Hooks {
 
 		$out .= '</div>
 			<div class="pageGalleryControls">
+				<span>'.wfMessage('pmg-gallery-title').'</span>
 			</div>
 		</div>
 				';

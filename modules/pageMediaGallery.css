@@ -40,22 +40,29 @@
 	display:none;
 }
 
+.pageGalleryControls:hover {
+    margin-left:0px;
+}
+
 .pageGalleryControls {
-    background: #222 url(images/gallery.png) no-repeat 5px 5px ;
-    position: fixed; /* Stay in place */
-	top:60px;
-    z-index: 1000; /* Stay on top */
-    padding:10px;
+    background: #222 url(images/gallery.png) no-repeat;
+    background-position: right;
+    position: fixed;
+    top: 67px;
+    margin-left:-125px;
+    z-index: 100;
+    color: #fff;
+    padding: 10px;
     cursor: pointer;
-    width:40px;
-    height:35px;
+    width: 163px;
+    height: 35px;
     -webkit-border-top-right-radius: 4px;
-	-webkit-border-bottom-right-radius: 4px;
-	-moz-border-radius-topright: 4px;
-	-moz-border-radius-bottomright: 4px;
-	border-top-right-radius: 4px;
-	border-bottom-right-radius: 4px;
-    transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
+    -webkit-border-bottom-right-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-bottomright: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    transition: 0.2s;
 }
 
 .pageGalleryControls:hover {
