@@ -6,12 +6,15 @@
     z-index: 1000; /* Stay on top */
     top: 0;
     left: 0;
-    background-color: #222; /* Black*/
+    background-color: #333; /* Black*/
     overflow-x: visible; /* Disable horizontal scroll  do not work with dragable*/
     overflow-y: scroll;
     padding: 10px 0px; /* Place content 10px from the top */
     transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
     box-shadow: 0 0 11px 0px rgba(0,0,0,0.6);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(drop-image-white.png);
 }
 
 .col-pic-detail.ui-droppable {
@@ -23,7 +26,7 @@
     color: #FFF;
     margin-bottom: 15px;
     font-size: 115%;
-	text-align:center;
+    text-align:center;
 }
 .pg_sidebar .PageGallerysubTitle {
 	color:#FFF;
@@ -34,14 +37,10 @@
 
 #PageGallery #PageGalleryUploader {
 	min-height:100%;
-	padding:0px 5px;
-}
-#PageGallery {
-	display:none;
 }
 
-.pageGalleryControls:hover {
-    margin-left:0px;
+#PageGallery {
+	display:none;
 }
 
 .pageGalleryControls {
@@ -49,12 +48,11 @@
     background-position: right;
     position: fixed;
     top: 67px;
-    margin-left:-125px;
     z-index: 100;
     color: #fff;
     padding: 10px;
     cursor: pointer;
-    width: 163px;
+    width: 42px;
     height: 35px;
     -webkit-border-top-right-radius: 4px;
     -webkit-border-bottom-right-radius: 4px;
@@ -72,7 +70,6 @@
 .pg_sidebar .msupload-list .green,
 .pg_sidebar .msupload-list .file {
 	width:100%;
-	margin:2px 0;
 	padding:0px;
     cursor: move; /* fallback if grab cursor is unsupported */
     cursor: grab;
@@ -98,7 +95,7 @@
 	border: solid 1px #008; 
 }
 .ui-droppable-active.ui-state-hover {
-	border: solid 1px #00F; 
+    border: solid 1px #00F; 
 }
 
 .col-xs-12.ui-droppable {
