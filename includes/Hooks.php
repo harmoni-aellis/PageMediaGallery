@@ -22,11 +22,14 @@ class Hooks {
 	static function start( $pFFormEdit) {
 		global $wgOut, $wgScriptPath, $wgJsMimeType, $wgFileExtensions, $wgUser, $wgpmgEnabledForms;
 
-		if($wgpmgEnabledForms && isset($pFFormEdit) && $pFFormEdit->mForm) {
+		if($wgpmgEnabledForms && isset($pFFormEdit) && isset($pFFormEdit->mForm)) {
 			if ( ! in_array($pFFormEdit->mForm, $wgpmgEnabledForms)) {
 				// pagemediagallery is not enable for this form :
 				return ;
 			}
+		} else if ($wgpmgEnabledForms) {
+			// pagemediagallery not enable out of pageForms:
+			return ;
 		}
 
 
@@ -140,7 +143,6 @@ class Hooks {
 
 		$out .= '</div>
 			<div class="pageGalleryControls">
-				<span>'.wfMessage('pmg-gallery-title').'</span>
 			</div>
 		</div>
 				';
