@@ -37,7 +37,15 @@
 	padding:0px 5px;
 }
 #PageGallery {
-	display:none;
+	left:-250px;
+	width:250px;
+}
+
+#PageGallery {
+    transition: left .8s;
+}
+body {
+    transition: margin-left .8s;
 }
 
 .pageGalleryControls:hover {

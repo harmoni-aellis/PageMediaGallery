@@ -26,15 +26,15 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	};
 	pagemediagallery.ui.PrimaryGallery.prototype.open = function (  )  {
 		this.isOpen=true;
-		$('#PageGallery').width(250);
-		$("#PageGallery .pageGalleryControls").animate({ left: '250' }, 200);
-		$('body').css('marginLeft','250px');
+
+		document.getElementById("PageGallery").style.left = "0px";
+		document.getElementsByTagName("body")[0].style.marginLeft = "250px";
 	};
 	pagemediagallery.ui.PrimaryGallery.prototype.close = function (  )  {
 		this.isOpen=false;
-		$('#PageGallery').width(0);
-		$('#PageGallery .pageGalleryControls').animate({ left: '250' }, 200);
-		$('body').css('marginLeft','0px');
+
+		document.getElementById("PageGallery").style.left = "-250px";
+		document.getElementsByTagName("body")[0].style.marginLeft = "0px";
 	};
 
 	pagemediagallery.ui.PrimaryGallery.prototype.onRefresh = function () {
