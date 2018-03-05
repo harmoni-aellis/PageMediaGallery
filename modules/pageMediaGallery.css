@@ -129,9 +129,15 @@ body {
   	transition:opacity 0.3s linear;
 }
 
-.formmediagallery li:hover .mw-ia-editButton, .formmediagallery li:hover .file-cancel {
+.formmediagallery li:hover .mw-ia-editButton,
+.formmediagallery li:hover .file-cancel {
 	display:block;
-	opacity:1;
+	opacity:0.7;
+}
+
+.formmediagallery li:hover .mw-ia-editButton:hover,
+.formmediagallery li:hover .file-cancel:hover {
+    opacity:1;
 }
 
 .msuploadContainer .formmediagallery .buttonBar {
@@ -187,6 +193,7 @@ body {
     margin-left: 5px;
     padding: 5px 10px;
     width: 32px;
+    border-right: 50px;
 }
 
 .formmediagallery{
