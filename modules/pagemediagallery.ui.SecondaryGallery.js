@@ -162,6 +162,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename, isTemp = false, tempToReplace = false ) {
 		var li;
 
+		var ext = filename.substr(filename.lastIndexOf('.') + 1);
+
 		var imageWrapper = $('<div>').attr('class','pfImagePreviewWrapper');
 		imageWrapper.append(img);
 
@@ -172,6 +174,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		}
 		if (imageWrapper.find('video').length > 0){
 			$('<span>').addClass('video-player').prependTo(imageWrapper);
+		}
+		if (ext == 'stl'){
+			$('<span>').addClass('stl-file').prependTo(imageWrapper);
 		}
 		var secondaryGallery = this;
 

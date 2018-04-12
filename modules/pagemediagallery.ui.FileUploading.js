@@ -66,9 +66,42 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.isUploaded = true;
 
 		$(this.tempImage).parents('li.fileToBeUpload').remove();
-		var img = file.li.find('img.file-thumb');
+
+		//to use it later
+		var instance = this;
+		
+		if (file.extension == "stl"){
+			$.ajax({
+				type: "POST",
+				url: mw.util.wikiScript('api'),
+				data: {
+					iiprop: 'url',
+					action:'query',
+					format:'json',
+					titles: 'File:' + file.name,
+					iiurlwidth: '800px',
+					prop: 'imageinfo'
+				},
+			    dataType: 'json',
+			    // Function to be called if the request succeeds
+				success: function( jsondata ){
+
+					var pages = jsondata['query']['pages'];
+					for (var firstkey in pages);
+					var thumbnail = pages[firstkey]['imageinfo'][0]['thumburl'];
+
+					var img = document.createElement("img");
+					img.setAttribute('src', thumbnail);
+					img.setAttribute('class', 'file-thumb stl');
+					img.setAttribute('style', 'width: 100%;');
+					instance.secondaryGallery.addImage(img, file.name, this.tempImage);
+				}
+			});
+		}else{
+			var img = file.li.find('img.file-thumb');
+		}
 		if ( img.length == 0) {
-			img = file.li.find('video.file-thumb');
+			var img = file.li.find('video.file-thumb');
 		}
 		this.secondaryGallery.addImage(img.clone(), file.name, this.tempImage);
 	};
