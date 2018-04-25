@@ -93,17 +93,28 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	pagemediagallery.ui.SecondaryGallery.prototype.addUploadButton = function() {
 		var secondaryGallery = this;
 		// add upload button
-		this.uploadButton = $('<a>'+ mw.msg( 'msu-upload-all' )+'</a>').addClass('uploadButton');
+		this.uploadButton = $('<a>');
+		this.uploadButton.addClass('btn btn-primary');
 
+		this.uploadButton.hide();
+
+		this.selectFileButton = $('<div>').addClass('select-file');
+		this.uploadIcon = $('<i>').addClass('fa fa-upload');
+		this.loadIcon = $('<i>').addClass('msupload-loading-button fa fa-spinner fa-spin fa-1x fa-fw');
+		this.loadIcon.hide();
+		var uploadIcon = this.uploadIcon;
+		var loadIcon = this.loadIcon;
 		this.uploadButton.click(function() {
-			$(this).addClass('loading');
+			uploadIcon.hide();
+			loadIcon.show();
 			secondaryGallery.primaryGallery.startUpload();
 			return false;
 		});
-		this.uploadButton.hide();
+		this.uploadButton.append(this.uploadIcon);
+		this.uploadButton.append(this.loadIcon);
 
-
-		this.selectFileButton = $('<div>').addClass('select-file');
+		var txt = document.createTextNode(mw.msg( 'msu-upload-all' ));
+		this.uploadButton.append(txt);
 
 		this.buttonbar = $('<div>').addClass('buttonBar');
 		this.buttonbar.append(this.uploadButton);
@@ -162,6 +173,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename, isTemp = false, tempToReplace = false ) {
 		var li;
 
+		var ext = filename.substr(filename.lastIndexOf('.') + 1);
+
 		var imageWrapper = $('<div>').attr('class','pfImagePreviewWrapper');
 		imageWrapper.append(img);
 
@@ -172,6 +185,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		}
 		if (imageWrapper.find('video').length > 0){
 			$('<span>').addClass('video-player').prependTo(imageWrapper);
+		}
+		if (ext == 'stl'){
+			$('<span>').addClass('stl-file').prependTo(imageWrapper);
 		}
 		var secondaryGallery = this;
 
@@ -344,7 +360,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.addThumb(img, filename, true);
 
 		this.uploadButton.show();
-		this.uploadButton.removeClass('loading');
+		this.loadIcon.hide();
+		this.uploadIcon.show();
 	};
 
 
