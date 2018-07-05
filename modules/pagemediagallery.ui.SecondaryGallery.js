@@ -171,9 +171,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 * @return {jQuery} li element added
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addThumb = function ( img, filename, isTemp, tempToReplace) {
-			
+
 		var isTemp = isTemp || false;
-		var tempToReplace = tempToReplace || false;	
+		var tempToReplace = tempToReplace || false;
 
 		var li;
 
@@ -238,7 +238,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			}
 
 			pagemediagallery.ui.FileUploading.onFileRemove(filename);
-			
+
 			this.updateUploadButtonVisibility();
 			this.updateImageInputsValues();
 		}
@@ -349,7 +349,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	pagemediagallery.ui.SecondaryGallery.prototype.removeTempImage = function (filename, tempToReplace) {
 
 		tempToReplace.parents('li').first().remove();
-		
+
 		//$(this.$container).find('.formmediagallery ul').append(li);
 		this.updateUploadButtonVisibility();
 	};
@@ -380,7 +380,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			filename = draggedObject.find('.file-name').first().text();
 		}
 		this.addImage(image, filename);
-				
+
 
 		// trick to hide the 'revert' movement of the image back to the gallery
 		$('.ui-draggable-dragging').hide();
@@ -397,12 +397,14 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 	var addDropOverClass = function (target) {
 		// as style is set on element by msupload, adding class is not enought, we must change style on element
-		target.css('border', '2px solid var(--main-btn-color)');
+		//target.css('border', '2px solid var(--main-btn-color)');
 		target.addClass('dropOverActive');
+		target.removeClass('dropOverInactive');
 	}
 	var removeDropOverClass = function (target) {
 		target.removeClass('dropOverActive');
-		target.css('border', '2px dotted var(--main-btn-color)');
+		target.addClass('dropOverInactive');
+		//target.css('border', '2px dotted var(--main-btn-color)');
 	}
 
 	pagemediagallery.ui.SecondaryGallery.prototype.manageDropOnFormField = function () {
@@ -410,7 +412,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		var secondaryGallery = this;
 		var target = $(this.$container);
 
-		target.css('border', '2px dotted var(--main-btn-color)');
+		//target.css('border', '2px dotted var(--main-btn-color)');
+		target.addClass('dropOverInactive');
 		if(target.find('.dropHelp').length == 0) {
 			target.append('<span class="dropHelp">'+mw.msg( 'msu-dropzone' )+'</span>');
 		}
