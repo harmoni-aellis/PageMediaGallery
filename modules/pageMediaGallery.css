@@ -112,15 +112,32 @@ body {
 }
 
 .formmediagallery{
-	padding:2px 0 2px 2px;
+    padding: 2% 1%;
 }
 .formmediagallery ul{
 	margin:0px;
 	padding:0px;	
 }
-.formmediagallery li:first-child {
-	width: 99%;
-	height: auto;
+
+.msuploadOneImage .formmediagallery li {
+    width: 100%;
+    height: 200px;
+    margin: 0px;
+}
+
+.formmediagallery li {
+    display: inline-block;
+    position: relative;
+    width: 31.33%;
+    margin: 0% 1% 1%;
+    border: 1px solid #ccc;
+    height: 100px;
+    overflow: hidden;
+    background: #f1f1f1;
+}
+
+.formmediagallery li div {
+    height: 100px;
 }
 
 .formmediagallery .mw-ia-editButton, .formmediagallery li .file-cancel {
@@ -154,23 +171,11 @@ body {
 	cursor: move;
 }
 
-.formmediagallery li {
-	display: inline-block;
-	position: relative;
-	width: 19%;
-	margin: 0% 0.5%;
-	border: 1px solid #ccc;
-	height: 76px;
-	overflow: hidden;
-	background: #f1f1f1;
-}
-.formmediagallery ul li {
-	min-height: 42px;
-}
 .formmediagallery li img {
-	width:100%;
-	min-height: 74px;
-	height:auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
 }
 .formmediagallery li .thumbimage {
 	display:none;
@@ -194,10 +199,6 @@ body {
     padding: 5px 10px;
     width: 32px;
     border-radius: 50px;
-}
-
-.formmediagallery{
-	min-height:100px;
 }
 
 .formmediagallery .tempFileLoader {
