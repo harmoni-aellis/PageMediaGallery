@@ -36,7 +36,20 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		// replace by formmediagallery list
 		this.ol = $('<div>').addClass('formmediagallery');
-		this.ol.append($('<ul>'));
+		var ul = $('<ul>');
+		this.ol.append(ul);
+
+		var div = $('<div>').addClass('add-new-file-slot unsortable');
+		div.click(function (element){
+			if($(element.target).parents('.msuploadContainer').get(0) && $($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0)){
+				$($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0).click();
+			}
+		});
+		div.append($('<i>').addClass('fa fa-plus'));
+		ul.append(div);
+		if ( !this.hasEmptiesSlots() ){
+			div.hide();
+		}
 		$(this.$container).prepend(this.ol);
 
 		this.addUploadButton();
@@ -55,6 +68,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		});
 		this.manageDropOnFormField();
 		$(this.$container).find('ul').sortable({
+				items : "li:not(.unsortable)",
 			    start: function (e, ui) {
 			        ui.placeholder.append(ui.item.find('img,video').clone());
 			    },
@@ -209,7 +223,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			li.addClass('fileToBeUpload');
 		}
 
-		$(this.$container).find('.formmediagallery ul').append(li);
+		$(this.$container).find('.formmediagallery ul').prepend(li);
 
 		mw.hook('pmg.secondaryGallery.newThumbAdded').fire(li);
 
@@ -219,6 +233,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 
 	pagemediagallery.ui.SecondaryGallery.prototype.removeImg = function ( closeButton ) {
+
+		var secondaryGallery = this;
 
 		var filename = $(closeButton).parents('li').attr('data-filename');
 		$(closeButton).parents('li').remove();
@@ -241,6 +257,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 			this.updateUploadButtonVisibility();
 			this.updateImageInputsValues();
+
+			if(secondaryGallery.hasEmptiesSlots()){
+				if ( $('.add-new-file-slot') && $('.add-new-file-slot').is(':hidden') ) $('.add-new-file-slot').show();
+			}
 		}
 	};
 
@@ -300,6 +320,31 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		return emptiesInputs.length > 0;
 	};
 
+	/**
+	 * this function returns the number of empty slots
+	 *
+	 *  @return number of empty slots
+	 */
+	pagemediagallery.ui.SecondaryGallery.prototype.numberEmptiesSlots = function (  ) {
+
+		var emptiesInputs = $(this.$container).find('input.createboxInput').filter(function() {
+			return this.value == "" || this.value == 'No-image-yet.jpg';
+		});
+
+		return emptiesInputs.length;
+	};
+
+	/**
+	 * this function returns the total number of slots available for this container
+	 *
+	 *  @return int max number of solts
+	 */
+	pagemediagallery.ui.SecondaryGallery.prototype.maxSlots = function (  ) {
+
+		var inputs = $(this.$container).find('input.createboxInput');
+
+		return inputs.length;
+	};
 
 	pagemediagallery.ui.SecondaryGallery.prototype.getInputForFile = function ( filename ) {
 
@@ -329,7 +374,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		var result = this.addImageToFormsInputs(filename);
 
-		if ( result) {
+		if ( result && !tempToReplace) {
 			var newItem = this.addThumb(img, filename, false, tempToReplace);
 			this.updateImageInputsValues();
 			var fileinput = this.getInputForFile(filename);
@@ -448,15 +493,22 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			e.stopPropagation();
 			e.preventDefault();
 
+			var files = e.originalEvent.dataTransfer.files;
+
 			//check space :
-			if ( ! secondaryGallery.hasEmptiesSlots()) {
-				secondaryGallery.dispErrorMessage(mw.msg( 'msu-upload-nbfile-exceed' ));
-				return;
+			if ( ! secondaryGallery.hasEmptiesSlots() || 
+				secondaryGallery.filesUploading.length + files.length > secondaryGallery.numberEmptiesSlots()) {
+				//secondaryGallery.dispErrorMessage(mw.msg( 'msu-upload-nbfile-exceed' ));
+				//return;
+			}
+
+			if ( secondaryGallery.numberEmptiesSlots() - files.length == 0 ) {
+				//hide add new file slot
+				if ( $('.add-new-file-slot') ) $('.add-new-file-slot').hide();
 			}
 
 			secondaryGallery.primaryGallery.open();
 
-			var files = e.originalEvent.dataTransfer.files;
 			secondaryGallery.affFilesToLoad(files);
 
 			// uploader.start();
