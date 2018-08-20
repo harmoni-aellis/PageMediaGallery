@@ -28,6 +28,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			uploader.bind('FileUploaded', pagemediagallery.ui.FileUploading.onFileUpload);
 			uploader.bind('FilesAdded', pagemediagallery.ui.FileUploading.onFilesAdded);
 			uploader.bind('FilesRemoved', pagemediagallery.ui.FileUploading.onFilesRemoved);
+			uploader.bind('FileNameChanged', pagemediagallery.ui.FileUploading.onFileNameChanged);
 		}
 
 		this.fileAdded();
@@ -103,6 +104,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		if ( img.length == 0) {
 			var img = file.li.find('video.file-thumb');
 		}
+		var fileName = file.name;
 		this.secondaryGallery.addImage(img.clone(), file.name, this.tempImage);
 	};
 
@@ -143,7 +145,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 * static method to listen FilesRemoved event 
 	 */
 	pagemediagallery.ui.FileUploading.onFilesRemoved = function (uploader, files) {
-		//console.log('pagemediagallery.file.onFilesRemoved');
 		for (var a = 0; a < files.length; a++) {
 			var file = files[a];
 			for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
@@ -165,7 +166,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 * static method to listen FileAdded event and call updateFileTempImage on corresponding items
 	 */
 	pagemediagallery.ui.FileUploading.onFilesAdded = function (uploader, files) {
-		//console.log('pagemediagallery.file.onFilesAdded');
 		for (var a = 0; a < files.length; a++) {
 			var file = files[a];
 			for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
@@ -178,7 +178,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 				if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
 				//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
+
 					pagemediagallery.ui.FileUploading.instances[i].updateFileTempImage(file);
+
 				}
 			}
 		}
@@ -189,7 +191,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 */
 	pagemediagallery.ui.FileUploading.onFileUpload = function (uploader, file, success) {
 
-		//console.log('pagemediagallery.file.onFileUpload');
 		for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
 			// here, in case of multiple file upload,
 			// I cannot find an exact condition to find if the uploaded file match the one for this object
@@ -197,8 +198,13 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			// this fix issue with filename with space : change them to '_' :
 			initName = initName.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
 			//initName =  mw.util.wikiUrlencode(initName);
+
+			var fileName = file.name;
+			fileName = fileName.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
+
+			var up = uploader
 			
-			if (file.name.indexOf(initName, file.name.length - initName.length) !== -1) {
+			if (fileName.indexOf(initName, fileName.length - initName.length) !== -1) {
 			//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
 
 				var result = false;
@@ -236,6 +242,26 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				pagemediagallery.ui.FileUploading.instances.splice(i, 1);
 			}
 		}
+	}
+
+	/**
+	 * static method to change file name in FileUploading when file name gets changed in MmsUpload
+	 */
+	pagemediagallery.ui.FileUploading.onFileNameChanged = function ( uploader, file, initialFileName ) {
+
+		for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
+			var initName = pagemediagallery.ui.FileUploading.instances[i].file.name;
+			// this fix issue with filename with space : change them to '_' :
+			initName = initName.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
+			if (initialFileName.indexOf(initName, initialFileName.length - initName.length) !== -1) {
+				var name = file.name.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
+				var f = pagemediagallery.ui.FileUploading.instances[i].file;
+			    // Instantiate copy of file, giving it new name.
+			    pagemediagallery.ui.FileUploading.instances[i].file = new File([f], name, { type: f.type });
+			}
+		}
+
+
 	}
 
 
