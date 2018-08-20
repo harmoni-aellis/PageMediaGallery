@@ -167,6 +167,11 @@ body {
 	cursor: move;
 }
 
+.msuploadContainerTall .formmediagallery li:hover {
+    border: none;
+    cursor: initial;
+}
+
 .formmediagallery li img {
     width: 100%;
     height: 100%;
@@ -292,8 +297,7 @@ body {
 }
 
 .pfImagePreviewWrapper .msu-progress-bar-progress {
-    background-color: #00bdda;
-    border-radius: 3px;
+    background-color: #52bad5;
     height: 100%;
     width: 0%;
     position: absolute;
