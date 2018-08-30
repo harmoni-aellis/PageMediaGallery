@@ -36,7 +36,22 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		// replace by formmediagallery list
 		this.ol = $('<div>').addClass('formmediagallery');
-		this.ol.append($('<ul>'));
+		var ul = $('<ul>');
+		this.ol.append(ul);
+
+		var div = $('<div>').addClass('add-new-file-slot unsortable');
+		div.click(function (element){
+			if($(element.target).parents('.msuploadContainer').get(0) && $($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0)){
+				$($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0).click();
+			}
+		});
+		div.append($('<i>').addClass('fa fa-plus'));
+		ul.append(div);
+
+		if ( !this.hasEmptiesSlots() ){
+			div.hide();
+		}
+
 		$(this.$container).prepend(this.ol);
 
 		this.addUploadButton();
@@ -55,6 +70,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		});
 		this.manageDropOnFormField();
 		$(this.$container).find('ul').sortable({
+				items : "li:not(.unsortable)",
 			    start: function (e, ui) {
 			        ui.placeholder.append(ui.item.find('img,video').clone());
 			    },
@@ -133,6 +149,20 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	};
 
 	pagemediagallery.ui.SecondaryGallery.prototype.addFileToUpload = function (file) {
+
+		var secondaryGallery = this;
+
+		if ( ! secondaryGallery.hasEmptiesSlots() || 
+			secondaryGallery.filesUploading.length + 1 > secondaryGallery.numberEmptiesSlots()) {
+			secondaryGallery.dispErrorMessage(mw.msg( 'msu-upload-nbfile-exceed' ));
+			return;
+		}
+
+		if ( secondaryGallery.numberEmptiesSlots() - (secondaryGallery.filesUploading.length + 1 ) <= 0 ) {
+			//hide add new file slot
+			if ( $($(secondaryGallery.$container).find('.add-new-file-slot')).get(0) ) $($($(secondaryGallery.$container).find('.add-new-file-slot')).get(0)).hide();
+		}
+
 		this.filesUploading.push( new pagemediagallery.ui.FileUploading(file,this));
 	}
 
@@ -209,7 +239,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			li.addClass('fileToBeUpload');
 		}
 
-		$(this.$container).find('.formmediagallery ul').append(li);
+		$(this.$container).find('.formmediagallery ul .add-new-file-slot').before(li);
 
 		mw.hook('pmg.secondaryGallery.newThumbAdded').fire(li);
 
@@ -220,9 +250,12 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 	pagemediagallery.ui.SecondaryGallery.prototype.removeImg = function ( closeButton ) {
 
+		var secondaryGallery = this;
+
 		var filename = $(closeButton).parents('li').attr('data-filename');
 		$(closeButton).parents('li').remove();
 		if (filename) {
+
 			var inputs = $(this.$container).find('input.createboxInput');
 			if (inputs.length == 0) {
 				this.updateUploadButtonVisibility();
@@ -241,6 +274,19 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 			this.updateUploadButtonVisibility();
 			this.updateImageInputsValues();
+
+			var filesUploading = $(this.filesUploading);
+			var elem = filesUploading.filter(function() {
+				return this.file.name == filename;
+			});
+			this.filesUploading.splice(this.filesUploading.indexOf(elem),1);
+
+			if(secondaryGallery.hasEmptiesSlots()){
+				var container = $(this.$container);
+				if ( $(container.find('.add-new-file-slot')).get(0) && $($(container.find('.add-new-file-slot')).get(0)).is(':hidden') ) {
+					$($(container.find('.add-new-file-slot')).get(0)).show();
+				}
+			}
 		}
 	};
 
@@ -300,6 +346,31 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		return emptiesInputs.length > 0;
 	};
 
+	/**
+	 * this function returns the number of empty slots
+	 *
+	 *  @return number of empty slots
+	 */
+	pagemediagallery.ui.SecondaryGallery.prototype.numberEmptiesSlots = function (  ) {
+
+		var emptiesInputs = $(this.$container).find('input.createboxInput').filter(function() {
+			return this.value == "" || this.value == 'No-image-yet.jpg';
+		});
+
+		return emptiesInputs.length;
+	};
+
+	/**
+	 * this function returns the total number of slots available for this container
+	 *
+	 *  @return int max number of solts
+	 */
+	pagemediagallery.ui.SecondaryGallery.prototype.maxSlots = function (  ) {
+
+		var inputs = $(this.$container).find('input.createboxInput');
+
+		return inputs.length;
+	};
 
 	pagemediagallery.ui.SecondaryGallery.prototype.getInputForFile = function ( filename ) {
 
@@ -327,15 +398,31 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addImage = function ( img, filename, tempToReplace) {
 
+		var secondaryGallery = this;
+
+		if ( ! secondaryGallery.hasEmptiesSlots() || 
+			( secondaryGallery.filesUploading.length + 1 > secondaryGallery.numberEmptiesSlots() ) && !tempToReplace) {
+			secondaryGallery.dispErrorMessage(mw.msg( 'msu-upload-nbfile-exceed' ));
+			return;
+		}
+
+		var fileFromGallery = tempToReplace ? 0 : 1;
+
+		if ( secondaryGallery.numberEmptiesSlots() - (secondaryGallery.filesUploading.length + fileFromGallery) <= 0 ) {
+			//hide add new file slot
+			if ( $($(secondaryGallery.$container).find('.add-new-file-slot')).get(0) ) $($($(secondaryGallery.$container).find('.add-new-file-slot')).get(0)).hide();
+		}
+
 		var result = this.addImageToFormsInputs(filename);
 
-		if ( result) {
+		if ( result && !tempToReplace) {
 			var newItem = this.addThumb(img, filename, false, tempToReplace);
 			this.updateImageInputsValues();
 			var fileinput = this.getInputForFile(filename);
 			mw.hook('pmg.secondaryGallery.newImageAdded').fire(fileinput, newItem);
 		}
-		this.uploadButton.hide();
+
+		if (tempToReplace) this.uploadButton.hide();
 
 		// TODO fire event to allow adding edit image tools
 	};
@@ -448,15 +535,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			e.stopPropagation();
 			e.preventDefault();
 
-			//check space :
-			if ( ! secondaryGallery.hasEmptiesSlots()) {
-				secondaryGallery.dispErrorMessage(mw.msg( 'msu-upload-nbfile-exceed' ));
-				return;
-			}
+			var files = e.originalEvent.dataTransfer.files;
 
 			secondaryGallery.primaryGallery.open();
 
-			var files = e.originalEvent.dataTransfer.files;
 			secondaryGallery.affFilesToLoad(files);
 
 			// uploader.start();
@@ -490,7 +572,5 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				});
 
 	}
-
-
 
 }( jQuery, mediaWiki, pagemediagallery ) );
