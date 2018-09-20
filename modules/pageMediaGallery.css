@@ -180,7 +180,7 @@ body {
 
 .formmediagallery li img {
     width: 100%;
-    height: 100%;
+    height: 100% !important;
     object-fit: cover;
     object-position: 50% 50%;
 }
@@ -284,6 +284,8 @@ body {
 .pfImagePreviewWrapper canvas {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
 }
 
 .fileToBeUpload .pfImagePreviewWrapper {
