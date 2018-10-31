@@ -2,7 +2,8 @@
 	"name": "PageMediaGallery",
 	"version": "0.0.0",
 	"author": [
-		"Pierre Boutet"
+		"Pierre Boutet",
+		"Julien"
 	],
 	"url": "https://github.com/Wikifab/PageMediaGallery",
 	"descriptionmsg": "imagesGallery-desc",
@@ -41,6 +42,7 @@
 	"ResourceModules": {
 		"ext.pageMediaGallery": {
 			"scripts": [
+				"mediamanager.js",
 				"pagemediagallery.ui.SecondaryGallery.js",
 				"pagemediagallery.ui.PrimaryGallery.js",
 				"pagemediagallery.ui.FileUploading.js",

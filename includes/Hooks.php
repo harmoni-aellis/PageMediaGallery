@@ -49,15 +49,67 @@ class Hooks {
 		$pmgVars = json_encode ( $pmgVars );
 
 		if ($wgUser->getId ()) {
-			$galleryBody = self::getGalleryBody ( $wgOut->getTitle () );
-			$wgOut->addHTML ( $galleryBody );
+			$mediaManager = self::getModal();
+			$wgOut->addHTML ( $mediaManager );
 		}
 		$wgOut->addScript ( "<script type=\"$wgJsMimeType\">window.pmgVars = $pmgVars;</script>\n" );
 
 		return true;
 	}
 
+	private static function getModal() {
 
+		global $wgOut;
+
+		$out = '';
+
+		$out .= '<div class="modal" id="MediaManager" tabindex="-1" role="dialog" role="document">';
+		$out .=  '<div class="modal-dialog" role="document">';
+		$out .=    '<div class="modal-content">';
+		$out .=      '<div class="modal-header">';
+		$out .=        '<button type="button" data-dismiss="modal" aria-label="Close">';
+		$out .=          '<span>Annuler</span>';
+		$out .=        '</button>';
+		$out .=        '<h5 class="modal-title">Paramètres du média</h5>';
+		$out .=        '<button type="button" id="addToPage" disabled>Insérer dans la page</button>';
+		$out .=      '</div>';
+		$out .=      '<ul class="nav nav-tabs" id="tabContent">';
+		$out .=	      '<li class="active"><a href="#search" data-toggle="tab" role="tab" aria-controls="search" >Rechercher</a></li>';
+		$out .=	      '<li><a href="#upload" role="tab" aria-controls="upload" data-toggle="tab">Téléverser</a></li>';
+		$out .=	  '</ul>';
+		$out .=      '<div class="tab-content">';
+		$out .=       '<div class="tab-pane active" id="search">';
+		$out .=	        '<div class="search-input">';
+		$out .=	          '<input id="querymedia-input" class="oo-ui-dropdownWidget-handle" type="text">';
+		$out .=           '<input type="checkbox" id="linkedToPageCheck" name="linkedToPage"> only files linked to this page';
+		$out .=	        '</div>';
+		$out .=	        '<div class="search-content">';
+		$out .=	        	'Aucun résultat trouvé';
+		$out .=	        '</div>';
+		$out .=        '</div>';
+		$out .=	      '<div class="tab-pane" id="upload">';
+		$out .=	    	self::getMediaManagerUploaderContent( );
+		$out .=	      '</div> ';
+		$out .=	    '</div>';
+		$out .=	  '</div>';
+		$out .=    '</div>';
+		$out .=  '</div>';
+		$out .= '</div>';
+
+		return $out;
+	}
+
+	static function getMediaManagerUploaderContent() {
+
+		$out = '';
+		$out .= '<div>';
+		$out .=   '<div id="MediaManagerUploader">';
+		$out .=     '<div id="MsUpload"></div>';
+		$out .=   '</div>';
+		$out .= '</div>';
+
+		return $out;
+	}
 
 	public static function beforePageDisplay( $out ) {
 		$out->addModules( 'ext.userswatchbutton.js' );

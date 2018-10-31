@@ -352,3 +352,63 @@ body {
     background-color: #e4faff;
     border: 2px solid #52bad5;
 }
+
+#MediaManager .modal-header {
+    text-align: center;
+}
+
+#MediaManager .search-input {
+
+    margin: 5px;
+
+}
+
+#MediaManager .search-input input {
+
+    width: 100%;
+
+}
+
+#MediaManager .search-content .image {
+
+    height: 150px;
+    width: auto;
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px;
+    border: 1px solid #ccc;
+    position: relative;
+
+}
+
+#MediaManager .search-content .image img, #MediaManager .search-content .image label {
+
+    display: block;
+
+}
+
+#MediaManager .search-content .image img {
+
+    height: 100%;
+
+}
+
+#MediaManager .search-content .image label {
+
+    text-align: center;
+    background-color: black;
+    opacity: 0.5;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    height: 20%;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+}
+
+#MediaManager .image.toAddToPage {
+    border: 3px solid blue;
+}
+

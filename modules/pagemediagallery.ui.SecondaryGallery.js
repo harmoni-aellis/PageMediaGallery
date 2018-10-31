@@ -7,7 +7,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 	/**
 	 * SecondaryGallery class
-	 * create html linked to form input to create a secondary gallery on inputs, linked to the PrimaryGallery for Upload and drag/drop
+	 * create html linked to form input to create a secondary gallery on inputs for Upload and drag/drop
 	 * container node should be the one with class .msuploadContainer
 	 *
 	 * possibles hooks fired :
@@ -18,11 +18,11 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 * @param container node
 	 * @constructor
 	 */
-	pagemediagallery.ui.SecondaryGallery = function ( container, primaryGallery ) {
+	pagemediagallery.ui.SecondaryGallery = function ( container ) {
 
 		var secondaryGallery = this;
 
-		this.primaryGallery = primaryGallery;
+		//this.primaryGallery = primaryGallery;
 		this.$container = container;
 
 		//file to be uploaded
@@ -42,7 +42,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		var div = $('<div>').addClass('add-new-file-slot unsortable');
 		div.click(function (element){
 			if($(element.target).parents('.msuploadContainer').get(0) && $($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0)){
-				$($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0).click();
+				//$($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0).click();
+				MediaManager.start(secondaryGallery);
 			}
 		});
 		div.append($('<i>').addClass('fa fa-plus'));
@@ -123,7 +124,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		this.uploadButton.click(function() {
 			uploadIcon.hide();
 			loadIcon.show();
-			secondaryGallery.primaryGallery.startUpload();
+			//secondaryGallery.primaryGallery.startUpload();
 			return false;
 		});
 		this.uploadButton.append(this.uploadIcon);
@@ -537,12 +538,12 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 			var files = e.originalEvent.dataTransfer.files;
 
-			secondaryGallery.primaryGallery.open();
+			//secondaryGallery.primaryGallery.open();
 
 			secondaryGallery.affFilesToLoad(files);
 
 			// uploader.start();
-			secondaryGallery.primaryGallery.onRefresh();
+			//secondaryGallery.primaryGallery.onRefresh();
 
 		});
 
