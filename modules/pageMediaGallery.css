@@ -8,7 +8,7 @@
     left: 0;
     background-color: #333; /* Black*/
     overflow-x: visible; /* Disable horizontal scroll  do not work with dragable*/
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 10px 0px; /* Place content 10px from the top */
     transition: 0.2s; /* 0.5 second transition effect to slide in the sidenav */
     box-shadow: 0 0 11px 0px rgba(0,0,0,0.6);
@@ -36,7 +36,7 @@
 }
 
 #PageGallery #PageGalleryUploader {
-	min-height:100%;
+	min-height: calc(100% - 53px);
 }
 
 #PageGallery {
@@ -91,10 +91,16 @@ body {
     cursor: -webkit-grabbing;
 }
 
+#draggableTempUl {
+    position: relative !important;
+}
+
 #draggableTempUl .ui-draggable {
 	width:150px;
 	display: block;
+    z-index:1001 !important
 }
+
 #draggableTempUl .ui-draggable .file-thumb {
 	width: 100%;
 }
@@ -102,6 +108,7 @@ body {
 .ui-droppable-active {
 	border: solid 1px #008; 
 }
+
 .ui-droppable-active.ui-state-hover {
     border: solid 1px #00F; 
 }
@@ -112,15 +119,33 @@ body {
 }
 
 .formmediagallery{
-	padding:2px 0 2px 2px;
+    padding: 2% 1%;
 }
 .formmediagallery ul{
 	margin:0px;
 	padding:0px;	
 }
-.formmediagallery li:first-child {
-	width: 99%;
-	height: auto;
+
+.msuploadOneImage .formmediagallery li {
+    width: 100%;
+    height: 200px;
+    margin: 0px;
+}
+
+.formmediagallery li div {
+	width:100%;
+	height:100%;
+}
+
+.formmediagallery li {
+    display: inline-block;
+    position: relative;
+    width: 31.33%;
+    margin: 0% 1% 1%;
+    height: 100px;
+    overflow: hidden;
+    background: #f1f1f1;
+    border-radius: 3px;
 }
 
 .formmediagallery .mw-ia-editButton, .formmediagallery li .file-cancel {
@@ -150,27 +175,20 @@ body {
 }
 
 .formmediagallery li:hover {
-	border: 1px solid rgb(11, 133, 161);
+	border: 2px solid rgb(11, 133, 161);
 	cursor: move;
 }
 
-.formmediagallery li {
-	display: inline-block;
-	position: relative;
-	width: 19%;
-	margin: 0% 0.5%;
-	border: 1px solid #ccc;
-	height: 76px;
-	overflow: hidden;
-	background: #f1f1f1;
+.msuploadContainerTall .formmediagallery li:hover {
+    border: none;
+    cursor: initial;
 }
-.formmediagallery ul li {
-	min-height: 42px;
-}
+
 .formmediagallery li img {
-	width:100%;
-	min-height: 74px;
-	height:auto;
+    width: 100%;
+    height: 100% !important;
+    object-fit: cover;
+    object-position: 50% 50%;
 }
 .formmediagallery li .thumbimage {
 	display:none;
@@ -196,19 +214,10 @@ body {
     border-radius: 50px;
 }
 
-.formmediagallery{
-	min-height:100px;
-}
-
 .formmediagallery .tempFileLoader {
 	background: url(images/upload.png) no-repeat center center;
     width: 100%;
     height: 100%;
-}
-.formmediagallery .tempFileLoader:before{
-	content: "";
-	display: block;
-	padding-top: 66%; 	/* initial ratio of 3:2*/
 }
 
 .msuploadContainer .errorMessage{
@@ -276,4 +285,70 @@ body {
 	display:block;
 	text-align:center;
     margin-top: 9px;
+}
+
+.pfImagePreviewWrapper canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+
+.fileToBeUpload .pfImagePreviewWrapper {
+    opacity: 0.5;
+}
+
+.pfImagePreviewWrapper .msu-progress-bar {
+    border: 1px solid grey;
+    background-color: white;
+    height: 22px;
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 20px);
+    margin: 0 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.pfImagePreviewWrapper .msu-progress-bar-progress {
+    background-color: #52bad5;
+    height: 100%;
+    width: 0%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.formmediagallery .unsortable:hover{
+    cursor: initial;
+}
+
+.add-new-file-slot i.fa-plus {
+    font-size: 24px;
+    color: #52bad5;
+    position: absolute;
+    top: calc(50% - 11px);
+    left: calc(50% - 9px);
+}
+
+.formmediagallery div.add-new-file-slot{
+    display: inline-block;
+    position: relative;
+    width: 31.33%;
+    margin: 0% 1% 1%;
+    height: 100px;
+    overflow: hidden;
+    text-align: center;
+    background: #f1f1f1;
+    border-radius: 3px;
+    background-color: #f3fdff;
+    border: 2px dashed #52bad5;
+    transition: 0.2s;
+}
+
+.formmediagallery div.add-new-file-slot:hover{
+    cursor: pointer;
+    background-color: #e4faff;
+    border: 2px solid #52bad5;
 }

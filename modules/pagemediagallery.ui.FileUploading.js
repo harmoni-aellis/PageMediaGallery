@@ -28,7 +28,9 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			uploader.bind('FileUploaded', pagemediagallery.ui.FileUploading.onFileUpload);
 			uploader.bind('FilesAdded', pagemediagallery.ui.FileUploading.onFilesAdded);
 			uploader.bind('FilesRemoved', pagemediagallery.ui.FileUploading.onFilesRemoved);
+			uploader.bind('UploadProgress', pagemediagallery.ui.FileUploading.onUploadProgress);
 			uploader.bind('FileNameChanged', pagemediagallery.ui.FileUploading.onFileNameChanged);
+
 		}
 
 		this.fileAdded();
@@ -60,13 +62,15 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 */
 	pagemediagallery.ui.FileUploading.prototype.confirmUpload = function ( file ) {
 
+		var fileid = file.id;
+
 		if(this.isUploaded) {
 			// security to avoid many calls
 			return;
 		}
 		this.isUploaded = true;
 
-		$(this.tempImage).parents('li.fileToBeUpload').remove();
+		//$(this.tempImage).parents('li.fileToBeUpload').remove();
 
 		//to use it later
 		var instance = this;
@@ -96,6 +100,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 					img.setAttribute('class', 'file-thumb stl');
 					img.setAttribute('style', 'width: 100%;');
 					instance.secondaryGallery.addImage(img, file.name, this.tempImage);
+					var test = this.tempImage.parents('.fileToBeUpload').get(0);
+					test.removeClass('fileToBeUpload');
 				}
 			});
 		}else{
@@ -106,6 +112,17 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		}
 		var fileName = file.name;
 		this.secondaryGallery.addImage(img.clone(), file.name, this.tempImage);
+		if ( fileid ) {
+			$('div[data-fileid=' + fileid + ']').parent('.fileToBeUpload').removeClass('fileToBeUpload');
+		}
+
+		//remove file from FilesUploading
+		var filesUploading = $(this.secondaryGallery.filesUploading);
+		var elem = filesUploading.filter(function() {
+			return this.file.name === file.name;
+		});
+		this.secondaryGallery.filesUploading.splice(this.secondaryGallery.filesUploading.indexOf(elem),1);
+
 	};
 
 	pagemediagallery.ui.FileUploading.prototype.cancelUpload = function ( file ) {
@@ -123,15 +140,19 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		var tempImage = this.tempImage;
 
+		tempImage.parent().attr('data-fileid', file.id);
+
+		var progressBar = `<div class="msu-progress-bar">
+  				<div class="msu-progress-bar-progress"></div>
+			</div>`;
+
+		$( '.fileToBeUpload [data-fileid="' + file.id + '"]' ).append( progressBar );
+
 		// add image on loader
-		// this does not work, :/
 		try {
 			var image = new o.Image();
 			image.onload = function () {
-				this.embed( tempImage, {
-					width: 30,
-					height: 30,
-					crop: true
+				this.embed( tempImage.get(0), {
 				});
 			};
 			image.load( file.getSource() );
@@ -162,12 +183,20 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		}
 	}
 
+	pagemediagallery.ui.FileUploading.onUploadProgress = function ( uploader, file ) {
+		$( '[data-fileid="' + file.id + '"] .msu-progress-bar-progress' ).css( 'width', file.percent + '%' );
+	}
+
 	/**
 	 * static method to listen FileAdded event and call updateFileTempImage on corresponding items
 	 */
 	pagemediagallery.ui.FileUploading.onFilesAdded = function (uploader, files) {
+
 		for (var a = 0; a < files.length; a++) {
 			var file = files[a];
+
+			var fileid = file.id;
+
 			for (var i = 0; i < pagemediagallery.ui.FileUploading.instances.length; i++) {
 				// here, in case of multiple file upload,
 				// I cannot find an exact condition to find if the uploaded file match the one for this object
@@ -214,9 +243,14 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 						if ( result.error ) {
 							pagemediagallery.ui.FileUploading.instances[i].cancelUpload(file);
 						} else {
+							var fileid = file.id;
+							$('div[data-fileid=' + fileid + ']').css('opacity', '1');
+							$('div[data-fileid=' + fileid + ']').find('.msu-progress-bar').css('display', 'none');
 							pagemediagallery.ui.FileUploading.instances[i].confirmUpload(file);
 						}
 					} else {
+						$('div[data-fileid=' + fileid + ']').css('opacity', '1');
+						$('div[data-fileid=' + fileid + ']').find('.msu-progress-bar').css('display', 'none');
 						pagemediagallery.ui.FileUploading.instances[i].confirmUpload(file);
 					}
 					
