@@ -118,9 +118,6 @@ body {
     background: #f8f8f8;
 }
 
-.formmediagallery{
-    padding: 2% 1%;
-}
 .formmediagallery ul{
 	margin:0px;
 	padding:0px;	
@@ -324,12 +321,16 @@ body {
     cursor: initial;
 }
 
-.add-new-file-slot i.fa-plus {
-    font-size: 24px;
-    color: #52bad5;
-    position: absolute;
-    top: calc(50% - 11px);
-    left: calc(50% - 9px);
+.add-new-file-slot:after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-image: url(msu-add-media.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 2.7em;
+    image-rendering: pixelated;
 }
 
 .formmediagallery div.add-new-file-slot{
@@ -358,19 +359,27 @@ body {
 }
 
 #MediaManager .search-input {
-
-    margin: 5px;
-
+    padding: 0px 15px 10px;
+    border-bottom: 1px solid #ddd;
 }
 
 #MediaManager .search-input input {
-
     width: 100%;
+    border-radius: 3px;
+    height: 35px;
+    padding: 0 10px;
+}
 
+#MediaManager .search-content {
+    max-height: 332px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-left: 10px;
+    padding-top: 7px;
+    background: #f9f9f9;
 }
 
 #MediaManager .search-content .image {
-
     height: 150px;
     width: auto;
     display: inline-block;
@@ -378,23 +387,17 @@ body {
     margin: 5px;
     border: 1px solid #ccc;
     position: relative;
-
 }
 
 #MediaManager .search-content .image img, #MediaManager .search-content .image label {
-
     display: block;
-
 }
 
 #MediaManager .search-content .image img {
-
     height: 100%;
-
 }
 
 #MediaManager .search-content .image label {
-
     text-align: center;
     background-color: black;
     opacity: 0.5;
@@ -405,7 +408,6 @@ body {
     position: absolute;
     bottom: 0;
     width: 100%;
-
 }
 
 #MediaManager .image.toAddToPage {
@@ -413,19 +415,59 @@ body {
 }
 
 #MediaManager .modal-header .cancel-container {
-    float: left;
-    width: 20%;
-    text-align: center;
+    width: auto;
+    left: 15px;
+    position: absolute;
 }
 
 #MediaManager .modal-header .insert-to-page-container {
-    float: right;
-    width: 20%;
-    text-align: center;
+    width: auto;
+    right: 15px;
+    position: absolute;
 }
 
 #MediaManager .modal-header .modal-title{
-    float: left;
     text-align: center;
+    width: calc(100% - 209px);
+    padding: 0 10px;
 }
+
+#MediaManager #tabContent {
+    background: #fafbfc;
+    padding: 6px 15px 0;
+}
+
+#MediaManager #tabContent.nav-tabs > li > a:hover {
+    border-color: transparent;
+    background-color: transparent;
+}
+
+#MediaManager #MediaManagerUploader {
+    padding: 0 15px;
+}
+
+#MediaManager .msupload-dropzone {
+    min-height: 70px;
+}
+
+@media (min-width: 768px) {
+#MediaManager .modal-dialog {
+    width: 100%;
+    max-width: 750px;
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

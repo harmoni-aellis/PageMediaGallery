@@ -101,7 +101,7 @@ class Hooks {
 		$out .=        '<div class="cancel-container"><button type="button" data-dismiss="modal" aria-label="Close">';
 		$out .=          '<span>' . wfMessage('pmg-cancel') . '</span>';
 		$out .=        '</button></div>';
-		$out .=        '<h5 class="modal-title">' . wfMessage('pmg-mediamanager-title') . '</h5>';
+		$out .=        '<h4 class="modal-title">' . wfMessage('pmg-mediamanager-title') . '</h4>';
 		$out .=        '<div class="insert-to-page-container"><button type="button" id="addToPage" disabled>' . wfMessage('pmg-insert-to-page') . '</button></div>';
 		$out .=      '</div>';
 		$out .=      '<ul class="nav nav-tabs" id="tabContent">';
