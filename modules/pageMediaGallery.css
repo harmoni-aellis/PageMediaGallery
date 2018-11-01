@@ -391,6 +391,7 @@ body {
     margin: 5px;
     border: 1px solid #ccc;
     position: relative;
+    cursor: pointer;
 }
 
 #MediaManager .search-content .image img, #MediaManager .search-content .image label {
@@ -404,14 +405,19 @@ body {
 #MediaManager .search-content .image label {
     text-align: center;
     background-color: black;
-    opacity: 0.5;
+    opacity: 0.6;
     margin-bottom: 0px;
     padding-bottom: 0px;
-    height: 20%;
+    height: auto;
     color: white;
+    flex-wrap: wrap;
     position: absolute;
     bottom: 0;
+    font-weight: normal;
     width: 100%;
+    font-size: 14px;
+    padding: 2px 5px;
+    word-break: break-all;
 }
 
 #MediaManager .image.toAddToPage {
