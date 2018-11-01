@@ -16,6 +16,8 @@ window.MediaManager = {
 	reset: function (){
 		MediaManager.window.$modal.find('.image').removeClass('toAddToPage');
 		$("#addToPage").prop('disabled', true);
+		$("a[href=#search]").click();
+		$("[id^=msupload][id$=list]").html("");
 	},
 	init: function (){
 
@@ -64,70 +66,17 @@ window.MediaManager.browser = {
 	init: function() {
 		browser = this;
 
-		var data = {
-			ailimit: '5',
-			aiprop: 'url',
-			aisort: 'timestamp',
-			aidir: 'descending'
-		};
-
-		function doQuery(e) {
-
-			if ( e.value !== '' ) {
-				data = {
-					ailimit: '5',
-					aiprop: 'url'
-				};
-			} else {
-				data = {
-					ailimit: '5',
-					aiprop: 'url',
-					aisort: 'timestamp',
-					aidir: 'descending'
-				};
-			}
-
-			if ($('#linkedToPageCheck').is(':checked')) {
-				data['aiprefix'] = mw.config.get('wgPageName').replace(/(.*)\//g,"").replace(":","-") + '_' + e.value;
-			} else {
-				if (e.value !== '') {
-					data['aiprefix'] = e.value;
-				}
-			}
-
-			browser.queryMedia( data );
-		}
-
 		$('#querymedia-input').on('input', function (e) {
-			doQuery(e.target);
+			browser.browse( e.target.value );
 		});
 
-		$('#linkedToPageCheck').off().on('click', function(){
-			doQuery($('#querymedia-input')[0]);
-		});
-
-		MediaManager.window.$modal.on('browser:contentChanged', function () {
-			$modal = $(this);
-			$(this).find( '.image' ).on('click', function() {
-				$(this).toggleClass( 'toAddToPage' );
-				if ($(this).hasClass('toAddToPage')) {
-					$("#addToPage").prop( "disabled", false );
-				} else {
-					$("#addToPage").prop( "disabled", true );
-				}
-				$modal.find( '.image' ).not($(this)).removeClass('toAddToPage');
-			});
-		});
-
-		doQuery($('#querymedia-input')[0]);
+		browser.browse( $('#querymedia-input')[0].value );
 	},
 	/**
-	 * @arg args key-value array arguments for the query to the AllImages API
-	 * @arg loadMore bool content will not be erased before new content
+	 * @param {string} input - The input provided by the user.
+	 * @param {string|integer} offset - Value from which to get the next matches (if any).
 	 */
-	queryMedia: function(args, loadMore) {
-
-		var browser = this;
+	browse: function(input, offset) {
 
 		// first request to get token
 		$.ajax({
@@ -135,168 +84,89 @@ window.MediaManager.browser = {
 			url: mw.util.wikiScript('api'),
 			data: { action:'query', format:'json',  meta: 'tokens', type:'csrf'},
 		    dataType: 'json',
-		    success: queryMedia
+		    success: browse
 		});
 
 		// function to do second request to execute follow action
-		function queryMedia(jsondata) {
-			console.log('queryMedia');
+		function browse(jsondata) {
 			var token = jsondata.query.tokens.csrftoken;
-			var data = {
-				format: 'json',
-				action: 'query',
-				list: 'allimages'
-			};
-
-			for (var arg in args){
-			    if (args.hasOwnProperty(arg)) {
-			    	data[arg] = args[arg];
-			    }
+			var data = {};
+			data.action = "pagemediagallery_browse";
+			data.format = "json";
+			data.input = input;
+			data.token = token;
+			if (offset) {
+				data.offset = offset;
 			}
-			$.ajax({ url: mw.util.wikiScript( 'api' ), dataType: 'json', type: 'POST',
+
+			$.ajax({ 
+				type: "POST",
+				url: mw.util.wikiScript('api'),
 				data: data,
+			    dataType: 'json',
 				success: function ( result ) {
 					console.log(result);
-					if ( result && result.query && result.query.allimages ) {
-						var allimages = result.query.allimages;
+					if ( result && result.pagemediagallery_browse ) {
+						var results = result.pagemediagallery_browse;
 
-						if (!loadMore) {
+						if (!offset) { //if offset, we append the results to the content
 							MediaManager.window.$modal.find('.search-content').html('');
 						}
 
-						$.each( allimages, function ( index, value ) {
-							var $div = $( document.createElement('div') );
-							$div.addClass( 'image' );
-							$div.attr('data-imagename', value.name);
-							var $img = $( document.createElement('img') );
-							$img.attr('src', value.url);
-							var $label = $( document.createElement('label') );
-							$label.html(value.name);
-							$div.append($img);
-							$div.append($label);
-							MediaManager.window.$modal.find('.search-content').append($div);
-						});
+						if ( results.search ) {
+							$.each( results.search, function ( index, value ) {
+								var $div = $( document.createElement('div') );
+								$div.addClass( 'image' );
+								$div.attr('data-imagename', value.filename);
+								var $img = $( document.createElement('img') );
+								$img.attr('src', value.fileurl);
+								var $label = $( document.createElement('label') );
+								$label.html(value.filename);
+								$div.append($img);
+								$div.append($label);
+								$div.on('click', function() {
+									$(this).toggleClass( 'toAddToPage' );
+									if ($(this).hasClass('toAddToPage')) {
+										$("#addToPage").prop( "disabled", false );
+									} else {
+										$("#addToPage").prop( "disabled", true );
+									}
+									MediaManager.window.$modal.find( '.image' ).not($(this)).removeClass('toAddToPage');
+								});
+								MediaManager.window.$modal.find('.search-content').append($div);
+							});
+						}
 
-						if (result.continue) {
+						if ( results.continue && results.continue.offset ) {
 
 							var $button = $( document.createElement('button') );
 							$button.html('Load more');
 							$button.attr('type', 'button');
 							$button.attr('id', 'loadMoreImages');
+							$button.attr( 'data-offset', results.continue.offset );
 							MediaManager.window.$modal.find('.search-content').append($button);
 
 							$('#loadMoreImages').on('click', function(){
-								console.log('hello');
-								console.log(args);
-								if (args.hasOwnProperty('aisort') && args['aisort'] == 'timestamp') {
-									args['aistart'] = result.continue.aicontinue.substr(0, result.continue.aicontinue.indexOf('|'));
-								}else {
-									args['aifrom'] = result.continue.aicontinue;
-								}
 								
-								$('#loadMoreImages').remove();
-								MediaManager.browser.queryMedia(args, true);
+								var offset = $(this).data('offset');
+								if (typeof offset == 'string') {
+									//API:allimages returns something like 20180927124202|Trgrol_kk.jpg
+									offset = String(offset).split("|")[0];
+								}
+								$(this).remove();
+								MediaManager.browser.browse(input, offset);
 							});
 						}
-
-						MediaManager.window.$modal.trigger('browser:contentChanged');
+					}else {
+						console.log(mw);
+						MediaManager.window.$modal.find('.search-content').html( mw.message('pmg-no-match-found') );
 					}
 				}, error: function () {
-					//MsUpload.warningText( fileItem, 'Error: Request failed', uploader );
+					console.log( mw.message('pmg-error-encountered') );
 				}
 			});
 		};
 	}
-	// /**
-	//  * @arg args key-value array arguments for the query to the AllImages API
-	//  * @arg loadMore bool content will not be erased before new content
-	//  */
-	// queryMedia: function(args, loadMore) {
-
-	// 	var browser = this;
-
-	// 	// first request to get token
-	// 	$.ajax({
-	// 		type: "GET",
-	// 		url: mw.util.wikiScript('api'),
-	// 		data: { action:'query', format:'json',  meta: 'tokens', type:'csrf'},
-	// 	    dataType: 'json',
-	// 	    success: queryMedia
-	// 	});
-
-	// 	// function to do second request to execute follow action
-	// 	function queryMedia(jsondata) {
-	// 		console.log('queryMedia');
-	// 		var token = jsondata.query.tokens.csrftoken;
-	// 		var data = {
-	// 			format: 'json',
-	// 			action: 'query',
-	// 			list: 'search',
-	// 			srsearch: 'tutorial',
-	// 			srnamespace: 6
-	// 		};
-
-	// 		// for (var arg in args){
-	// 		//     if (args.hasOwnProperty(arg)) {
-	// 		//     	data[arg] = args[arg];
-	// 		//     }
-	// 		// }
-	// 		$.ajax({ url: mw.util.wikiScript( 'api' ), dataType: 'json', type: 'POST',
-	// 			data: data,
-	// 			success: function ( result ) {
-	// 				console.log(result);
-	// 				if ( result && result.query && result.query.search ) {
-	// 					var searchResults = result.query.search;
-
-	// 					if (!loadMore) {
-	// 						MediaManager.window.$modal.find('.search-content').html('');
-	// 					}
-
-	// 					$.each( searchResults, function ( index, value ) {
-	// 						var file = wfLocalFile(Title::newFromText(value.title));
-	// 						console.log(file);
-	// 						// var $div = $( document.createElement('div') );
-	// 						// $div.addClass( 'image' );
-	// 						// $div.attr('data-imagename', value.name);
-	// 						// var $img = $( document.createElement('img') );
-	// 						// $img.attr('src', value.url);
-	// 						// var $label = $( document.createElement('label') );
-	// 						// $label.html(value.name);
-	// 						// $div.append($img);
-	// 						// $div.append($label);
-	// 						// MediaManager.window.$modal.find('.search-content').append($div);
-	// 					});
-
-	// 					// if (result.continue) {
-
-	// 					// 	var $button = $( document.createElement('button') );
-	// 					// 	$button.html('Load more');
-	// 					// 	$button.attr('type', 'button');
-	// 					// 	$button.attr('id', 'loadMoreImages');
-	// 					// 	MediaManager.window.$modal.find('.search-content').append($button);
-	// 					// 	$('#loadMoreImages').on('click', function(){
-	// 					// 		console.log('hello');
-	// 					// 		console.log(args);
-	// 					// 		if (args.hasOwnProperty('aisort') && args['aisort'] == 'timestamp') {
-	// 					// 			args['aistart'] = result.continue.aicontinue.substr(0, result.continue.aicontinue.indexOf('|'));
-	// 					// 		}else {
-	// 					// 			args['aifrom'] = result.continue.aicontinue;
-	// 					// 		}
-								
-	// 					// 		$('#loadMoreImages').remove();
-	// 					// 		MediaManager.browser.queryMedia(args, true);
-	// 					// 	});
-	// 					// }
-
-	// 					// MediaManager.window.$modal.trigger('browser:contentChanged');
-	// 				}
-	// 				console.log(result);
-	// 			}, error: function () {
-	// 				//MsUpload.warningText( fileItem, 'Error: Request failed', uploader );
-	// 			}
-	// 		});
-	// 	};
-	// }
 }
 
 window.MediaManager.uploader = {
@@ -381,6 +251,8 @@ window.MediaManager.uploader = {
 				$("#addToPage").prop( "disabled", true );
 			}
 		});
+		console.log(uploader.uploaderId);
+		$( '#'+ uploader.uploaderId + '-bottom' ).hide(); //doesn't work
 	},
 	init: function () {
 		var mediaManagerUploader = this;

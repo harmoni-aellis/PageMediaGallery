@@ -412,3 +412,20 @@ body {
     border: 3px solid blue;
 }
 
+#MediaManager .modal-header .cancel-container {
+    float: left;
+    width: 20%;
+    text-align: center;
+}
+
+#MediaManager .modal-header .insert-to-page-container {
+    float: right;
+    width: 20%;
+    text-align: center;
+}
+
+#MediaManager .modal-header .modal-title{
+    float: left;
+    text-align: center;
+}
+

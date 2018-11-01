@@ -20,6 +20,37 @@ class Hooks {
 		}
 
 	}
+	/**
+	 * Execute a request to the API within mediawiki using FauxRequest
+	 *
+     * @param $data array Array of non-urlencoded key => value pairs, the fake GET/POST values
+     * @param $wasPosted bool Whether to treat the data as POST 
+     * @param $session MediaWiki\\Session\\Session | array | null Session, session data array, or null
+     * @param $protocol string 'http' or 'https' 
+     * @return array the result data array
+     *
+	 * @see https://doc.wikimedia.org/mediawiki-core/master/php/classFauxRequest.html
+	 */
+	static function APIFauxRequest($data = [],
+		  	$wasPosted = false,
+		  	$session = null,
+		  	$protocol = 'http' ){
+
+		$res = array();
+
+		$apiParams = new \FauxRequest($data, $wasPosted, $session, $protocol);
+
+		try {
+			$api = new \ApiMain( $apiParams );
+			$api->execute();
+			$res = $api->getResult()->getResultData();
+		} catch (\Exception $e) {
+			trigger_error("API exception : " . $e->getMessage(), E_USER_WARNING);
+		}
+
+		return $res;
+	}
+
 	static function start( $pFFormEdit) {
 		global $wgOut, $wgScriptPath, $wgJsMimeType, $wgFileExtensions, $wgUser, $wgpmgEnabledForms;
 
@@ -67,24 +98,23 @@ class Hooks {
 		$out .=  '<div class="modal-dialog" role="document">';
 		$out .=    '<div class="modal-content">';
 		$out .=      '<div class="modal-header">';
-		$out .=        '<button type="button" data-dismiss="modal" aria-label="Close">';
-		$out .=          '<span>Annuler</span>';
-		$out .=        '</button>';
-		$out .=        '<h5 class="modal-title">Paramètres du média</h5>';
-		$out .=        '<button type="button" id="addToPage" disabled>Insérer dans la page</button>';
+		$out .=        '<div class="cancel-container"><button type="button" data-dismiss="modal" aria-label="Close">';
+		$out .=          '<span>' . wfMessage('pmg-cancel') . '</span>';
+		$out .=        '</button></div>';
+		$out .=        '<h5 class="modal-title">' . wfMessage('pmg-mediamanager-title') . '</h5>';
+		$out .=        '<div class="insert-to-page-container"><button type="button" id="addToPage" disabled>' . wfMessage('pmg-insert-to-page') . '</button></div>';
 		$out .=      '</div>';
 		$out .=      '<ul class="nav nav-tabs" id="tabContent">';
-		$out .=	      '<li class="active"><a href="#search" data-toggle="tab" role="tab" aria-controls="search" >Rechercher</a></li>';
-		$out .=	      '<li><a href="#upload" role="tab" aria-controls="upload" data-toggle="tab">Téléverser</a></li>';
+		$out .=	      '<li class="active"><a href="#search" data-toggle="tab" role="tab" aria-controls="search" >' . wfMessage('pmg-tab-search') . '</a></li>';
+		$out .=	      '<li><a href="#upload" role="tab" aria-controls="upload" data-toggle="tab">' . wfMessage('pmg-tab-upload') . '</a></li>';
 		$out .=	  '</ul>';
 		$out .=      '<div class="tab-content">';
 		$out .=       '<div class="tab-pane active" id="search">';
 		$out .=	        '<div class="search-input">';
 		$out .=	          '<input id="querymedia-input" class="oo-ui-dropdownWidget-handle" type="text">';
-		$out .=           '<input type="checkbox" id="linkedToPageCheck" name="linkedToPage"> only files linked to this page';
 		$out .=	        '</div>';
 		$out .=	        '<div class="search-content">';
-		$out .=	        	'Aucun résultat trouvé';
+		$out .=	        	wfMessage('pmg-no-match-found');
 		$out .=	        '</div>';
 		$out .=        '</div>';
 		$out .=	      '<div class="tab-pane" id="upload">';

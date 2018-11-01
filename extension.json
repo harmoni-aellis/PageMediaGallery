@@ -10,11 +10,16 @@
 	"license-name": "MIT",
 	"type": "other",
 	"AutoloadClasses": {
-		"PageMediaGallery\\Hooks": "includes/Hooks.php"
+		"PageMediaGallery\\Hooks": "includes/Hooks.php",
+		"PageMediaGallery\\ApiBrowse": "includes/ApiBrowse.php"
 	},
 	"config": {
 		"PageMediaGalleryFoo": true,
-		"pmgEnabledForms" : false
+		"pmgEnabledForms" : false,
+		"PageMediaGallerySearchLimit": 10
+	},
+	"APIModules": {
+		"pagemediagallery_browse": "PageMediaGallery\\ApiBrowse"
 	},
 	"callback": "PageMediaGallery\\Hooks::onExtensionLoad",
 	"Hooks": {
@@ -54,6 +59,10 @@
 			],
 			"styles": [
 				"pageMediaGallery.css"
+			],
+			"messages": [
+				"pmg-no-match-found",
+				"pmg-error-encountered"
 			]
 		}
 	},
