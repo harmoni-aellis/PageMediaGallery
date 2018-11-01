@@ -331,6 +331,7 @@ body {
     background-position: center;
     background-size: 2.7em;
     image-rendering: pixelated;
+    opacity: 0.5;
 }
 
 .formmediagallery div.add-new-file-slot{
@@ -344,14 +345,18 @@ body {
     background: #f1f1f1;
     border-radius: 3px;
     background-color: #f3fdff;
-    border: 2px dashed #52bad5;
-    transition: 0.2s;
+    border: 2px solid #a5e9fa;
+    transition: 0.1s;
 }
 
 .formmediagallery div.add-new-file-slot:hover{
     cursor: pointer;
     background-color: #e4faff;
     border: 2px solid #52bad5;
+}
+
+.formmediagallery div.add-new-file-slot:hover .add-new-file-slot:after {
+    opacity:1;
 }
 
 #MediaManager .modal-header {
