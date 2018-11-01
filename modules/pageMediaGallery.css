@@ -432,7 +432,7 @@ body {
 
 #MediaManager .modal-header .modal-title{
     text-align: center;
-    width: calc(100% - 209px);
+    width: 100%;
     padding: 0 10px;
 }
 
