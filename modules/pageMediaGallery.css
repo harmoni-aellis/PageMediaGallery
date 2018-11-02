@@ -357,6 +357,11 @@ body {
     opacity:1;
 }
 
+#MediaManager .modal-content {
+    float: left;
+    width: 100%;
+}
+
 #MediaManager .modal-header {
     text-align: center;
 }
@@ -466,7 +471,9 @@ body {
 }
 
 #MediaManager #MediaManagerUploader {
-    padding: 0 15px;
+    padding: 5px 15px 15px;
+    float: left;
+    width: 100%;
 }
 
 #MediaManager .msupload-dropzone {
