@@ -491,9 +491,10 @@ body {
     color: #30373b;
 }
 
-.nav-tabs > li > a:hover {
+.nav > li > a:hover, .nav > li > a:focus {
     border-color: transparent;
     background-color: transparent;
+    outline: 0;
 }
 
 #MediaManager .search-input:before {
