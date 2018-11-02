@@ -448,13 +448,13 @@ body {
 }
 
 #MediaManager .modal-header .cancel-container .btn {
-    background-color: #888;
+    background-color: #ccc;
 }
 
 #MediaManager .modal-header .cancel-container .btn:hover,
 #MediaManager .modal-header .cancel-container .btn:focus,
 #MediaManager .modal-header .cancel-container .btn:active:focus {
-    background-color: #555;
+    background-color: #aaa;
     border-color: transparent;
     outline: 0;
 }
@@ -494,6 +494,9 @@ body {
     font-weight: bold;
     font-size: 1.1em;
     line-height: 1.1;
+}
+
+#MediaManager .nav-tabs > li.active > a {
     color: #30373b;
 }
 
