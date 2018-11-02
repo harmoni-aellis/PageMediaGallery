@@ -423,6 +423,11 @@ body {
     font-size: 14px;
     padding: 2px 5px;
     word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #MediaManager .image.toAddToPage {
