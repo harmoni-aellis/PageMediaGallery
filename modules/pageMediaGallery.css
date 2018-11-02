@@ -321,15 +321,17 @@ body {
 
 .add-new-file-slot:after {
     content: '';
-    width: 100%;
+    width: 38px;
     height: 100%;
+    background-color: #69b8d2;
     display: block;
-    background-image: url(images/msu-add-media.svg);
+    -webkit-mask: url(/w/extensions/PageMediaGallery/modules/images/msu-add-media.svg) no-repeat 50% 50%;
+    mask: url(/w/extensions/PageMediaGallery/modules/images/msu-add-media.svg) no-repeat 50% 50%;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 2.7em;
-    image-rendering: pixelated;
-    opacity: 0.5;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    margin: auto;
 }
 
 .formmediagallery div.add-new-file-slot{
@@ -344,7 +346,7 @@ body {
     border-radius: 3px;
     background-color: #f3fdff;
     border: 2px solid #a5e9fa;
-    transition: 0.1s;
+    transition: 0.15s;
 }
 
 .formmediagallery div.add-new-file-slot:hover{
