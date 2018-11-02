@@ -484,6 +484,13 @@ body {
     padding: 6px 15px 0;
 }
 
+#MediaManager .nav-tabs > li > a {
+    font-weight: bold;
+    font-size: 1.1em;
+    line-height: 1.1;
+    color: #30373b;
+}
+
 .nav-tabs > li > a:hover {
     border-color: transparent;
     background-color: transparent;
