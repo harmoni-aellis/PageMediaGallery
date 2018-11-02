@@ -367,7 +367,7 @@ body {
 }
 
 #MediaManager .search-input {
-    padding: 0px 15px 10px;
+    padding: 10px 15px 10px;
     border-bottom: 1px solid #ddd;
 }
 
@@ -485,6 +485,7 @@ body {
 #MediaManager #tabContent {
     background: #fafbfc;
     padding: 6px 15px 0;
+    margin-bottom: 0px;
 }
 
 #MediaManager .nav-tabs > li > a {
@@ -514,9 +515,12 @@ body {
 }
 
 #MediaManager #MediaManagerUploader {
-    padding: 5px 15px 15px;
+    padding: 15px 15px 15px;
     float: left;
     width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 520px;
 }
 
 #MediaManager .msupload-dropzone {
