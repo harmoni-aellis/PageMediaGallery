@@ -446,12 +446,15 @@ body {
 }
 
 #MediaManager .modal-header .cancel-container .btn {
-    background-color: #555;
+    background-color: #888;
 }
 
 #MediaManager .modal-header .cancel-container .btn:hover,
-#MediaManager .modal-header .cancel-container .btn:focus {
-    background-color: #888;
+#MediaManager .modal-header .cancel-container .btn:focus,
+#MediaManager .modal-header .cancel-container .btn:active:focus {
+    background-color: #555;
+    border-color: transparent;
+    outline: 0;
 }
 
 #MediaManager .modal-header .insert-to-page-container .btn-primary[disabled]:hover {
