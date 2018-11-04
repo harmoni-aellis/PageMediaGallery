@@ -255,11 +255,13 @@ window.MediaManager.uploader = {
 					}
 
 					// When hovering over the link to the file about to be replaced, show the thumbnail
-					$( fileItem.warning ).find( 'a' ).mouseover( function () {
-						$( fileItem.warning ).find( 'div.thumb' ).show();
-					}).mouseout( function () {
-						$( fileItem.warning ).find( 'div.thumb' ).hide();
-					});
+					// $( fileItem.warning ).find( 'a' ).mouseover( function () {
+					// 	$( fileItem.warning ).find( 'div.thumb' ).show();
+					// }).mouseout( function () {
+					// 	$( fileItem.warning ).find( 'div.thumb' ).hide();
+					// });
+
+					$( fileItem.warning ).find('.mw-selflink.selflink').attr({ href: $( fileItem.warning ).find( '.image' ).attr('href'), target: "_blank"});
 
 					// If a file with the same name already exists, add a checkbox to confirm the replacement
 					if ( window.msuVars.confirmReplace ) {
