@@ -462,6 +462,12 @@ body {
 }
 }
 
+#load-more-content {
+    height: 30px;
+    margin: 10px;
+    text-align: center;
+}
+
 
 
 

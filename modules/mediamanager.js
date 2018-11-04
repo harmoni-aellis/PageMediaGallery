@@ -18,6 +18,9 @@ window.MediaManager = {
 		$("#addToPage").prop('disabled', true);
 		$("a[href=#search]").click();
 		$("[id^=msupload][id$=list]").html("");
+
+		MediaManager.browser.init();
+
 	},
 	init: function (){
 
@@ -63,6 +66,7 @@ window.MediaManager.window = {
 
 window.MediaManager.browser = {
 
+	requestRunning: 0,
 	init: function() {
 		browser = this;
 
@@ -77,6 +81,8 @@ window.MediaManager.browser = {
 	 * @param {string|integer} offset - Value from which to get the next matches (if any).
 	 */
 	browse: function(input, offset) {
+
+		var browser = this;
 
 		// first request to get token
 		$.ajax({
@@ -105,12 +111,11 @@ window.MediaManager.browser = {
 				data: data,
 			    dataType: 'json',
 				success: function ( result ) {
-					console.log(result);
 					if ( result && result.pagemediagallery_browse ) {
 						var results = result.pagemediagallery_browse;
 
 						if (!offset) { //if offset, we append the results to the content
-							MediaManager.window.$modal.find('.search-content').html('');
+							MediaManager.window.$modal.find('.search-content-body').html('');
 						}
 
 						if ( results.search ) {
@@ -133,33 +138,46 @@ window.MediaManager.browser = {
 									}
 									MediaManager.window.$modal.find( '.image' ).not($(this)).removeClass('toAddToPage');
 								});
-								MediaManager.window.$modal.find('.search-content').append($div);
+								MediaManager.window.$modal.find('.search-content-body').append($div);
 							});
 						}
 
 						if ( results.continue && results.continue.offset ) {
 
-							var $button = $( document.createElement('button') );
-							$button.html('Load more');
-							$button.attr('type', 'button');
-							$button.attr('id', 'loadMoreImages');
-							$button.attr( 'data-offset', results.continue.offset );
-							MediaManager.window.$modal.find('.search-content').append($button);
 
-							$('#loadMoreImages').on('click', function(){
-								
-								var offset = $(this).data('offset');
-								if (typeof offset == 'string') {
-									//API:allimages returns something like 20180927124202|Trgrol_kk.jpg
-									offset = String(offset).split("|")[0];
-								}
-								$(this).remove();
-								MediaManager.browser.browse(input, offset);
+							MediaManager.window.$modal.find('.search-content').data('offset', results.continue.offset );		
+
+							$searchcontent = MediaManager.window.$modal.find('.search-content');
+							$searchcontentbody = MediaManager.window.$modal.find('.search-content-body');
+							$searchcontent.off().scroll(function() {
+
+							    if( parseInt( $searchcontent.scrollTop() + $searchcontent.height() - $( '#load-more-content-spinner' ).height() ) >= parseInt( $searchcontentbody.height() ) ) {
+
+							    	$( '#load-more-content-spinner' ).show();
+							 
+
+							    	if (browser.requestRunning == 0) {
+							    		browser.requestRunning = browser.requestRunning +1 ;
+
+							    		var offset = MediaManager.window.$modal.find('.search-content').data('offset');
+
+										if (typeof offset == 'string') {
+											//API:allimages returns something like 20180927124202|Trgrol_kk.jpg
+											offset = String(offset).split("|")[0];
+										}
+										browser.requestRunning--;
+										MediaManager.browser.browse(input, offset);
+
+										$( '#load-more-content-spinner' ).hide();
+							    	}
+							    }
 							});
+						} else {
+							$searchcontent = MediaManager.window.$modal.find('.search-content');
+							$searchcontent.off();
 						}
 					}else {
-						console.log(mw);
-						MediaManager.window.$modal.find('.search-content').html( mw.message('pmg-no-match-found') );
+						MediaManager.window.$modal.find('.search-content-body').html( mw.message('pmg-no-match-found') );
 					}
 				}, error: function () {
 					console.log( mw.message('pmg-error-encountered') );
@@ -251,7 +269,6 @@ window.MediaManager.uploader = {
 				$("#addToPage").prop( "disabled", true );
 			}
 		});
-		console.log(uploader.uploaderId);
 		$( '#'+ uploader.uploaderId + '-bottom' ).hide(); //doesn't work
 	},
 	init: function () {

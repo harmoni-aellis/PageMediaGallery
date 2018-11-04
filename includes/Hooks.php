@@ -114,7 +114,11 @@ class Hooks {
 		$out .=	          '<input id="querymedia-input" class="oo-ui-dropdownWidget-handle" type="text">';
 		$out .=	        '</div>';
 		$out .=	        '<div class="search-content">';
+		$out .=	          '<div class="search-content-body">';
 		$out .=	        	wfMessage('pmg-no-match-found');
+		$out .=	          '</div>';
+		$out .=           '<div id="load-more-content"><i style="display:none;" id="load-more-content-spinner" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+<span class="sr-only">Loading...</span></div>';
 		$out .=	        '</div>';
 		$out .=        '</div>';
 		$out .=	      '<div class="tab-pane" id="upload">';
