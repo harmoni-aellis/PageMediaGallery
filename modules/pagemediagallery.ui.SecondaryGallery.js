@@ -41,8 +41,11 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		var div = $('<div>').addClass('add-new-file-slot unsortable');
 		div.click(function (element){
-			if($(element.target).parents('.msuploadContainer').get(0) && $($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0)){
-				//$($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0).click();
+			// if($(element.target).parents('.msuploadContainer').get(0) && $($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0)){
+			// 	$($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0).click();
+			// }
+
+			if($(element.target).parents('.msuploadContainer').get(0) ){
 				MediaManager.start(secondaryGallery);
 			}
 		});
@@ -114,7 +117,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		this.uploadButton.hide();
 
-		this.selectFileButton = $('<div>').addClass('select-file');
+		this.selectFileButton = $('<input>').addClass('select-file').attr('type', 'hidden'); //trick to hide it
+		//this.selectFileButton = $('<div>').addClass('select-file');
 		this.uploadIcon = $('<i>').addClass('fa fa-upload');
 		this.loadIcon = $('<i>').addClass('msupload-loading-button fa fa-spinner fa-spin fa-1x fa-fw');
 		this.loadIcon.hide();
