@@ -143,6 +143,8 @@ window.MediaManager.browser = {
 								});
 								MediaManager.window.$modal.find('.search-content-body').append($div);
 							});
+						} else {
+							MediaManager.window.$modal.find('.search-content-body').html( mw.msg('pmg-no-match-found') );
 						}
 
 						if ( results.continue && results.continue.offset ) {
@@ -152,7 +154,7 @@ window.MediaManager.browser = {
 
 							$searchcontent = MediaManager.window.$modal.find('.search-content');
 							$searchcontentbody = MediaManager.window.$modal.find('.search-content-body');
-							$searchcontent.off().scroll(function() {
+							$searchcontent.off('scroll').on('scroll', function() {
 
 							    if( parseInt( $searchcontent.scrollTop() + $searchcontent.height() ) == parseInt( $searchcontentbody.outerHeight( true ) + $( '#load-more-content' ).outerHeight( true ) ) ) {
 
@@ -172,14 +174,14 @@ window.MediaManager.browser = {
 							});
 						} else {
 							$searchcontent = MediaManager.window.$modal.find('.search-content');
-							$searchcontent.off();
+							$searchcontent.off('scroll');
 						}
 
 					}else {
-						MediaManager.window.$modal.find('.search-content-body').html( mw.message('pmg-no-match-found') );
+						MediaManager.window.$modal.find('.search-content-body').html( mw.msg('pmg-no-match-found') );
 					}
 				}, error: function () {
-					console.log( mw.message('pmg-error-encountered') );
+					console.log( mw.msg('pmg-error-encountered') );
 				}
 			});
 		};
