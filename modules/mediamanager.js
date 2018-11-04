@@ -66,7 +66,7 @@ window.MediaManager.window = {
 
 window.MediaManager.browser = {
 
-	requestRunning: 0,
+	requestRunning: false,
 	init: function() {
 		browser = this;
 
@@ -84,6 +84,8 @@ window.MediaManager.browser = {
 
 		var browser = this;
 
+		browser.requestRunning = true;
+
 		// first request to get token
 		$.ajax({
 			type: "GET",
@@ -95,6 +97,7 @@ window.MediaManager.browser = {
 
 		// function to do second request to execute follow action
 		function browse(jsondata) {
+
 			var token = jsondata.query.tokens.csrftoken;
 			var data = {};
 			data.action = "pagemediagallery_browse";
@@ -151,13 +154,9 @@ window.MediaManager.browser = {
 							$searchcontentbody = MediaManager.window.$modal.find('.search-content-body');
 							$searchcontent.off().scroll(function() {
 
-							    if( parseInt( $searchcontent.scrollTop() + $searchcontent.height() - $( '#load-more-content-spinner' ).height() ) >= parseInt( $searchcontentbody.height() ) ) {
+							    if( parseInt( $searchcontent.scrollTop() + $searchcontent.height() ) == parseInt( $searchcontentbody.outerHeight( true ) + $( '#load-more-content' ).outerHeight( true ) ) ) {
 
 							    	$( '#load-more-content-spinner' ).show();
-							 
-
-							    	if (browser.requestRunning == 0) {
-							    		browser.requestRunning = browser.requestRunning +1 ;
 
 							    		var offset = MediaManager.window.$modal.find('.search-content').data('offset');
 
@@ -165,17 +164,17 @@ window.MediaManager.browser = {
 											//API:allimages returns something like 20180927124202|Trgrol_kk.jpg
 											offset = String(offset).split("|")[0];
 										}
-										browser.requestRunning--;
+
 										MediaManager.browser.browse(input, offset);
 
 										$( '#load-more-content-spinner' ).hide();
-							    	}
 							    }
 							});
 						} else {
 							$searchcontent = MediaManager.window.$modal.find('.search-content');
 							$searchcontent.off();
 						}
+
 					}else {
 						MediaManager.window.$modal.find('.search-content-body').html( mw.message('pmg-no-match-found') );
 					}
@@ -193,6 +192,9 @@ window.MediaManager.uploader = {
 
 		this.uploader = MsUpload.createUploaderOnElement($('#MsUpload'), true);
 		this.uploader.mediaManagerUploader = this;
+
+		console.log("this.uploader");
+		console.log(this.uploader);
 
 		this.uploader.bind('FileUploaded', MediaManager.uploader.onFileUploaded);
 
