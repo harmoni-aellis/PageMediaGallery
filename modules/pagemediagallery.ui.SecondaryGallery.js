@@ -46,7 +46,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				MediaManager.start(secondaryGallery);
 			}
 		});
-		div.append($('<i>').addClass('fa fa-plus'));
 		ul.append(div);
 
 		if ( !this.hasEmptiesSlots() ){
