@@ -193,8 +193,32 @@ window.MediaManager.uploader = {
 		this.uploader = MsUpload.createUploaderOnElement($('#MsUpload'), true);
 		this.uploader.mediaManagerUploader = this;
 
-		console.log("this.uploader");
-		console.log(this.uploader);
+		var dropzone = $( '#'+ this.uploader.uploaderId + '-dropzone' );
+
+		//target.css('border', '2px dotted var(--main-btn-color)');
+		dropzone.addClass('dropOverInactive');
+
+		dropzone.off( "dragenter").on('dragenter', function (e)
+		{
+		    e.stopPropagation();
+		    e.preventDefault();
+			$(this).addClass('dropOverActive');
+			$(this).removeClass('dropOverInactive');
+		});
+		dropzone.off( "dragleave").on('dragleave', function (e)
+		{
+		    e.stopPropagation();
+		    e.preventDefault();
+		    $(this).removeClass('dropOverActive');
+			$(this).addClass('dropOverInactive');
+		});
+		dropzone.off( "dragover").on('dragover', function (e)
+		{
+		    e.stopPropagation();
+		    e.preventDefault();
+		    $(this).addClass('dropOverActive');
+		    $(this).removeClass('dropOverInactive');
+		});
 
 		this.uploader.bind('FileUploaded', MediaManager.uploader.onFileUploaded);
 

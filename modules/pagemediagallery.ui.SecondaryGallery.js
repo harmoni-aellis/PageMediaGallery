@@ -68,7 +68,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				secondaryGallery.addThumb( image.show(), $(this).val());
 			}
 		});
-		this.manageDropOnFormField();
+		//this.manageDropOnFormField();
 		$(this.$container).find('ul').sortable({
 				items : "li:not(.unsortable)",
 			    start: function (e, ui) {
