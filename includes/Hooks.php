@@ -98,11 +98,11 @@ class Hooks {
 		$out .=  '<div class="modal-dialog" role="document">';
 		$out .=    '<div class="modal-content">';
 		$out .=      '<div class="modal-header">';
-		$out .=        '<div class="cancel-container"><button type="button" data-dismiss="modal" aria-label="Close">';
+		$out .=        '<div class="cancel-container"><button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">';
 		$out .=          '<span>' . wfMessage('pmg-cancel') . '</span>';
 		$out .=        '</button></div>';
 		$out .=        '<h4 class="modal-title">' . wfMessage('pmg-mediamanager-title') . '</h4>';
-		$out .=        '<div class="insert-to-page-container"><button type="button" id="addToPage" disabled>' . wfMessage('pmg-insert-to-page') . '</button></div>';
+		$out .=        '<div class="insert-to-page-container"><button type="button" id="addToPage" class="btn btn-primary" disabled>' . wfMessage('pmg-insert-to-page') . '</button></div>';
 		$out .=      '</div>';
 		$out .=      '<ul class="nav nav-tabs" id="tabContent">';
 		$out .=	      '<li class="active"><a href="#search" data-toggle="tab" role="tab" aria-controls="search" >' . wfMessage('pmg-tab-search') . '</a></li>';
