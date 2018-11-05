@@ -119,10 +119,13 @@ body {
 }
 
 .formmediagallery ul{
-    margin-left: -5px;
-    margin-right: -5px;
     padding: 0px;
     margin-bottom: 0px;
+}
+
+.WfFormTutoStep .formmediagallery ul {
+    margin-left: -5px;
+    margin-right: -5px;
 }
 
 .msuploadOneImage .formmediagallery li {
