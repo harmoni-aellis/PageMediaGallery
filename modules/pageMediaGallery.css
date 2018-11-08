@@ -17,6 +17,18 @@
     background-image: url(drop-image-white.png);
 }
 
+.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder {
+    width: 31.33% !important;
+    border: 2px dotted #eee !important;
+    visibility:unset !important;
+    background:#fff !important;
+    background-image: none !important;
+}
+
+.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder img {
+    display:none;
+}
+
 .col-pic-detail.ui-droppable {
     background: #f8f8f8;
     padding-bottom: 6px;
@@ -458,14 +470,15 @@ body {
 }
 
 #MediaManager .modal-header .cancel-container .btn {
-    background-color: #ccc;
+    background-color: #fff;
+    border: 1px solid #999;
+    color: #888;
 }
 
 #MediaManager .modal-header .cancel-container .btn:hover,
 #MediaManager .modal-header .cancel-container .btn:focus,
 #MediaManager .modal-header .cancel-container .btn:active:focus {
-    background-color: #aaa;
-    border-color: transparent;
+    background-color: #f9f9f9;
     outline: 0;
 }
 
