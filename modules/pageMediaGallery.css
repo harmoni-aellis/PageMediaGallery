@@ -17,6 +17,18 @@
     background-image: url(drop-image-white.png);
 }
 
+.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder {
+    width: 31.33% !important;
+    border: 2px dotted #eee !important;
+    visibility:unset !important;
+    background:#fff !important;
+    background-image: none !important;
+}
+
+.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder img {
+    display:none;
+}
+
 .col-pic-detail.ui-droppable {
     background: #f8f8f8;
     padding-bottom: 6px;
@@ -119,10 +131,13 @@ body {
 }
 
 .formmediagallery ul{
-    margin-left: -5px;
-    margin-right: -5px;
     padding: 0px;
     margin-bottom: 0px;
+}
+
+.WfFormTutoStep .formmediagallery ul {
+    margin-left: -5px;
+    margin-right: -5px;
 }
 
 .msuploadOneImage .formmediagallery li {
@@ -200,8 +215,15 @@ body {
     right: 5px;
     top: 6px;
     width: 100px;
-	
 }
+
+.formmediagallery .ui-sortable-helper {
+    transform: rotate(3deg);
+    -moz-transform: rotate(3deg);
+    -webkit-transform: rotate(3deg);
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.15);
+}
+
 .formmediagallery li .file-cancel {
     background: url(images/msu-close.png) #fff no-repeat;
     background-position: center;
@@ -448,14 +470,15 @@ body {
 }
 
 #MediaManager .modal-header .cancel-container .btn {
-    background-color: #ccc;
+    background-color: #fff;
+    border: 1px solid #999;
+    color: #888;
 }
 
 #MediaManager .modal-header .cancel-container .btn:hover,
 #MediaManager .modal-header .cancel-container .btn:focus,
 #MediaManager .modal-header .cancel-container .btn:active:focus {
-    background-color: #aaa;
-    border-color: transparent;
+    background-color: #f9f9f9;
     outline: 0;
 }
 
