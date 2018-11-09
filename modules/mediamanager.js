@@ -222,6 +222,11 @@ window.MediaManager.uploader = {
 		    $(this).removeClass('dropOverInactive');
 		});
 
+		dropzone.off("drop").on("drop", function() {
+			$(this).removeClass('dropOverActive');
+			$(this).addClass('dropOverInactive');
+		});
+
 		this.uploader.bind('FileUploaded', MediaManager.uploader.onFileUploaded);
 
 		// overrides MsUpload's warningText method
