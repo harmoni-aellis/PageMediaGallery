@@ -402,6 +402,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addImage = function ( img, filename, tempToReplace) {
 
+		if (tempToReplace === undefined) {
+			tempToReplace = false;
+		}
+
 		var secondaryGallery = this;
 
 		if ( ! secondaryGallery.hasEmptiesSlots() || 

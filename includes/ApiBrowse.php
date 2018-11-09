@@ -46,7 +46,7 @@ class ApiBrowse extends ApiBase {
 		$offset = $this->getMain()->getVal( 'offset' );
 
 		if (empty($input)) {
-			$list = 'allimages';
+			$list = 'allimages'; //$list is the API to use
 		} else {
 			$list = 'search';
 		}
@@ -69,7 +69,7 @@ class ApiBrowse extends ApiBase {
 				break;
 			case 'allimages': //here we assume $input is empty
 				$requestParams['ailimit'] = $wgPageMediaGallerySearchLimit;
-				$requestParams['aiprop'] = 'url';
+				$requestParams['aiprop'] = 'url|mime';
 				$requestParams['aisort'] = 'timestamp';
 				$requestParams['aidir'] = 'descending';
 				if ($offset) {
@@ -91,7 +91,29 @@ class ApiBrowse extends ApiBase {
 						$file = wfLocalFile(\Title::newFromText($value['title']));
 						$a = array();
 						$a['filename'] = $file->getName();
-						$a['fileurl'] = $file->getUrl();
+						$a['mime'] = $file->getMimeType();
+						if ($file->getMimeType() == 'application/sla') {
+
+							$requestParams['iiprop'] = 'url';
+							$requestParams['action'] = 'query';
+							$requestParams['titles'] = 'File:' . $file->getName();
+							$requestParams['iiurlwidth'] = '400px';
+							$requestParams['prop'] = 'imageinfo';
+
+							$imageInfoResult = self::APIFauxRequest($requestParams);
+
+							if (isset($imageInfoResult['query']) && isset($imageInfoResult['query']['pages'])){
+
+								$pages = $imageInfoResult['query']['pages'];
+
+								$a['fileurl'] = reset($pages)['imageinfo'][0]['thumburl'];
+							} else {
+								$a['fileurl'] = $file->getUrl();
+							}
+
+						} else {
+							$a['fileurl'] = $file->getUrl();
+						}
 						$r['search'][] = $a;
 					}
 					if (isset($searchResults['continue']) && isset($searchResults['continue']['sroffset'])) {
@@ -109,7 +131,30 @@ class ApiBrowse extends ApiBase {
 						}
 						$a = array();
 						$a['filename'] = $value['name'];
-						$a['fileurl'] = $value['url'];
+						$a['mime'] = $value['mime'];
+						if ($value['mime'] == 'application/sla') {
+
+							$requestParams = [];
+							$requestParams['action'] = 'query';
+							$requestParams['iiprop'] = 'url';
+							$requestParams['titles'] = 'File:' . $value['name'];
+							$requestParams['iiurlwidth'] = '400px';
+							$requestParams['prop'] = 'imageinfo';
+
+							$imageInfoResult = self::APIFauxRequest($requestParams);
+
+							if (isset($imageInfoResult['query']) && isset($imageInfoResult['query']['pages'])){
+
+								$pages = $imageInfoResult['query']['pages'];
+
+								$a['fileurl'] = reset($pages)['imageinfo'][0]['thumburl'];
+							} else {
+								$a['fileurl'] = $value['url'];
+							}
+
+						} else {
+							$a['fileurl'] = $value['url'];
+						}
 						$r['search'][] = $a;
 					}
 					if (isset($searchResults['continue']) && isset($searchResults['continue']['aicontinue'])) {

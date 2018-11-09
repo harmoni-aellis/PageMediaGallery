@@ -37,7 +37,7 @@ window.MediaManager = {
 	},
 	addToPage: function (){
 		var $toAddToPage = $(MediaManager.window.$modal.find('.toAddToPage')[0]);
-		var file = $($toAddToPage.find('img')[0]).clone();
+		var file = $($toAddToPage.find('.file-thumb')[0]).clone();
 		var fileName = '';
 		if ($toAddToPage[0].hasAttribute('data-imagename')) {
 			fileName = $toAddToPage.data('imagename');
@@ -126,8 +126,17 @@ window.MediaManager.browser = {
 								var $div = $( document.createElement('div') );
 								$div.addClass( 'image' );
 								$div.attr('data-imagename', value.filename);
-								var $img = $( document.createElement('img') );
+								var $img;
+								switch (value.mime) {
+								  case 'video/mp4':
+								  	$img = $( document.createElement('video') );
+								    break;
+								  case 'application/sla':
+								  default:
+								  	$img = $( document.createElement('img') );
+								}
 								$img.attr('src', value.fileurl);
+								$img.addClass('file-thumb');
 								var $label = $( document.createElement('label') );
 								$label.html(value.filename);
 								$div.append($img);
@@ -180,7 +189,7 @@ window.MediaManager.browser = {
 					}else {
 						MediaManager.window.$modal.find('.search-content-body').html( mw.msg('pmg-no-match-found') );
 					}
-				}, error: function () {
+				}, error: function (e) {
 					console.log( mw.msg('pmg-error-encountered') );
 				}
 			});
