@@ -20,36 +20,6 @@ class Hooks {
 		}
 
 	}
-	/**
-	 * Execute a request to the API within mediawiki using FauxRequest
-	 *
-     * @param $data array Array of non-urlencoded key => value pairs, the fake GET/POST values
-     * @param $wasPosted bool Whether to treat the data as POST 
-     * @param $session MediaWiki\\Session\\Session | array | null Session, session data array, or null
-     * @param $protocol string 'http' or 'https' 
-     * @return array the result data array
-     *
-	 * @see https://doc.wikimedia.org/mediawiki-core/master/php/classFauxRequest.html
-	 */
-	static function APIFauxRequest($data = [],
-		  	$wasPosted = false,
-		  	$session = null,
-		  	$protocol = 'http' ){
-
-		$res = array();
-
-		$apiParams = new \FauxRequest($data, $wasPosted, $session, $protocol);
-
-		try {
-			$api = new \ApiMain( $apiParams );
-			$api->execute();
-			$res = $api->getResult()->getResultData();
-		} catch (\Exception $e) {
-			trigger_error("API exception : " . $e->getMessage(), E_USER_WARNING);
-		}
-
-		return $res;
-	}
 
 	static function start( $pFFormEdit) {
 		global $wgOut, $wgScriptPath, $wgJsMimeType, $wgFileExtensions, $wgUser, $wgpmgEnabledForms;
@@ -84,6 +54,7 @@ class Hooks {
 			$wgOut->addHTML ( $mediaManager );
 		}
 		$wgOut->addScript ( "<script type=\"$wgJsMimeType\">window.pmgVars = $pmgVars;</script>\n" );
+
 
 		return true;
 	}

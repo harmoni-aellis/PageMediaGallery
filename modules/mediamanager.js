@@ -117,6 +117,8 @@ window.MediaManager.browser = {
 					if ( result && result.pagemediagallery_browse ) {
 						var results = result.pagemediagallery_browse;
 
+						console.log(results);
+
 						if (!offset) { //if offset, we append the results to the content
 							MediaManager.window.$modal.find('.search-content-body').html('');
 						}
@@ -190,6 +192,7 @@ window.MediaManager.browser = {
 						MediaManager.window.$modal.find('.search-content-body').html( mw.msg('pmg-no-match-found') );
 					}
 				}, error: function (e) {
+					console.log(e);
 					console.log( mw.msg('pmg-error-encountered') );
 				}
 			});
