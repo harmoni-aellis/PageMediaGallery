@@ -255,7 +255,6 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		var filename = $(closeButton).parents('li').attr('data-filename');
 		$(closeButton).parents('li').remove();
 		if (filename) {
-
 			var inputs = $(this.$container).find('input.createboxInput');
 			if (inputs.length == 0) {
 				this.updateUploadButtonVisibility();
@@ -267,6 +266,12 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			if (inputs.length > 0) {
 				// remove filename from input
 				inputs.first().val('');
+				var inputName = inputs.first().attr('name');
+				// look for annotations linked to the input :
+				var annotationInput = $("input.editableImageDataInput[data-targetname='"+inputName+"']");
+				if (annotationInput.length > 0) {
+					annotationInput.first().val('');
+				}
 				this.clearErrorMessages();
 			}
 
