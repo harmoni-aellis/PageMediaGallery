@@ -454,6 +454,11 @@ body {
     text-overflow: ellipsis;
 }
 
+#MediaManager .image video {
+    width: auto;
+    height: 100%;
+}
+
 #MediaManager .image.toAddToPage {
     border: 3px solid blue;
 }
