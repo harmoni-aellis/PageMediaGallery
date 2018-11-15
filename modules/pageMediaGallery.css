@@ -152,7 +152,7 @@ body {
 	height:100%;
 }
 
-.formmediagallery li {
+.formmediagallery li, .formmediagallery .empty-slot {
     display: inline-block;
     position: relative;
     width: 31.33%;

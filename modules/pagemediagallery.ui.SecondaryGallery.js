@@ -71,6 +71,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				secondaryGallery.addThumb( image.show(), $(this).val());
 			}
 		});
+
+		for (var i = 0; i < this.numberEmptiesSlots() - 1; i++) {
+			ul.append( $('<div>').addClass('empty-slot unsortable') );
+		}
 		//this.manageDropOnFormField();
 		$(this.$container).find('ul').sortable({
 				items : "li:not(.unsortable)",
@@ -245,6 +249,11 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		$(this.$container).find('.formmediagallery ul .add-new-file-slot').before(li);
 
+		//remove empty slot
+		if ( $(this.$container).find('.empty-slot').get(0) ) {
+			$(this.$container).find('.empty-slot').last().remove();
+		}
+
 		mw.hook('pmg.secondaryGallery.newThumbAdded').fire(li);
 
 		return li;
@@ -289,6 +298,10 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				var container = $(this.$container);
 				if ( $(container.find('.add-new-file-slot')).get(0) && $($(container.find('.add-new-file-slot')).get(0)).is(':hidden') ) {
 					$($(container.find('.add-new-file-slot')).get(0)).show();
+				}
+
+				if ( secondaryGallery.numberEmptiesSlots() > 1 ) {
+					$(container.find('.formmediagallery > ul')).append( $('<div>').addClass('empty-slot unsortable') );
 				}
 			}
 		}
