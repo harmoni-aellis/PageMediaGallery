@@ -84,6 +84,7 @@ window.MediaManager.tabs.browser = {
 
 		$('#querymedia-input').off('input').on('input', function (e) {
 			MediaManager.window.$modal.find('#pmg-search .search-content-body').html('');
+			$( '#pmg-search .load-more-content-spinner' ).show();
 			MediaManager.tabs.browser.browse( e.target.value );
 		});
 
@@ -127,8 +128,6 @@ window.MediaManager.tabs.browser = {
 				success: function ( result ) {
 					if ( result && result.pagemediagallery_browse ) {
 						var results = result.pagemediagallery_browse;
-
-						console.log(results);
 
 						if (!offset) { //if offset, we append the results to the content
 							MediaManager.window.$modal.find('#pmg-search .search-content-body').html('');
@@ -201,6 +200,7 @@ window.MediaManager.tabs.browser = {
 						}
 
 					}else {
+						$( '#pmg-search .load-more-content-spinner' ).hide();
 						MediaManager.window.$modal.find('#pmg-search .search-content-body').html( mw.msg('pmg-no-match-found') );
 					}
 				}, error: function (e) {
@@ -346,6 +346,7 @@ window.MediaManager.tabs.myMedia = {
 
 		$('#querymedia-input-mymedia').off('input').on('input', function (e) {
 			MediaManager.window.$modal.find('#myMedia .search-content-body').html('');
+			$( '#myMedia .load-more-content-spinner' ).show();
 			MediaManager.tabs.myMedia.browse( e.target.value );
 		});
 
@@ -390,8 +391,6 @@ window.MediaManager.tabs.myMedia = {
 				success: function ( result ) {
 					if ( result && result.pagemediagallery_browse ) {
 						var results = result.pagemediagallery_browse;
-
-						console.log(results);
 
 						if (!offset) { //if offset, we append the results to the content
 							MediaManager.window.$modal.find('#myMedia .search-content-body').html('');
@@ -463,6 +462,7 @@ window.MediaManager.tabs.myMedia = {
 						}
 
 					}else {
+						$( '#myMedia .load-more-content-spinner' ).hide();
 						MediaManager.window.$modal.find('#myMedia .search-content-body').html( mw.msg('pmg-no-match-found') );
 					}
 				}, error: function (e) {
