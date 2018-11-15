@@ -19,7 +19,7 @@ window.MediaManager = {
 		$("a[href=#pmg-search]").click();
 		$("[id^=msupload][id$=list]").html("");
 
-		MediaManager.browser.init();
+		MediaManager.tabs.browser.init();
 		//MediaManager.myMedia.init();
 
 	},
@@ -27,8 +27,8 @@ window.MediaManager = {
 
 		mediamanager = this;
 
-		MediaManager.browser.init();
-		MediaManager.uploader.init();
+		MediaManager.tabs.browser.init();
+		MediaManager.tabs.uploader.init();
 
 		$("#addToPage").off().on('click', function() {
 			MediaManager.addToPage();
@@ -36,12 +36,12 @@ window.MediaManager = {
 
 		$('[href="#pmg-search"]').on('click', function() {
 			MediaManager.window.$modal.find('#pmg-search .search-content-body').html('');
-			MediaManager.browser.init();
+			MediaManager.tabs.browser.init();
 		});
 
 		$('[href="#myMedia"]').on('click', function() {
 			MediaManager.window.$modal.find('#myMedia .search-content-body').html('');
-			MediaManager.myMedia.init();
+			MediaManager.tabs.myMedia.init();
 		});
 
 		MediaManager.isInit = true;
@@ -75,17 +75,19 @@ window.MediaManager.window = {
 	}
 }
 
-window.MediaManager.browser = {
+window.MediaManager.tabs = {}
+
+window.MediaManager.tabs.browser = {
 
 	requestRunning: false,
 	init: function() {
 
 		$('#querymedia-input').off('input').on('input', function (e) {
 			MediaManager.window.$modal.find('#pmg-search .search-content-body').html('');
-			MediaManager.browser.browse( e.target.value );
+			MediaManager.tabs.browser.browse( e.target.value );
 		});
 
-		MediaManager.browser.browse( $('#querymedia-input')[0].value );
+		MediaManager.tabs.browser.browse( $('#querymedia-input')[0].value );
 	},
 	/**
 	 * @param {string} input - The input provided by the user.
@@ -93,7 +95,7 @@ window.MediaManager.browser = {
 	 */
 	browse: function(input, offset) {
 
-		MediaManager.browser.requestRunning = true;
+		MediaManager.tabs.browser.requestRunning = true;
 
 		// first request to get token
 		$.ajax({
@@ -186,7 +188,7 @@ window.MediaManager.browser = {
 											offset = String(offset).split("|")[0];
 										}
 
-										MediaManager.browser.browse(input, offset);
+										MediaManager.tabs.browser.browse(input, offset);
 
 										$( '#pmg-search .load-more-content-spinner' ).hide();
 							    }
@@ -207,14 +209,13 @@ window.MediaManager.browser = {
 	}
 }
 
-window.MediaManager.uploader = {
+window.MediaManager.tabs.uploader = {
 
 	initcallMsUpload: function() {
 
-		this.uploader = MsUpload.createUploaderOnElement($('#MsUpload'), true);
-		this.uploader.mediaManagerUploader = this;
+		MediaManager.tabs.uploader.uploader = MsUpload.createUploaderOnElement($('#MsUpload'), true);
 
-		var dropzone = $( '#'+ this.uploader.uploaderId + '-dropzone' );
+		var dropzone = $( '#'+ MediaManager.tabs.uploader.uploader.uploaderId + '-dropzone' );
 
 		//target.css('border', '2px dotted var(--main-btn-color)');
 		dropzone.addClass('dropOverInactive');
@@ -246,7 +247,7 @@ window.MediaManager.uploader = {
 			$(this).addClass('dropOverInactive');
 		});
 
-		this.uploader.bind('FileUploaded', MediaManager.uploader.onFileUploaded);
+		MediaManager.tabs.uploader.uploader.bind('FileUploaded', MediaManager.tabs.uploader.onFileUploaded);
 
 		// overrides MsUpload's warningText method
 		MsUpload.warningText = function ( fileItem, warning, uploader ) {
@@ -326,28 +327,27 @@ window.MediaManager.uploader = {
 		$( '#'+ uploader.uploaderId + '-bottom' ).hide(); //doesn't work
 	},
 	init: function () {
-		var mediaManagerUploader = this;
 
 		setTimeout(function () {
-		  mediaManagerUploader.initcallMsUpload();
+		  MediaManager.tabs.uploader.initcallMsUpload();
 		}, 300);
 	},
 	startUpload: function() {
-		this.uploader.start();
+		MediaManager.tabs.uploader.uploader.start();
 	}
 }
 
-window.MediaManager.myMedia = {
+window.MediaManager.tabs.myMedia = {
 
 	requestRunning: false,
 	init: function() {
 
 		$('#querymedia-input-mymedia').off('input').on('input', function (e) {
 			MediaManager.window.$modal.find('#myMedia .search-content-body').html('');
-			MediaManager.myMedia.browse( e.target.value );
+			MediaManager.tabs.myMedia.browse( e.target.value );
 		});
 
-		MediaManager.myMedia.browse( $('#querymedia-input-mymedia')[0].value );
+		MediaManager.tabs.myMedia.browse( $('#querymedia-input-mymedia')[0].value );
 	},
 	/**
 	 * @param {string} input - The input provided by the user.
@@ -355,7 +355,7 @@ window.MediaManager.myMedia = {
 	 */
 	browse: function(input, offset) {
 
-		MediaManager.myMedia.requestRunning = true;
+		MediaManager.tabs.myMedia.requestRunning = true;
 
 		// first request to get token
 		$.ajax({
@@ -449,7 +449,7 @@ window.MediaManager.myMedia = {
 											offset = String(offset).split("|")[0];
 										}
 
-										MediaManager.myMedia.browse(input, offset);
+										MediaManager.tabs.myMedia.browse(input, offset);
 
 										$( '#myMedia .load-more-content-spinner' ).hide();
 							    }
