@@ -23,6 +23,10 @@ class ApiBrowse extends ApiBase {
 			'input' => array ( //search for files matching this value
 					ApiBase::PARAM_TYPE => 'string',
 					ApiBase::PARAM_REQUIRED => false
+			),
+			'owner' => array ( //only return files belonging to this user
+					ApiBase::PARAM_TYPE => 'boolean',
+					ApiBase::PARAM_REQUIRED => false
 			)
 		);
 	}
@@ -34,7 +38,7 @@ class ApiBrowse extends ApiBase {
 	}
 	public function execute() {
 
-		global $wgPageMediaGallerySearchLimit;
+		global $wgPageMediaGallerySearchLimit, $wgUser;
 
 		// $user = $this->getUser();
 
@@ -44,180 +48,60 @@ class ApiBrowse extends ApiBase {
 
 		$input = $this->getMain()->getVal( 'input' );
 		$offset = $this->getMain()->getVal( 'offset' );
+		$owner = $this->getMain()->getVal( 'owner' );
 
-		if (empty($input)) {
-			$list = 'allimages'; //$list is the API to use
+		// $requestParams['srsearch'] = $input;
+		$query = '[[File:~*' . $input . '*]]';
+		if ( !is_null( $owner ) && $owner && $wgUser->isLoggedIn() ) {
+			$aiuser = $wgUser->getName();
+			$query .= ' [[Page creator::~' . $aiuser . ']]';
+		}
+		if ( !is_null( $offset ) ) {
+			$semanticQueryResult = self::semanticQuery($query, $wgPageMediaGallerySearchLimit, $offset);
 		} else {
-			$list = 'search';
-		}
-		
-		$requestParams = array(
-			'action' => 'query',
-			'list' => $list
-		);
-
-		$semanticQueryResult = null;
-
-		switch ($list) {
-			case 'search': //here we assume $input is not empty
-				// if ($input) {
-				// 	$requestParams['srsearch'] = $input;
-				// }
-				// $requestParams['srnamespace'] = NS_FILE;
-				// if ($offset) {
-				// 	$requestParams['sroffset'] = intval($offset);
-				// }
-				// $requestParams['srlimit'] = $wgPageMediaGallerySearchLimit;
-				break;
-			case 'allimages': //here we assume $input is empty
-				$requestParams['ailimit'] = $wgPageMediaGallerySearchLimit;
-				$requestParams['aiprop'] = 'url|mime';
-				$requestParams['aisort'] = 'timestamp';
-				$requestParams['aidir'] = 'descending';
-				if ($offset) {
-					$requestParams['aistart'] = intval($offset);
-				}
-				$searchResults = self::APIFauxRequest($requestParams);
-				break;
-			default:
+			$semanticQueryResult = self::semanticQuery($query, $wgPageMediaGallerySearchLimit);
 		}
 
-		switch ($list) {
-			case 'search': //here we assume $input is not empty
-				// if (isset($searchResults['query']) && isset($searchResults['query']['search'])){
-				// 	foreach ($searchResults['query']['search'] as $key => $value) {
-				// 		if (!isset($value['title'])) {
-				// 			continue;
-				// 		}
-				// 		$file = wfLocalFile(\Title::newFromText($value['title']));
-				// 		$a = array();
-				// 		$a['filename'] = $file->getName();
-				// 		$a['mime'] = $file->getMimeType();
-				// 		if ($file->getMimeType() == 'application/sla') {
+		foreach ($semanticQueryResult as $key => $wikipage) {
 
-				// 			$requestParams['iiprop'] = 'url';
-				// 			$requestParams['action'] = 'query';
-				// 			$requestParams['titles'] = 'File:' . $file->getName();
-				// 			$requestParams['iiurlwidth'] = '400px';
-				// 			$requestParams['prop'] = 'imageinfo';
+			$file = wfLocalFile(\Title::newFromDBkey($wikipage->getDBkey())->getText() );
+			$a = array();
+			$a['filename'] = $file->getName();
+			$a['mime'] = $file->getMimeType();
+			if ($file->getMimeType() == 'application/sla') {
 
-				// 			$imageInfoResult = self::APIFauxRequest($requestParams);
+				$requestParams['iiprop'] = 'url';
+				$requestParams['action'] = 'query';
+				$requestParams['titles'] = 'File:' . $file->getName();
+				$requestParams['iiurlwidth'] = '400px';
+				$requestParams['prop'] = 'imageinfo';
 
-				// 			if (isset($imageInfoResult['query']) && isset($imageInfoResult['query']['pages'])){
+				$imageInfoResult = self::APIFauxRequest($requestParams);
 
-				// 				$pages = $imageInfoResult['query']['pages'];
+				if (isset($imageInfoResult['query']) && isset($imageInfoResult['query']['pages'])){
 
-				// 				$a['fileurl'] = reset($pages)['imageinfo'][0]['thumburl'];
-				// 			} else {
-				// 				$a['fileurl'] = $file->getUrl();
-				// 			}
+					$pages = $imageInfoResult['query']['pages'];
 
-				// 		} else {
-				// 			$a['fileurl'] = $file->getUrl();
-				// 		}
-				// 		$r['search'][] = $a;
-				// 	}
-				// 	if (isset($searchResults['continue']) && isset($searchResults['continue']['sroffset'])) {
-				// 		$r['continue']['offset'] = $searchResults['continue']['sroffset'];
-				// 	}
-				// } else {
-
-				// }
-				if ($input) {
-					// $requestParams['srsearch'] = $input;
-					if (isset($offset)) {
-						$semanticQueryResult = self::semanticQuery('[[File:~*' . $input . '*]]', $wgPageMediaGallerySearchLimit, $offset);
-					} else {
-						$semanticQueryResult = self::semanticQuery('[[File:~*' . $input . '*]]', $wgPageMediaGallerySearchLimit);
-					}
-				}
-
-				foreach ($semanticQueryResult as $key => $wikipage) {
-
-					//$r[] = \Title::newFromDBkey($wikipage->getDBkey());
-
-					$file = wfLocalFile(\Title::newFromDBkey($wikipage->getDBkey())->getText() );
-					$a = array();
-					$a['filename'] = $file->getName();
-					$a['mime'] = $file->getMimeType();
-					if ($file->getMimeType() == 'application/sla') {
-
-						$requestParams['iiprop'] = 'url';
-						$requestParams['action'] = 'query';
-						$requestParams['titles'] = 'File:' . $file->getName();
-						$requestParams['iiurlwidth'] = '400px';
-						$requestParams['prop'] = 'imageinfo';
-
-						$imageInfoResult = self::APIFauxRequest($requestParams);
-
-						if (isset($imageInfoResult['query']) && isset($imageInfoResult['query']['pages'])){
-
-							$pages = $imageInfoResult['query']['pages'];
-
-							$a['fileurl'] = reset($pages)['imageinfo'][0]['thumburl'];
-						} else {
-							$a['fileurl'] = $file->getUrl();
-						}
-
-					} else {
-						$a['fileurl'] = $file->getUrl();
-					}
-					$r['search'][] = $a;
-
-					if (isset($offset)) {
-						$nextOffset = $offset + $wgPageMediaGallerySearchLimit;
-					} else {
-						$nextOffset = $wgPageMediaGallerySearchLimit;
-					}
-
-					$nextValues = self::semanticQuery('[[File:~*' . $input . '*]]', $wgPageMediaGallerySearchLimit, $nextOffset);
-					if ($nextValues) {
-						$r['continue']['offset'] = $nextOffset;
-					}
-				}
-				break;
-			case 'allimages': //here we assume $input is empty
-				if (isset($searchResults['query']) && isset($searchResults['query']['allimages'])){
-					foreach ($searchResults['query']['allimages'] as $key => $value) {
-						if (!isset($value['name'])) {
-							continue;
-						}
-						$a = array();
-						$a['filename'] = $value['name'];
-						$a['mime'] = $value['mime'];
-						if ($value['mime'] == 'application/sla') {
-
-							$requestParams = [];
-							$requestParams['action'] = 'query';
-							$requestParams['iiprop'] = 'url';
-							$requestParams['titles'] = 'File:' . $value['name'];
-							$requestParams['iiurlwidth'] = '400px';
-							$requestParams['prop'] = 'imageinfo';
-
-							$imageInfoResult = self::APIFauxRequest($requestParams);
-
-							if (isset($imageInfoResult['query']) && isset($imageInfoResult['query']['pages'])){
-
-								$pages = $imageInfoResult['query']['pages'];
-
-								$a['fileurl'] = reset($pages)['imageinfo'][0]['thumburl'];
-							} else {
-								$a['fileurl'] = $value['url'];
-							}
-
-						} else {
-							$a['fileurl'] = $value['url'];
-						}
-						$r['search'][] = $a;
-					}
-					if (isset($searchResults['continue']) && isset($searchResults['continue']['aicontinue'])) {
-						$r['continue']['offset'] = $searchResults['continue']['aicontinue'];
-					}
+					$a['fileurl'] = reset($pages)['imageinfo'][0]['thumburl'];
 				} else {
-
+					$a['fileurl'] = $file->getUrl();
 				}
-				break;
-			default:
+
+			} else {
+				$a['fileurl'] = $file->getUrl();
+			}
+			$r['search'][] = $a;
+
+			if (isset($offset)) {
+				$nextOffset = $offset + $wgPageMediaGallerySearchLimit;
+			} else {
+				$nextOffset = $wgPageMediaGallerySearchLimit;
+			}
+
+			$nextValues = self::semanticQuery('[[File:~*' . $input . '*]]', $wgPageMediaGallerySearchLimit, $nextOffset);
+			if ($nextValues) {
+				$r['continue']['offset'] = $nextOffset;
+			}
 		}
 
 		$this->getResult()->addValue ( null, $this->getModuleName(), $r );

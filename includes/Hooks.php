@@ -76,11 +76,17 @@ class Hooks {
 		$out .=        '<div class="insert-to-page-container"><button type="button" id="addToPage" class="btn btn-primary" disabled>' . wfMessage('pmg-insert-to-page') . '</button></div>';
 		$out .=      '</div>';
 		$out .=      '<ul class="nav nav-tabs" id="tabContent">';
-		$out .=	      '<li class="active"><a href="#search" data-toggle="tab" role="tab" aria-controls="search" >' . wfMessage('pmg-tab-search') . '</a></li>';
+
+		$out .=	      '<li class="active"><a href="#pmg-search" data-toggle="tab" role="tab" aria-controls="pmg-search" >' . wfMessage('pmg-tab-search') . '</a></li>';
+
 		$out .=	      '<li><a href="#upload" role="tab" aria-controls="upload" data-toggle="tab">' . wfMessage('pmg-tab-upload') . '</a></li>';
+
+		$out .=	      '<li><a href="#myMedia" role="tab" aria-controls="myMedia" data-toggle="tab">' . wfMessage('pmg-tab-mymedia') . '</a></li>';
+
 		$out .=	  '</ul>';
 		$out .=      '<div class="tab-content">';
-		$out .=       '<div class="tab-pane active" id="search">';
+
+		$out .=       '<div class="tab-pane active" id="pmg-search">';
 		$out .=	        '<div class="search-input">';
 		$out .=	          '<input id="querymedia-input" class="oo-ui-dropdownWidget-handle" type="text">';
 		$out .=	        '</div>';
@@ -88,13 +94,28 @@ class Hooks {
 		$out .=	          '<div class="search-content-body">';
 		$out .=	        	wfMessage('pmg-no-match-found');
 		$out .=	          '</div>';
-		$out .=           '<div id="load-more-content"><i style="display:none;" id="load-more-content-spinner" class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+		$out .=           '<div class="load-more-content"><i style="display:none;" class="fa fa-spinner fa-spin fa-2x fa-fw load-more-content-spinner"></i>
 <span class="sr-only">Loading...</span></div>';
 		$out .=	        '</div>';
 		$out .=        '</div>';
+
 		$out .=	      '<div class="tab-pane" id="upload">';
 		$out .=	    	self::getMediaManagerUploaderContent( );
 		$out .=	      '</div> ';
+
+		$out .=       '<div class="tab-pane" id="myMedia">';
+		$out .=	        '<div class="search-input">';
+		$out .=	          '<input id="querymedia-input-mymedia" class="oo-ui-dropdownWidget-handle" type="text">';
+		$out .=	        '</div>';
+		$out .=	        '<div class="search-content">';
+		$out .=	          '<div class="search-content-body">';
+		$out .=	        	wfMessage('pmg-no-match-found');
+		$out .=	          '</div>';
+		$out .=           '<div class="load-more-content"><i style="display:none;" class="fa fa-spinner fa-spin fa-2x fa-fw load-more-content-spinner"></i>
+<span class="sr-only">Loading...</span></div>';
+		$out .=	        '</div>';
+		$out .=        '</div>';
+
 		$out .=	    '</div>';
 		$out .=	  '</div>';
 		$out .=    '</div>';
