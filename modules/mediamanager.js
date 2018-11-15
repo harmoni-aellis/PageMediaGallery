@@ -80,7 +80,7 @@ window.MediaManager.browser = {
 	requestRunning: false,
 	init: function() {
 
-		$('#querymedia-input').on('input', function (e) {
+		$('#querymedia-input').off('input').on('input', function (e) {
 			MediaManager.window.$modal.find('#pmg-search .search-content-body').html('');
 			MediaManager.browser.browse( e.target.value );
 		});
@@ -342,7 +342,7 @@ window.MediaManager.myMedia = {
 	requestRunning: false,
 	init: function() {
 
-		$('#querymedia-input-mymedia').on('input', function (e) {
+		$('#querymedia-input-mymedia').off('input').on('input', function (e) {
 			MediaManager.window.$modal.find('#myMedia .search-content-body').html('');
 			MediaManager.myMedia.browse( e.target.value );
 		});
