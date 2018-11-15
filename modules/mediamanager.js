@@ -135,6 +135,8 @@ window.MediaManager.tabs.browser = {
 						}
 
 						if ( results.search ) {
+							$( '#pmg-search .load-more-content-spinner' ).hide();
+							
 							$.each( results.search, function ( index, value ) {
 								var $div = $( document.createElement('div') );
 								$div.addClass( 'image' );
@@ -190,7 +192,7 @@ window.MediaManager.tabs.browser = {
 
 										MediaManager.tabs.browser.browse(input, offset);
 
-										$( '#pmg-search .load-more-content-spinner' ).hide();
+										//$( '#pmg-search .load-more-content-spinner' ).hide();
 							    }
 							});
 						} else {
