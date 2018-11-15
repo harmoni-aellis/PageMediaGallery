@@ -57,9 +57,9 @@ class ApiBrowse extends ApiBase {
 			$query .= ' [[Page creator::~' . $aiuser . ']]';
 		}
 		if ( !is_null( $offset ) ) {
-			$semanticQueryResult = self::semanticQuery($query, $wgPageMediaGallerySearchLimit, $offset);
+			$semanticQueryResult = self::semanticQuery($query, $wgPageMediaGallerySearchLimit, $offset, 'Modification date');
 		} else {
-			$semanticQueryResult = self::semanticQuery($query, $wgPageMediaGallerySearchLimit);
+			$semanticQueryResult = self::semanticQuery($query, $wgPageMediaGallerySearchLimit, 0, 'Modification date');
 		}
 
 		foreach ($semanticQueryResult as $key => $wikipage) {
