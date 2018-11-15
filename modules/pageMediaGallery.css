@@ -19,13 +19,14 @@
 
 .multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder {
     width: 31.33% !important;
-    border: 2px dotted #eee !important;
+    border: 2px dotted #ddd !important;
     visibility:unset !important;
     background:#fff !important;
     background-image: none !important;
 }
 
-.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder img {
+.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder img,
+.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder video {
     display:none;
 }
 
