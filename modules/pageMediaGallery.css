@@ -25,7 +25,8 @@
     background-image: none !important;
 }
 
-.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder img {
+.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder img,
+.multipleTemplate-tutostep .formmediagallery .ui-sortable-placeholder video {
     display:none;
 }
 
@@ -199,7 +200,8 @@ body {
     cursor: initial;
 }
 
-.formmediagallery li img {
+.formmediagallery li img,
+.formmediagallery li video {
     width: 100%;
     height: 100% !important;
     object-fit: cover;
