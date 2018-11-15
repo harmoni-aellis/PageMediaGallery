@@ -136,7 +136,7 @@ window.MediaManager.tabs.browser = {
 
 						if ( results.search ) {
 							$( '#pmg-search .load-more-content-spinner' ).hide();
-							
+
 							$.each( results.search, function ( index, value ) {
 								var $div = $( document.createElement('div') );
 								$div.addClass( 'image' );
@@ -398,6 +398,8 @@ window.MediaManager.tabs.myMedia = {
 						}
 
 						if ( results.search ) {
+							$( '#myMedia .load-more-content-spinner' ).hide();
+							
 							$.each( results.search, function ( index, value ) {
 								var $div = $( document.createElement('div') );
 								$div.addClass( 'image' );
@@ -444,16 +446,15 @@ window.MediaManager.tabs.myMedia = {
 
 							    	$( '#myMedia .load-more-content-spinner' ).show();
 
-							    		var offset = MediaManager.window.$modal.find('#myMedia .search-content').data('offset');
+						    		var offset = MediaManager.window.$modal.find('#myMedia .search-content').data('offset');
 
-										if (typeof offset == 'string') {
-											//API:allimages returns something like 20180927124202|Trgrol_kk.jpg
-											offset = String(offset).split("|")[0];
-										}
+									if (typeof offset == 'string') {
+										//API:allimages returns something like 20180927124202|Trgrol_kk.jpg
+										offset = String(offset).split("|")[0];
+									}
 
-										MediaManager.tabs.myMedia.browse(input, offset);
-
-										$( '#myMedia .load-more-content-spinner' ).hide();
+									MediaManager.tabs.myMedia.browse(input, offset);
+										
 							    }
 							});
 						} else {
