@@ -161,7 +161,13 @@ body {
     overflow: hidden;
     background: #f1f1f1;
     border-radius: 3px;
+    vertical-align: top;
     border: 1px solid #ddd;
+}
+
+.formmediagallery .empty-slot {
+    background: #fff;
+    border: 1px solid #fff;
 }
 
 .formmediagallery .mw-ia-editButton, .formmediagallery li .file-cancel {
@@ -370,6 +376,7 @@ body {
     border-radius: 3px;
     background-color: #f3fdff;
     border: 2px solid #a5e9fa;
+    vertical-align: top;
     transition: 0.15s;
 }
 
