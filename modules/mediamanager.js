@@ -120,7 +120,7 @@ window.MediaManager.tabs.browser = {
 				data.offset = offset;
 			}
 
-			$.ajax({ 
+			$.ajax({
 				type: "POST",
 				url: mw.util.wikiScript('api'),
 				data: data,
@@ -167,12 +167,17 @@ window.MediaManager.tabs.browser = {
 								MediaManager.window.$modal.find('#pmg-search .search-content-body').append($div);
 							});
 						} else {
-							MediaManager.window.$modal.find('#pmg-search .search-content-body').html( mw.msg('pmg-no-match-found') );
+							if (offset) {
+								var div = "<div class='no-more-result'>" + mw.msg('pmg-no-more-match-found') + '</div>';
+								MediaManager.window.$modal.find('#pmg-search .search-content-body').append(div);
+							} else {
+								MediaManager.window.$modal.find('#pmg-search .search-content-body').html( mw.msg('pmg-no-match-found') );
+							}
 						}
 
 						if ( results.continue && results.continue.offset ) {
 
-							MediaManager.window.$modal.find('#pmg-search .search-content').data('offset', results.continue.offset );		
+							MediaManager.window.$modal.find('#pmg-search .search-content').data('offset', results.continue.offset );
 
 							$searchcontent = MediaManager.window.$modal.find('#pmg-search .search-content');
 							$searchcontentbody = MediaManager.window.$modal.find('#pmg-search .search-content-body');
@@ -199,9 +204,14 @@ window.MediaManager.tabs.browser = {
 							$searchcontent.off('scroll');
 						}
 
-					}else {
+					} else {
 						$( '#pmg-search .load-more-content-spinner' ).hide();
-						MediaManager.window.$modal.find('#pmg-search .search-content-body').html( mw.msg('pmg-no-match-found') );
+						if (offset) {
+							var div = "<div class='no-more-result'>" + mw.msg('pmg-no-more-match-found') + '</div>';
+							MediaManager.window.$modal.find('#pmg-search .search-content-body').append(div);
+						} else {
+							MediaManager.window.$modal.find('#pmg-search .search-content-body').html( mw.msg('pmg-no-match-found') );
+						}
 					}
 				}, error: function (e) {
 					console.log( mw.msg('pmg-error-encountered') );
@@ -383,7 +393,7 @@ window.MediaManager.tabs.myMedia = {
 				data.offset = offset;
 			}
 
-			$.ajax({ 
+			$.ajax({
 				type: "POST",
 				url: mw.util.wikiScript('api'),
 				data: data,
@@ -398,7 +408,7 @@ window.MediaManager.tabs.myMedia = {
 
 						if ( results.search ) {
 							$( '#myMedia .load-more-content-spinner' ).hide();
-							
+
 							$.each( results.search, function ( index, value ) {
 								var $div = $( document.createElement('div') );
 								$div.addClass( 'image' );
@@ -430,12 +440,17 @@ window.MediaManager.tabs.myMedia = {
 								MediaManager.window.$modal.find('#myMedia .search-content-body').append($div);
 							});
 						} else {
-							MediaManager.window.$modal.find('#myMedia .search-content-body').html( mw.msg('pmg-no-match-found') );
+							if (offset) {
+								var div = "<div class='no-more-result'>" + mw.msg('pmg-no-more-match-found') + '</div>';
+								MediaManager.window.$modal.find('#myMedia .search-content-body').append(div);
+							} else {
+								MediaManager.window.$modal.find('#myMedia .search-content-body').html( mw.msg('pmg-no-match-found') );
+							}
 						}
 
 						if ( results.continue && results.continue.offset ) {
 
-							MediaManager.window.$modal.find('#myMedia .search-content').data('offset', results.continue.offset );		
+							MediaManager.window.$modal.find('#myMedia .search-content').data('offset', results.continue.offset );
 
 							$searchcontent = MediaManager.window.$modal.find('#myMedia .search-content');
 							$searchcontentbody = MediaManager.window.$modal.find('#myMedia .search-content-body');
@@ -453,7 +468,7 @@ window.MediaManager.tabs.myMedia = {
 									}
 
 									MediaManager.tabs.myMedia.browse(input, offset);
-										
+
 							    }
 							});
 						} else {
@@ -463,7 +478,13 @@ window.MediaManager.tabs.myMedia = {
 
 					}else {
 						$( '#myMedia .load-more-content-spinner' ).hide();
-						MediaManager.window.$modal.find('#myMedia .search-content-body').html( mw.msg('pmg-no-match-found') );
+
+						if (offset) {
+							var div = "<div class='no-more-result'>" + mw.msg('pmg-no-more-match-found') + '</div>';
+							MediaManager.window.$modal.find('#myMedia .search-content-body').append(div);
+						} else {
+							MediaManager.window.$modal.find('#myMedia .search-content-body').html( mw.msg('pmg-no-match-found') );
+						}
 					}
 				}, error: function (e) {
 					console.log(e);

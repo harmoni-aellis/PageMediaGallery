@@ -578,6 +578,10 @@ body {
 }
 }
 
+.no-more-result {
+    margin: 10px;
+	text-align: center;
+}
 .load-more-content {
     height: 30px;
     margin: 10px;

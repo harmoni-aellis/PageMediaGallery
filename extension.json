@@ -62,6 +62,7 @@
 			],
 			"messages": [
 				"pmg-no-match-found",
+				"pmg-no-more-match-found",
 				"pmg-error-encountered"
 			]
 		}
