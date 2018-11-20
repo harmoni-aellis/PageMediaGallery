@@ -74,7 +74,7 @@ class Hooks {
 		$out .=        '</button></div>';
 		$out .=        '<h4 class="modal-title">' . wfMessage('pmg-mediamanager-title') . '</h4>';
 		$out .=        '<div class="insert-to-page-container"><button type="button" id="addToPage" class="btn btn-primary" disabled>' . wfMessage('pmg-insert-to-page') . '</button></div>';
-		$out .=      '</div>';
+		$out .=      "</div><!-- end .modal-header --> \n";
 		$out .=      '<ul class="nav nav-tabs" id="tabContent">';
 
 		$out .=	      '<li class="active"><a href="#pmg-search" data-toggle="tab" role="tab" aria-controls="pmg-search" >' . wfMessage('pmg-tab-search') . '</a></li>';
@@ -97,7 +97,7 @@ class Hooks {
 		$out .=           '<div class="load-more-content"><i style="display:none;" class="fa fa-spinner fa-spin fa-2x fa-fw load-more-content-spinner"></i>
 <span class="sr-only">Loading...</span></div>';
 		$out .=	        '</div>';
-		$out .=        '</div>';
+		$out .=        '</div><!-- end #pmg-search --> ';
 
 		$out .=	      '<div class="tab-pane" id="upload">';
 		$out .=	    	self::getMediaManagerUploaderContent( );
@@ -114,13 +114,12 @@ class Hooks {
 		$out .=           '<div class="load-more-content"><i style="display:none;" class="fa fa-spinner fa-spin fa-2x fa-fw load-more-content-spinner"></i>
 <span class="sr-only">Loading...</span></div>';
 		$out .=	        '</div>';
-		$out .=        '</div>';
+		$out .=        '</div> <!-- end #myMedia --> ';
 
-		$out .=	    '</div>';
-		$out .=	  '</div>';
-		$out .=    '</div>';
-		$out .=  '</div>';
-		$out .= '</div>';
+		$out .=	    '</div><!-- end .tab-content --> ';
+		$out .=	  "</div><!-- end .modal-content -->\n";
+		$out .=    "</div><!-- end .modal-dialog -->\n";
+		$out .=  "</div><!-- end .modal #MediaManager -->\n";
 
 		return $out;
 	}
