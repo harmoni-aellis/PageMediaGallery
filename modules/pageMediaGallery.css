@@ -131,13 +131,11 @@ body {
     background: #f8f8f8;
 }
 
-.formmediagallery ul{
-    padding: 0px;
-    margin-bottom: 0px;
-}
-
 .formmediagallery ul {
+    padding: 0px;
     margin: -5px;
+    float: left;
+    width: 100%;
 }
 
 .msuploadOneImage .formmediagallery li {
@@ -201,7 +199,7 @@ body {
 }
 
 .msuploadContainerTall .formmediagallery li:hover {
-    border: none;
+    border: 1px solid #ddd;
     cursor: initial;
 }
 
