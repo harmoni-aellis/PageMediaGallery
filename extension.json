@@ -47,6 +47,7 @@
 	"ResourceModules": {
 		"ext.pageMediaGallery": {
 			"scripts": [
+				"mediamanager.browsertab.js",
 				"mediamanager.js",
 				"pagemediagallery.ui.SecondaryGallery.js",
 				"pagemediagallery.ui.PrimaryGallery.js",

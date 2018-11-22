@@ -1,91 +1,16 @@
-window.MediaManager = {
+mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
-	container: undefined, //secondaryGallery
-	isInit: false,
-	start: function (container) {
-		MediaManager.container = container;
+( function ( $, mw, window, MsUpload ) {
 
-		if (!MediaManager.isInit) {
-			this.init();
-		}
-
-		MediaManager.window.open();
-	},
-	reset: function (){
-		MediaManager.window.$modal.find('.image').removeClass('toAddToPage');
-		$("#addToPage").prop('disabled', true);
-		$("a[href=#pmg-search]").click();
-		$("[id^=msupload][id$=list]").html("");
-
-		MediaManager.tabs.browser.init();
-
-	},
-	init: function (){
-
-		mediamanager = this;
-
-		MediaManager.tabs.browser = new mw.pagemediagallery.browsertab('pmg-search');
-		MediaManager.tabs.browser.init();
-
-		MediaManager.tabs.myMedia = new mw.pagemediagallery.browsertab('myMedia');
-		MediaManager.tabs.myMedia.init();
-		
-		MediaManager.tabs.uploader.init();
-
-		$("#addToPage").off().on('click', function() {
-			MediaManager.addToPage();
-		});
-
-		$('[href="#pmg-search"]').on('click', function() {
-			MediaManager.window.$modal.find('#pmg-search .search-content-body').html('');
-			MediaManager.tabs.browser.init();
-		});
-
-		$('[href="#myMedia"]').on('click', function() {
-			MediaManager.window.$modal.find('#myMedia .search-content-body').html('');
-			MediaManager.tabs.myMedia.init();
-		});
-
-		MediaManager.isInit = true;
-	},
-	addToPage: function (){
-		var $toAddToPage = $(MediaManager.window.$modal.find('.toAddToPage')[0]);
-		var file = $($toAddToPage.find('.file-thumb')[0]).clone();
-		var fileName = '';
-		if ($toAddToPage[0].hasAttribute('data-imagename')) {
-			fileName = $toAddToPage.data('imagename');
-		} else { //uploaded with MsUpload
-			fileName = $toAddToPage.find('.file-name').first().text();
-		}
-
-		mediamanager.container.addImage(file, fileName);
-		mediamanager.close();
-	},
-	close: function () {
-		MediaManager.window.close();
+	mw.pagemediagallery.uploadertab = function() {
+		this.uploader = null;
 	}
-}
 
-window.MediaManager.window = {
+	mw.pagemediagallery.uploadertab.prototype.initcallMsUpload = function() {
 
-	$modal: $('#MediaManager'),
-	open: function () {
-		MediaManager.window.$modal.modal('show');
-	},
-	close: function () {
-		MediaManager.window.$modal.modal('hide');
-	}
-}
+		this.uploader = MsUpload.createUploaderOnElement($('#MsUpload'), true);
 
-window.MediaManager.tabs = {}
-
-window.MediaManager.tabs.uploader = {
-
-	initcallMsUpload: function() {
-
-		MediaManager.tabs.uploader.uploader = MsUpload.createUploaderOnElement($('#MsUpload'), true);
-
-		var dropzone = $( '#'+ MediaManager.tabs.uploader.uploader.uploaderId + '-dropzone' );
+		var dropzone = $( '#'+ this.uploader.uploaderId + '-dropzone' );
 
 		//target.css('border', '2px dotted var(--main-btn-color)');
 		dropzone.addClass('dropOverInactive');
@@ -117,7 +42,7 @@ window.MediaManager.tabs.uploader = {
 			$(this).addClass('dropOverInactive');
 		});
 
-		MediaManager.tabs.uploader.uploader.bind('FileUploaded', MediaManager.tabs.uploader.onFileUploaded);
+		this.uploader.bind('FileUploaded', this.onFileUploaded);
 
 		// overrides MsUpload's warningText method
 		MsUpload.warningText = function ( fileItem, warning, uploader ) {
@@ -179,11 +104,15 @@ window.MediaManager.tabs.uploader = {
 					}
 					break;
 			}
-			uploader.trigger( 'CheckFiles' );
+			this.uploader.trigger( 'CheckFiles' );
 			fileItem.loading.hide();
 		}
-	},
-	onFileUploaded: function ( uploader, file, success ) {
+	}
+
+	mw.pagemediagallery.uploadertab.prototype.onFileUploaded = function ( uploader, file, success ) {
+
+		uploadertab = this;
+
 		$(file.li[0]).addClass('image');
 		$(file.li[0]).on('click', function(){
 			MediaManager.window.$modal.find('.image').not($(this)).removeClass('toAddToPage');
@@ -195,14 +124,18 @@ window.MediaManager.tabs.uploader = {
 			}
 		});
 		$( '#'+ uploader.uploaderId + '-bottom' ).hide(); //doesn't work
-	},
-	init: function () {
-
-		setTimeout(function () {
-		  MediaManager.tabs.uploader.initcallMsUpload();
-		}, 300);
-	},
-	startUpload: function() {
-		MediaManager.tabs.uploader.uploader.start();
 	}
-}
+
+	mw.pagemediagallery.uploadertab.prototype.init = function () {
+
+		uploadertab = this;
+		setTimeout(function () {
+		  uploadertab.initcallMsUpload();
+		}, 300);
+	}
+
+	mw.pagemediagallery.uploadertab.prototype.startUpload = function() {
+		this.uploader.start();
+	}
+
+})( jQuery, mediaWiki, window, MsUpload);
