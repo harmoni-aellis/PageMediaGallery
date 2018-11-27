@@ -2,10 +2,14 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 ( function ( $, mw, window ) {
 
-	mw.pagemediagallery.browsertab = function(containerId) {
+	mw.pagemediagallery.browsertab = function(containerId, onlyOwnImages) {
+
+		onlyOwnImages = typeof onlyOwnImages !== 'undefined' ? onlyOwnImages : false;
+
 		this.containerId = containerId;
 		this.container = $('#' + containerId);
 		this.contentBody = this.container.find('.search-content-body');
+		this.onlyOwnImages = onlyOwnImages;
 	}
 
 	mw.pagemediagallery.browsertab.prototype.init = function() {
@@ -48,9 +52,13 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 		var data = {};
 		data.action = "pagemediagallery_browse";
 		data.format = "json";
-		console.log(this);
 		data.input = this.getInputValue();
 		data.token = token;
+
+		if ( this.onlyOwnImages ) {
+			data.owner = true;
+		}
+
 		if (this.offset) {
 			data.offset = this.offset;
 		}

@@ -27,7 +27,7 @@ window.MediaManager = {
 		MediaManager.tabs.browser = new mw.pagemediagallery.browsertab('pmg-search');
 		MediaManager.tabs.browser.init();
 
-		MediaManager.tabs.myMedia = new mw.pagemediagallery.browsertab('myMedia');
+		MediaManager.tabs.myMedia = new mw.pagemediagallery.browsertab('myMedia', true);
 		MediaManager.tabs.myMedia.init();
 		
 		MediaManager.tabs.uploader.init();
