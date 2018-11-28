@@ -40,6 +40,8 @@ class ApiBrowse extends ApiBase {
 
 		global $wgPageMediaGallerySearchLimit, $wgUser;
 
+		$r = [];
+
 		// $user = $this->getUser();
 
 		// if(!$user->isAllowed( '' )){
@@ -155,9 +157,9 @@ class ApiBrowse extends ApiBase {
 	 * Execute a request to the API within mediawiki using FauxRequest
 	 *
      * @param $data array Array of non-urlencoded key => value pairs, the fake GET/POST values
-     * @param $wasPosted bool Whether to treat the data as POST 
+     * @param $wasPosted bool Whether to treat the data as POST
      * @param $session MediaWiki\\Session\\Session | array | null Session, session data array, or null
-     * @param $protocol string 'http' or 'https' 
+     * @param $protocol string 'http' or 'https'
      * @return array the result data array
      *
 	 * @see https://doc.wikimedia.org/mediawiki-core/master/php/classFauxRequest.html
