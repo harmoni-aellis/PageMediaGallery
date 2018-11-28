@@ -14,11 +14,13 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 	mw.pagemediagallery.browsertab.prototype.init = function() {
 
+		var that = this;
 		this.offset = 0;
 
 		this.container.find('.querymediainput').off('input').on('input', function (e) {
-			this.contentBody.html(''); //empty content
-			this.browse( e.target.value );
+
+			that.contentBody.html(''); //empty content
+			that.browse( e.target.value );
 		});
 
 		this.browse( this.getInputValue() );
@@ -72,7 +74,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
  			browsertab.browseError(jsondata);
 		}
 
-		$.ajax({ 
+		$.ajax({
 			type: "POST",
 			url: mw.util.wikiScript('api'),
 			data: data,
@@ -95,7 +97,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 			if ( results.search ) {
 				this.displayResult(results);
-				
+
 			} else {
 				this.appendNoMoreResults();
 			}
@@ -105,7 +107,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 				this.offset = results.continue.offset;
 
 				this.addScrollEvent();
-				
+
 			} else {
 				this.disableScrollEvent();
 			}
@@ -114,7 +116,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 			this.appendNoMoreResults();
 		}
 	}
-	
+
 	mw.pagemediagallery.browsertab.prototype.browseError = function(e) {
 		console.log( mw.msg('pmg-error-encountered') );
 	}
