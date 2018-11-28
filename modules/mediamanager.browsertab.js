@@ -20,6 +20,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 		this.container.find('.querymediainput').off('input').on('input', function (e) {
 
 			that.contentBody.html(''); //empty content
+			that.offset = 0;
 			that.browse( e.target.value );
 		});
 
