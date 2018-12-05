@@ -88,7 +88,7 @@ class Hooks {
 
 		$out .=       '<div class="tab-pane active" id="pmg-search">';
 		$out .=	        '<div class="search-input">';
-		$out .=	          '<input id="querymedia-input" class="querymediainput oo-ui-dropdownWidget-handle" type="text">';
+		$out .=	          '<input id="querymedia-input" class="querymediainput " type="text">';
 		$out .=	        '</div>';
 		$out .=	        '<div class="search-content">';
 		$out .=	          '<div class="search-content-body">';
@@ -105,7 +105,7 @@ class Hooks {
 
 		$out .=       '<div class="tab-pane" id="myMedia">';
 		$out .=	        '<div class="search-input">';
-		$out .=	          '<input id="querymedia-input-mymedia" class="querymediainput oo-ui-dropdownWidget-handle" type="text">';
+		$out .=	          '<input id="querymedia-input-mymedia" class="querymediainput " type="text">';
 		$out .=	        '</div>';
 		$out .=	        '<div class="search-content">';
 		$out .=	          '<div class="search-content-body">';
