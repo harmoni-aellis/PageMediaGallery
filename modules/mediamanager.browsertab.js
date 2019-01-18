@@ -14,14 +14,13 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 	mw.pagemediagallery.browsertab.prototype.init = function() {
 
-		var that = this;
+		var browsertab = this;
+		
 		this.offset = 0;
 
 		this.container.find('.querymediainput').off('input').on('input', function (e) {
-
-			that.contentBody.html(''); //empty content
-			that.offset = 0;
-			that.browse( e.target.value );
+			browsertab.contentBody.html(''); //empty content
+			browsertab.browse( e.target.value );
 		});
 
 		this.browse( this.getInputValue() );
@@ -75,14 +74,14 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
  			browsertab.browseError(jsondata);
 		}
 
-		$.ajax({
+		$.ajax({ 
 			type: "POST",
 			url: mw.util.wikiScript('api'),
 			data: data,
 		    dataType: 'json',
 			success: success,
 			error: this.browseError
-		})
+		});
 	}
 
 	mw.pagemediagallery.browsertab.prototype.browseSuccess = function(result) {
@@ -98,7 +97,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 			if ( results.search ) {
 				this.displayResult(results);
-
+				
 			} else {
 				this.appendNoMoreResults();
 			}
@@ -108,7 +107,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 				this.offset = results.continue.offset;
 
 				this.addScrollEvent();
-
+				
 			} else {
 				this.disableScrollEvent();
 			}
@@ -117,7 +116,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 			this.appendNoMoreResults();
 		}
 	}
-
+	
 	mw.pagemediagallery.browsertab.prototype.browseError = function(e) {
 		console.log( mw.msg('pmg-error-encountered') );
 	}
@@ -156,24 +155,36 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 	mw.pagemediagallery.browsertab.prototype.displayResult = function(results) {
 
 		var browsertab = this;
+
+		function isVideo(imageurl) {
+			fileExt = imageurl.split('.').pop().toLowerCase();
+			videoExtensions = ['mp4','webm', 'mov'];
+			if (videoExtensions.indexOf(fileExt) == -1) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+
 		$.each( results.search, function ( index, value ) {
 			var $div = $( document.createElement('div') );
-			$div.addClass( 'image' );
 			$div.attr('data-imagename', value.filename);
-			var $img;
-			switch (value.mime) {
-			  case 'video/mp4':
-			  	$img = $( document.createElement('video') );
-			    break;
-			  case 'application/sla':
-			  default:
-			  	$img = $( document.createElement('img') );
+			$div.addClass( 'image' );
+			
+			var $file;
+
+			if (isVideo(value.fileurl)) {
+				$file = $( document.createElement('video') );
+				$div.addClass('videofile');
+			} else {
+				$file = $( document.createElement('img') );
 			}
-			$img.attr('src', value.fileurl);
-			$img.addClass('file-thumb');
+
+			$file.attr('src', value.fileurl);
+			$file.addClass('file-thumb');
 			var $label = $( document.createElement('label') );
 			$label.html(value.filename);
-			$div.append($img);
+			$div.append($file);
 			$div.append($label);
 			$div.on('click', function() {
 				$(this).toggleClass( 'toAddToPage' );
