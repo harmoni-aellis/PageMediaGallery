@@ -163,8 +163,7 @@ body {
 }
 
 .formmediagallery .empty-slot {
-    background: #fff;
-    border: 1px solid #fff;
+    border: 0;
 }
 
 .formmediagallery .mw-ia-editButton, .formmediagallery li .file-cancel {
