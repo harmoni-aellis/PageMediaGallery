@@ -15,11 +15,12 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 	mw.pagemediagallery.browsertab.prototype.init = function() {
 
 		var browsertab = this;
-		
+
 		this.offset = 0;
 
 		this.container.find('.querymediainput').off('input').on('input', function (e) {
 			browsertab.contentBody.html(''); //empty content
+			browsertab.offset =  0 ;
 			browsertab.browse( e.target.value );
 		});
 
@@ -74,7 +75,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
  			browsertab.browseError(jsondata);
 		}
 
-		$.ajax({ 
+		$.ajax({
 			type: "POST",
 			url: mw.util.wikiScript('api'),
 			data: data,
@@ -97,7 +98,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 			if ( results.search ) {
 				this.displayResult(results);
-				
+
 			} else {
 				this.appendNoMoreResults();
 			}
@@ -107,7 +108,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 				this.offset = results.continue.offset;
 
 				this.addScrollEvent();
-				
+
 			} else {
 				this.disableScrollEvent();
 			}
@@ -116,7 +117,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 			this.appendNoMoreResults();
 		}
 	}
-	
+
 	mw.pagemediagallery.browsertab.prototype.browseError = function(e) {
 		console.log( mw.msg('pmg-error-encountered') );
 	}
@@ -170,7 +171,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 			var $div = $( document.createElement('div') );
 			$div.attr('data-imagename', value.filename);
 			$div.addClass( 'image' );
-			
+
 			var $file;
 
 			if (isVideo(value.fileurl)) {
