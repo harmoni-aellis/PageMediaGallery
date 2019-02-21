@@ -22,7 +22,7 @@ class Hooks {
 	}
 
 	static function start( $pFFormEdit) {
-		global $wgOut, $wgScriptPath, $wgJsMimeType, $wgFileExtensions, $wgUser, $wgpmgEnabledForms;
+		global $wgOut, $wgScriptPath, $wgFileExtensions, $wgUser, $wgpmgEnabledForms;
 
 		if($wgpmgEnabledForms && isset($pFFormEdit) && isset($pFFormEdit->mForm)) {
 
@@ -53,7 +53,7 @@ class Hooks {
 			$mediaManager = self::getModal();
 			$wgOut->addHTML ( $mediaManager );
 		}
-		$wgOut->addScript ( "<script type=\"$wgJsMimeType\">window.pmgVars = $pmgVars;</script>\n" );
+		$wgOut->addScript ( "<script type=\"text/javascript\">window.pmgVars = $pmgVars;</script>\n" );
 
 
 		return true;
