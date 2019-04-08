@@ -106,7 +106,8 @@ class ApiBrowse extends ApiBase {
 					}
 				}
 				if ( ! $thumbfile) {
-					$thumbfile = $file->generateThumbName($a['title'], [ 'width' => 200 ]);
+					$thumbfile = $file->generateThumbName($a['filename'], [ 'width' => 200 ]);
+					$thumb = $file->transform( [ 'width' => 200 ]);
 				}
 
 				$a['url'] = $file->getFullUrl();
