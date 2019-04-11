@@ -237,7 +237,8 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		var buttonBar = $( '<span>' ).attr({ 'class': 'file-buttonbar'});
 		var cancelbutton = $( '<span>' ).attr({ 'class': 'file-cancel', 'title': mw.msg( 'msu-cancel-upload' ) });
 		cancelbutton.click( function () {
-			secondaryGallery.removeImg( this );
+			var li = $(this).parents('li');
+			secondaryGallery.removeImg( li );
 		});
 		buttonBar.append( cancelbutton );
 		li.append( buttonBar );
@@ -262,12 +263,12 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 
 
-	pagemediagallery.ui.SecondaryGallery.prototype.removeImg = function ( closeButton ) {
+	pagemediagallery.ui.SecondaryGallery.prototype.removeImg = function ( li ) {
 
 		var secondaryGallery = this;
 
-		var filename = $(closeButton).parents('li').attr('data-filename');
-		$(closeButton).parents('li').remove();
+		var filename = $(li).attr('data-filename');
+		$(li).remove();
 		if (filename) {
 			var inputs = $(this.$container).find('input.createboxInput');
 			if (inputs.length == 0) {
@@ -446,7 +447,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			var newItem = this.addThumb(img, filename, false, tempToReplace);
 			this.updateImageInputsValues();
 			var fileinput = this.getInputForFile(filename);
-			mw.hook('pmg.secondaryGallery.newImageAdded').fire(fileinput, newItem);
+			mw.hook('pmg.secondaryGallery.newImageAdded').fire(fileinput, newItem, this);
 		}
 
 		if (tempToReplace) this.uploadButton.hide();
