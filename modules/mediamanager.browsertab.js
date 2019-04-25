@@ -174,14 +174,19 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 			var $file;
 
-			if (isVideo(value.fileurl)) {
+			if ( ! value.fileurl){
+				// miniature not available
+				$file = $( document.createElement('div') );
+				$div.addClass('nothumbfile');
+			} else if (isVideo(value.fileurl)) {
 				$file = $( document.createElement('video') );
 				$div.addClass('videofile');
+				$file.attr('src', value.fileurl);
 			} else {
 				$file = $( document.createElement('img') );
+				$file.attr('src', value.fileurl);
 			}
 
-			$file.attr('src', value.fileurl);
 			$file.addClass('file-thumb');
 			var $label = $( document.createElement('label') );
 			$label.html(value.filename);

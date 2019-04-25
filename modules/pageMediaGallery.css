@@ -439,6 +439,9 @@ body {
 #MediaManager .search-content .image img {
     height: 100%;
 }
+#MediaManager .search-content .image.nothumbfile {
+    width: 150px;
+}
 
 #MediaManager .search-content .image label {
     text-align: center;
