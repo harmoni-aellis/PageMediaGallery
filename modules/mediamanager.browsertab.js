@@ -184,7 +184,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 				$file.attr('src', value.fileurl);
 			} else {
 				$file = $( document.createElement('img') );
-				$file.attr('src', value.fileurl);
+				$file.attr('src', value.thumburl ? value.thumburl : value.fileurl);
 			}
 
 			$file.addClass('file-thumb');
