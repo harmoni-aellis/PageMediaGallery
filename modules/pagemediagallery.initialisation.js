@@ -18,4 +18,22 @@ $(document).ready(function (){
 			}, 10);
 		} );
 
+	$('.addFileAttachment').prev('.inputSpan').each(function () {
+		//setup the multipleTemplateStarter for future instances
+		if($(this).parents('.multipleTemplateStarter').length > 0){
+			$(this).addClass('simplemsuploadContainer');
+			$(this).children().hide();
+			$(this).parent().next('.instanceAddAbove').children().hide();
+		//create a SecondaryGallery for existing instances
+		} else {
+			new pagemediagallery.ui.SecondaryGallery(this);
+		}
+	});
+
+	//add event to create secondaryGallery on every attachment instance
+	mw.hook('pf.addSimpleTemplateInstance').add(function (container) {
+		var secondaryGallery = new pagemediagallery.ui.SecondaryGallery(container);
+		MediaManager.start(secondaryGallery);
+	});
+
 });
