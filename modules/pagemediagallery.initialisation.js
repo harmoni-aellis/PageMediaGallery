@@ -23,7 +23,7 @@ $(document).ready(function (){
 	});
 
 	//add event to create secondaryGallery on every attachment instance
-	mw.hook('pf.addSimpleTemplateInstance').add(function (container) {
+	mw.hook('pf.addSimplePMG').add(function (container) {
 		new pagemediagallery.ui.SecondaryGallery(container);
 	});
 
