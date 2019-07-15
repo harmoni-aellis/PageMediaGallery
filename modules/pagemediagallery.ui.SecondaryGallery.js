@@ -94,6 +94,14 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 				$(this.$container).children().hide();
 				$(this.$container).parent().next('.instanceAddAbove').children().hide();
 				secondaryGallery.addFileName(filename);
+			} else {
+				$(this.$container).children().hide();
+				$(this.$container).parent().siblings('.instanceAddAbove').children().hide();
+				var uploadButton = $('<div>').addClass('btn btn-default addFileAttachment').html('Importer un fichier');
+				uploadButton.on('click', function () {
+					MediaManager.start(secondaryGallery);
+				});
+				$(this.$container).append(uploadButton);
 			}
 		}
 	};
@@ -471,7 +479,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	 * @param filename
 	 */
 	pagemediagallery.ui.SecondaryGallery.prototype.addFileName = function ( filename) {
-		$(this.$container).next('.addFileAttachment').remove();
+		$(this.$container).find('.addFileAttachment').remove();
 
         var fileExt = filename.split('.')[1];
 		var fileLogo = '';
