@@ -18,7 +18,7 @@ $(document).ready(function (){
 			}, 10);
 		} );
 
-	$('.addFileAttachment').prev('.inputSpan').each(function () {
+	$('.simplePMG').find('.addFileAttachment').prev().each(function () {
 		//setup the multipleTemplateStarter for future instances
 		if($(this).parents('.multipleTemplateStarter').length > 0){
 			$(this).addClass('simplemsuploadContainer');

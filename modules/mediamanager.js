@@ -60,7 +60,7 @@ window.MediaManager = {
 
 		if(mediamanager.container.$container.classList.contains('msuploadContainer')){
             mediamanager.container.addImage(file, fileName);
-        } else if(mediamanager.container.$container.classList.contains('simplemsuploadContainer')){
+        } else if($(mediamanager.container.$container).parents('.simplePMG').length > 0){
             mediamanager.container.addFileName(fileName);
         }
 		mediamanager.close();

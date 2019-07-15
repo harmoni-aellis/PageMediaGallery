@@ -479,15 +479,24 @@ pagemediagallery.ui = pagemediagallery.ui || {};
             case 'pdf':
                 fileLogo = '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
                 break;
-            case 'png': case 'jpg':
+			case 'jpg': case 'jpeg': case 'png': case 'gif': case 'bmp': case 'tif': case 'tiff':
                 fileLogo = '<i class="fa fa-file-image-o" aria-hidden="true"></i>';
                 break;
-            case 'docx':
+			case 'doc': case 'docx':
                 fileLogo = '<i class="fa fa-file-word-o" aria-hidden="true"></i>';
                 break;
-            case 'odt':
+			case 'ppt': case 'pptx':
+				fileLogo = '<i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>';
+				break;
+			case 'xls': case 'xlsx':
+				fileLogo = '<i class="fa fa-file-excel-o" aria-hidden="true"></i>';
+				break;
+            case 'odt': case 'txt':
                 fileLogo = '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
                 break;
+			case 'mov': case 'avi': case 'mp4': case 'webm':
+				fileLogo = '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
+				break;
             default:
                 fileLogo = '<i class="fa fa-file-o" aria-hidden="true"></i>';
         }
