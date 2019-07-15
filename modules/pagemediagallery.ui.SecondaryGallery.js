@@ -97,7 +97,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			} else {
 				$(this.$container).children().hide();
 				$(this.$container).parent().siblings('.instanceAddAbove').children().hide();
-				var uploadButton = $('<div>').addClass('btn btn-default addFileAttachment').html('Importer un fichier');
+				var uploadButton = $('<div>').addClass('btn btn-default addFileAttachment').html(mw.msg('upload'));
 				uploadButton.on('click', function () {
 					MediaManager.start(secondaryGallery);
 				});
