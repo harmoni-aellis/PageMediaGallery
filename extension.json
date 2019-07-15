@@ -65,7 +65,8 @@
 				"pmg-no-match-found",
 				"pmg-no-more-match-found",
 				"pmg-error-encountered",
-				"pmg-load-more-results"
+				"pmg-load-more-results",
+				"upload"
 			]
 		}
 	},
