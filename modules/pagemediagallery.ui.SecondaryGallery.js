@@ -497,6 +497,12 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			case 'mov': case 'avi': case 'mp4': case 'webm':
 				fileLogo = '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
 				break;
+			case 'rar': case 'zip': case 'gz': case 'tgz':
+				fileLogo = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>';
+				break;
+			case 'stl':
+				fileLogo = '<i class="fa fa-cube" aria-hidden="true"></i>';
+				break;
             default:
                 fileLogo = '<i class="fa fa-file-o" aria-hidden="true"></i>';
         }

@@ -20,8 +20,7 @@ $(document).ready(function (){
 
 	$('.simplePMG').find('.addFileAttachment').prev().each(function () {
 		//setup the multipleTemplateStarter for future instances
-		if($(this).parents('.multipleTemplateStarter').length > 0){
-			$(this).addClass('simplemsuploadContainer');
+		if($(this).children('input').val() === ""){
 			$(this).children().hide();
 			$(this).parent().next('.instanceAddAbove').children().hide();
 		//create a SecondaryGallery for existing instances
