@@ -58,7 +58,11 @@ window.MediaManager = {
 			fileName = $toAddToPage.find('.file-name').first().text();
 		}
 
-		mediamanager.container.addImage(file, fileName);
+		if(mediamanager.container.$container.classList.contains('msuploadContainer')){
+            mediamanager.container.addImage(file, fileName);
+        } else if($(mediamanager.container.$container).parents('.simplePMG').length > 0){
+            mediamanager.container.addFileName(fileName);
+        }
 		mediamanager.close();
 	},
 	close: function () {

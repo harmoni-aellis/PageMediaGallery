@@ -28,63 +28,82 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		//file to be uploaded
 		this.filesUploading = [];
 
-		if ($(this.$container).find('.formmediagallery').length > 0) {
-			return ;
-		}
-		// hide all inputs in container
-		$(this.$container).children().hide();
+		if(container.classList.contains('msuploadContainer')) {
 
-		// replace by formmediagallery list
-		this.ol = $('<div>').addClass('formmediagallery');
-		var ul = $('<ul>');
-		this.ol.append(ul);
-
-		var div = $('<div>').addClass('add-new-file-slot unsortable');
-		div.click(function (element){
-			// if($(element.target).parents('.msuploadContainer').get(0) && $($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0)){
-			// 	$($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0).click();
-			// }
-
-			if($(element.target).parents('.msuploadContainer').get(0) ){
-				MediaManager.start(secondaryGallery);
+			if ($(this.$container).find('.formmediagallery').length > 0) {
+				return ;
 			}
-		});
-		ul.append(div);
+			// hide all inputs in container
+			$(this.$container).children().hide();
 
-		if ( !this.hasEmptiesSlots() ){
-			div.hide();
-		}
+			// replace by formmediagallery list
+			this.ol = $('<div>').addClass('formmediagallery');
+			var ul = $('<ul>');
+			this.ol.append(ul);
 
-		$(this.$container).prepend(this.ol);
+			var div = $('<div>').addClass('add-new-file-slot unsortable');
+			div.click(function (element){
+				// if($(element.target).parents('.msuploadContainer').get(0) && $($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0)){
+				// 	$($(element.target).parents('.msuploadContainer').get(0)).find('.buttonBar .select-file').get(0).click();
+				// }
 
-		this.addUploadButton();
-
-		// add image present in inputs
-		$(this.$container).find('input.createboxInput').each(function (i) {
-			if ($(this).val()) {
-				var inputId = $(this).attr('id');
-				if (!inputId ) {
-					return;
+				if($(element.target).parents('.msuploadContainer').get(0) ){
+					MediaManager.start(secondaryGallery);
 				}
-				var image = $('#'+ inputId + '_imagepreview');
-				//var image = $(this).parent().find('.pfImagePreviewWrapper').clone();
-				secondaryGallery.addThumb( image.show(), $(this).val());
-			}
-		});
+			});
+			ul.append(div);
 
-		for (var i = 0; i < this.numberEmptiesSlots() - 1; i++) {
-			ul.append( $('<div>').addClass('empty-slot unsortable') );
+			if ( !this.hasEmptiesSlots() ){
+				div.hide();
+			}
+
+			$(this.$container).prepend(this.ol);
+
+			this.addUploadButton();
+
+			// add image present in inputs
+			$(this.$container).find('input.createboxInput').each(function (i) {
+				if ($(this).val()) {
+					var inputId = $(this).attr('id');
+					if (!inputId ) {
+						return;
+					}
+					var image = $('#'+ inputId + '_imagepreview');
+					//var image = $(this).parent().find('.pfImagePreviewWrapper').clone();
+					secondaryGallery.addThumb( image.show(), $(this).val());
+				}
+			});
+
+			for (var i = 0; i < this.numberEmptiesSlots() - 1; i++) {
+				ul.append( $('<div>').addClass('empty-slot unsortable') );
+			}
+			//this.manageDropOnFormField();
+			$(this.$container).find('ul').sortable({
+					items : "li:not(.unsortable)",
+				    start: function (e, ui) {
+				        ui.placeholder.append(ui.item.find('img,video').clone());
+				    },
+				    stop: function (e, info) {
+				    	secondaryGallery.updateImageInputsValues();
+				    }
+			});
+		} else {
+			//if we already have a value, we display the filename
+			if($(this.$container).children('input').val() !== ""){
+				var filename = $(this.$container).children('input').val();
+				$(this.$container).children().hide();
+				$(this.$container).parent().next('.instanceAddAbove').children().hide();
+				secondaryGallery.addFileName(filename);
+			} else {
+				$(this.$container).children().hide();
+				$(this.$container).parent().siblings('.instanceAddAbove').children().hide();
+				var uploadButton = $('<div>').addClass('btn btn-default addFileAttachment').html(mw.msg('upload'));
+				uploadButton.on('click', function () {
+					MediaManager.start(secondaryGallery);
+				});
+				$(this.$container).append(uploadButton);
+			}
 		}
-		//this.manageDropOnFormField();
-		$(this.$container).find('ul').sortable({
-				items : "li:not(.unsortable)",
-			    start: function (e, ui) {
-			        ui.placeholder.append(ui.item.find('img,video').clone());
-			    },
-			    stop: function (e, info) {
-			    	secondaryGallery.updateImageInputsValues();
-			    }
-		});
 	};
 
 	/**
@@ -453,6 +472,52 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 		if (tempToReplace) this.uploadButton.hide();
 
 		// TODO fire event to allow adding edit image tools
+	};
+
+	/**
+	 * Display filename when file imported
+	 * @param filename
+	 */
+	pagemediagallery.ui.SecondaryGallery.prototype.addFileName = function ( filename) {
+		$(this.$container).find('.addFileAttachment').remove();
+
+        var fileExt = filename.split('.')[1].toLowerCase();
+		var fileLogo = '';
+		switch (fileExt) {
+            case 'pdf':
+                fileLogo = '<i class="fa fa-file-pdf-o" aria-hidden="true"></i>';
+                break;
+			case 'jpg': case 'jpeg': case 'png': case 'gif': case 'bmp': case 'tif': case 'tiff':
+                fileLogo = '<i class="fa fa-file-image-o" aria-hidden="true"></i>';
+                break;
+			case 'doc': case 'docx':
+                fileLogo = '<i class="fa fa-file-word-o" aria-hidden="true"></i>';
+                break;
+			case 'ppt': case 'pptx':
+				fileLogo = '<i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>';
+				break;
+			case 'xls': case 'xlsx':
+				fileLogo = '<i class="fa fa-file-excel-o" aria-hidden="true"></i>';
+				break;
+            case 'odt': case 'txt':
+                fileLogo = '<i class="fa fa-file-text-o" aria-hidden="true"></i>';
+                break;
+			case 'mov': case 'avi': case 'mp4': case 'webm':
+				fileLogo = '<i class="fa fa-file-video-o" aria-hidden="true"></i>';
+				break;
+			case 'rar': case 'zip': case 'gz': case 'tgz':
+				fileLogo = '<i class="fa fa-file-archive-o" aria-hidden="true"></i>';
+				break;
+			case 'stl':
+				fileLogo = '<i class="fa fa-cube" aria-hidden="true"></i>';
+				break;
+            default:
+                fileLogo = '<i class="fa fa-file-o" aria-hidden="true"></i>';
+        }
+
+        $(this.$container).children('input').val(filename);
+		$(this.$container).append(fileLogo);
+		$(this.$container).append('<span> ' + filename + '</span>');
 	};
 
 	/**
