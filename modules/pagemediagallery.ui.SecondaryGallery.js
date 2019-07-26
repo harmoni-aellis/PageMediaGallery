@@ -466,7 +466,12 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			var newItem = this.addThumb(img, filename, false, tempToReplace);
 			this.updateImageInputsValues();
 			var fileinput = this.getInputForFile(filename);
-			mw.hook('pmg.secondaryGallery.newImageAdded').fire(fileinput, newItem, this);
+
+			var fileExt = filename.split('.')[1].toLowerCase();
+			var imageExt = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif', 'tiff'];
+			if(imageExt.includes(fileExt)){
+				mw.hook('pmg.secondaryGallery.newImageAdded').fire(fileinput, newItem, this);
+			}
 		}
 
 		if (tempToReplace) this.uploadButton.hide();
