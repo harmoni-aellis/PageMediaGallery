@@ -179,7 +179,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 			switch (fileExt) {
 				case 'pdf':
 					$file = $( document.createElement('img') );
-					$file.attr('src', scriptPath + '/images/file-icon/dokit_icon_file_pdf.jpg');
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_pdf.jpg');
 					break;
 				case 'jpg': case 'jpeg': case 'png': case 'gif': case 'bmp': case 'tif': case 'tiff': case'stl':
 					$file = $( document.createElement('img') );
@@ -187,15 +187,15 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 					break;
 				case 'doc': case 'docx':
 					$file = $( document.createElement('img') );
-					$file.attr('src', scriptPath + '/images/file-icon/dokit_icon_file_word.jpg');
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_word.jpg');
 					break;
 				case 'ppt': case 'pptx':
 					$file = $( document.createElement('img') );
-					$file.attr('src', scriptPath + '/images/file-icon/dokit_icon_file_powerpoint.jpg');
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_powerpoint.jpg');
 					break;
 				case 'xls': case 'xlsx':
 					$file = $( document.createElement('img') );
-					$file.attr('src', scriptPath + '/images/file-icon/dokit_icon_file_excel.jpg');
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_excel.jpg');
 					break;
 				case 'mov': case 'avi': case 'mp4': case 'webm':
 					$file = $( document.createElement('video') );
@@ -204,11 +204,11 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 					break;
 				case 'rar': case 'zip': case 'gz': case 'tgz':
 					$file = $( document.createElement('img') );
-					$file.attr('src', scriptPath + '/images/file-icon/dokit_icon_file_archive.jpg');
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_archive.jpg');
 					break;
 				default:
 					$file = $( document.createElement('img') );
-					$file.attr('src', scriptPath + '/images/file-icon/dokit_icon_file_all.jpg');
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_all.jpg');
 			}
 
 			$file.addClass('file-thumb');
