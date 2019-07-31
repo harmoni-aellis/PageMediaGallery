@@ -174,7 +174,7 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 			var $file;
 
-			var fileExt = value.filename.split('.')[1].toLowerCase();
+			var fileExt = value.filename.split('.').pop().toLowerCase();
 			var scriptPath = mw.config.get('wgScriptPath');
 			switch (fileExt) {
 				case 'pdf':
