@@ -486,7 +486,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	pagemediagallery.ui.SecondaryGallery.prototype.addFileName = function ( filename) {
 		$(this.$container).find('.addFileAttachment').remove();
 
-        var fileExt = filename.split('.')[1].toLowerCase();
+        var fileExt = filename.split('.').pop().toLowerCase();
 		var fileLogo = '';
 		switch (fileExt) {
             case 'pdf':
