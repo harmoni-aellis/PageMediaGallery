@@ -467,7 +467,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			this.updateImageInputsValues();
 			var fileinput = this.getInputForFile(filename);
 
-			var fileExt = filename.split('.')[1].toLowerCase();
+			var fileExt = filename.split('.').pop().toLowerCase();
 			var imageExt = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tif', 'tiff'];
 			if(imageExt.includes(fileExt)){
 				mw.hook('pmg.secondaryGallery.newImageAdded').fire(fileinput, newItem, this);
