@@ -174,20 +174,41 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 			var $file;
 
-			if ( ! value.fileurl){
-				// miniature not available
-				$file = $( document.createElement('div') );
-				$div.addClass('nothumbfile');
-			} else if (isVideo(value.fileurl)) {
-				$file = $( document.createElement('video') );
-				$div.addClass('videofile');
-				$file.attr('src', value.fileurl);
-			} else {
-				$file = $( document.createElement('img') );
-				// TODO : we should use thumburl when available,
-				// but it cause issues for in annotation (for rotated image for instance)
-				//$file.attr('src', value.thumburl ? value.thumburl : value.fileurl);
-				$file.attr('src',  value.fileurl);
+			var fileExt = value.filename.split('.').pop().toLowerCase();
+			var scriptPath = mw.config.get('wgScriptPath');
+			switch (fileExt) {
+				case 'pdf':
+					$file = $( document.createElement('img') );
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_pdf.jpg');
+					break;
+				case 'jpg': case 'jpeg': case 'png': case 'gif': case 'bmp': case 'tif': case 'tiff': case'stl':
+					$file = $( document.createElement('img') );
+					$file.attr('src', value.fileurl);
+					break;
+				case 'doc': case 'docx':
+					$file = $( document.createElement('img') );
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_word.jpg');
+					break;
+				case 'ppt': case 'pptx':
+					$file = $( document.createElement('img') );
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_powerpoint.jpg');
+					break;
+				case 'xls': case 'xlsx':
+					$file = $( document.createElement('img') );
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_excel.jpg');
+					break;
+				case 'mov': case 'avi': case 'mp4': case 'webm':
+					$file = $( document.createElement('video') );
+					$div.addClass('videofile');
+					$file.attr('src', value.fileurl);
+					break;
+				case 'rar': case 'zip': case 'gz': case 'tgz':
+					$file = $( document.createElement('img') );
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_archive.jpg');
+					break;
+				default:
+					$file = $( document.createElement('img') );
+					$file.attr('src', scriptPath + '/extensions/MmsUpload/images/dokit_icon_file_all.jpg');
 			}
 
 			$file.addClass('file-thumb');
