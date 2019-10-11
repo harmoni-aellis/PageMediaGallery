@@ -202,7 +202,8 @@ body {
     cursor: initial;
 }
 
-.msuploadContainerFullWidth .formmediagallery div.add-new-file-slot {
+.msuploadContainerFullWidth .formmediagallery div.add-new-file-slot,
+.msuploadContainerFullWidth .formmediagallery li, .msuploadContainerFullWidth .formmediagallery .empty-slot {
     width:100%;
 }
 
