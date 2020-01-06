@@ -74,7 +74,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		//to use it later
 		var instance = this;
-		
+
 		if (file.extension == "stl"){
 			$.ajax({
 				type: "POST",
@@ -142,9 +142,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 
 		tempImage.parent().attr('data-fileid', file.id);
 
-		var progressBar = `<div class="msu-progress-bar">
-  				<div class="msu-progress-bar-progress"></div>
-			</div>`;
+		var progressBar = '<div class="msu-progress-bar"><div class="msu-progress-bar-progress"></div></div>';
 
 		$( '.fileToBeUpload [data-fileid="' + file.id + '"]' ).append( progressBar );
 
@@ -163,7 +161,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 	};
 
 	/**
-	 * static method to listen FilesRemoved event 
+	 * static method to listen FilesRemoved event
 	 */
 	pagemediagallery.ui.FileUploading.onFilesRemoved = function (uploader, files) {
 		for (var a = 0; a < files.length; a++) {
@@ -232,7 +230,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 			fileName = fileName.replace(/[^A-Za-z0-9\-_\.:]+/g,"_");
 
 			var up = uploader
-			
+
 			if (fileName.indexOf(initName, fileName.length - initName.length) !== -1) {
 			//if (pagemediagallery.ui.FileUploading.instances[i].file.name == file.name) {
 
@@ -253,7 +251,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 						$('div[data-fileid=' + fileid + ']').find('.msu-progress-bar').css('display', 'none');
 						pagemediagallery.ui.FileUploading.instances[i].confirmUpload(file);
 					}
-					
+
 				} catch ( e) {
 					pagemediagallery.ui.FileUploading.instances[i].cancelUpload(file);
 				}
