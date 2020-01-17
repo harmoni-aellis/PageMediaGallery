@@ -8,6 +8,9 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 
 		this.containerId = containerId;
 		this.container = $('#' + containerId);
+		if (! this.container) {
+			console.error('missing PMG browsertab container ' + containerId);
+		}
 		this.contentBody = this.container.find('.search-content-body');
 		this.onlyOwnImages = onlyOwnImages;
 	}
@@ -28,6 +31,10 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 	}
 
 	mw.pagemediagallery.browsertab.prototype.getInputValue = function() {
+		if (! this.container.find('.querymediainput')[0]) {
+			console.error('missing PMG container mediaInput');
+			return '';
+		}
 		return this.container.find('.querymediainput')[0].value;
 	}
 
@@ -183,7 +190,11 @@ mediaWiki.pagemediagallery = mediaWiki.pagemediagallery || {};
 					break;
 				case 'jpg': case 'jpeg': case 'png': case 'gif': case 'bmp': case 'tif': case 'tiff': case'stl':
 					$file = $( document.createElement('img') );
-					$file.attr('src', value.fileurl);
+					if (value.thumburl) {
+						$file.attr('src', value.thumburl);
+					} else {
+						$file.attr('src', value.fileurl);
+					}
 					break;
 				case 'doc': case 'docx':
 					$file = $( document.createElement('img') );

@@ -84,7 +84,7 @@ pagemediagallery.ui = pagemediagallery.ui || {};
 					action:'query',
 					format:'json',
 					titles: 'File:' + file.name,
-					iiurlwidth: '800px',
+					iiurlwidth: '800',
 					prop: 'imageinfo'
 				},
 			    dataType: 'json',
