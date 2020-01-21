@@ -435,6 +435,8 @@ body {
     border: 1px solid #ccc;
     position: relative;
     cursor: pointer;
+    max-width: 33%;
+    overflow: hidden;
 }
 
 #MediaManager .search-content .image img, #MediaManager .search-content .image label {
@@ -586,6 +588,19 @@ body {
     width: 100%;
     max-width: 750px;
 }
+}
+
+@media (max-width: 768px) {
+#MediaManager .search-content .image {
+        height: 130px;
+}
+
+}
+
+@media (max-width: 450px) {
+    #MediaManager .modal-header .modal-title {
+        visibility: hidden;
+    }
 }
 
 .no-more-result {
