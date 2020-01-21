@@ -592,8 +592,8 @@ body {
 
 @media (max-width: 768px) {
 #MediaManager .search-content .image {
-        height: 130px;
-}
+        height: 135px;
+    }
 
 }
 
