@@ -135,7 +135,7 @@ body {
     padding: 0px;
     margin-left: -5px;
     margin-right: -5px;
-    margin-bottom: 0;
+    margin-bottom: -10px;
 }
 
 .msuploadOneImage .formmediagallery li {
@@ -154,7 +154,7 @@ body {
     position: relative;
     width: calc(33.33% - 10px);
     margin: 0 5px 10px;
-    height: 100px;
+    height: 102px;
     overflow: hidden;
     background: #f1f1f1;
     border-radius: 3px;
@@ -370,7 +370,7 @@ body {
     position: relative;
     width: calc(33.33% - 10px);
     margin: 0 5px 10px;
-    height: 100px;
+    height: 102px;
     overflow: hidden;
     text-align: center;
     background: #f1f1f1;
