@@ -3,6 +3,7 @@
 namespace PageMediaGallery;
 
 use ApiBase;
+use SMWQueryProcessor;
 
 /**
  * Returns a list of files
@@ -160,19 +161,23 @@ class ApiBrowse extends ApiBase {
 			$rawQueryArray['order'] = $order;
 		}
 
-		\SMWQueryProcessor::processFunctionParams( $rawQueryArray, $queryString, $processedParams, $printouts );
-		\SMWQueryProcessor::addThisPrintout( $printouts, $processedParams );
-		$processedParams = \SMWQueryProcessor::getProcessedParams( $processedParams, $printouts );
-		$queryCount = \SMWQueryProcessor::createQuery( $queryString,
-			$processedParams,
-			\SMWQueryProcessor::SPECIAL_PAGE, 'count', $printouts );
-
-		$queryObj = \SMWQueryProcessor::createQuery( $queryString,
-			$processedParams,
-			\SMWQueryProcessor::SPECIAL_PAGE, '', $printouts );
-		$queryObj->setLimit($limit);
-		$res = \PFUtils::getSMWStore()->getQueryResult( $queryObj );
-		$pages = $res->getResults();
+		list( $queryString, $processedParams, $printouts ) = SMWQueryProcessor::getComponentsFromFunctionParams( $rawQueryArray, false );
+        SMWQueryProcessor::addThisPrintout( $printouts, $processedParams );
+		$processedParams = SMWQueryProcessor::getProcessedParams( $processedParams, $printouts );
+		$queryCount = SMWQueryProcessor::createQuery( 
+            $queryString,
+            $processedParams,
+            SMWQueryProcessor::SPECIAL_PAGE, 'count', $printouts 
+        );
+        $queryObj = SMWQueryProcessor::createQuery( 
+            $queryString,
+            $processedParams,
+            SMWQueryProcessor::SPECIAL_PAGE, '', 
+            $printouts 
+        );
+        $queryObj->setLimit($limit);
+        $res = \PFUtils::getSMWStore()->getQueryResult( $queryObj );
+        $pages = $res->getResults();
 
 		return $pages;
 	}
